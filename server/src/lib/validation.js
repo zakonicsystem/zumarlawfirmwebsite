@@ -35,8 +35,10 @@ export function normalizeAppointment(payload, existing = {}) {
     name,
     phone,
     email: clean(payload.email),
+    branch: clean(payload.branch),
     service: clean(payload.service),
     date: clean(payload.date),
+    details: cleanDetails(payload.details),
     message: clean(payload.message),
     status: clean(payload.status) || existing.status || "New",
     createdAt: existing.createdAt || payload.createdAt || new Date().toISOString()
@@ -86,6 +88,18 @@ function clean(value) {
 
 function array(value) {
   return Array.isArray(value) ? value : [];
+}
+
+function cleanDetails(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return {};
+  }
+
+  return Object.fromEntries(
+    Object.entries(value)
+      .map(([key, entry]) => [clean(key), clean(entry)])
+      .filter(([key, entry]) => key && entry)
+  );
 }
 
 function validationError(message) {

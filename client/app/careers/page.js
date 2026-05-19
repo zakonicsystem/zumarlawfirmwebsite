@@ -32,8 +32,8 @@ export default async function CareersPage() {
               {page.introCopy}
             </p>
             <div className="mt-8 grid gap-4 sm:grid-cols-3">
-              {(page.values || []).filter((item) => item.enabled !== false).map((item) => (
-                <div className="rounded-3xl bg-paper p-5" key={item.title}>
+              {(page.values || []).filter((item) => item.enabled !== false).map((item, index) => (
+                <div className="rounded-3xl bg-paper p-5" key={`${item.title || "value"}-${index}`}>
                   <span className="grid size-12 place-items-center rounded-2xl bg-primary text-white">
                     <FaIcon className="size-5" name={item.icon} />
                   </span>
@@ -59,8 +59,8 @@ export default async function CareersPage() {
           </div>
 
           <div className="grid gap-6 lg:grid-cols-3">
-            {(page.openings || []).filter((job) => job.enabled !== false).map((job) => (
-              <article className="rounded-[2rem] border border-primary/10 bg-white p-6 shadow-xl shadow-primary/5 transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/15" key={job.title}>
+            {(page.openings || []).filter((job) => job.enabled !== false).map((job, index) => (
+              <article className="rounded-[2rem] border border-primary/10 bg-white p-6 shadow-xl shadow-primary/5 transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/15" key={`${job.title || "opening"}-${index}`}>
                 <span className="grid size-14 place-items-center rounded-2xl bg-secondary text-primary">
                   <FaIcon className="size-6" name={job.icon} />
                 </span>

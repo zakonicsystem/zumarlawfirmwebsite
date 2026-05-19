@@ -2,9 +2,20 @@
 
 import { useState } from "react";
 
-export default function AppointmentForm({ services, content = {} }) {
-  const [form, setForm] = useState({ name: "", phone: "", email: "", service: services[0]?.title || "", date: "", message: "" });
+export default function AppointmentForm({ branches = [], services, content = {} }) {
+  const initialService = services[0]?.title || "";
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    branch: branches[0]?.name || "",
+    service: initialService,
+    date: "",
+    message: ""
+  });
   const [status, setStatus] = useState("");
+  const selectedService = services.find((service) => service.title === form.service) || services[0];
+  const requirements = selectedService?.requirements || [];
 
   async function submit(event) {
     event.preventDefault();
@@ -17,7 +28,7 @@ export default function AppointmentForm({ services, content = {} }) {
 
     if (response.ok) {
       setStatus(content.successText || "Appointment request submitted.");
-      setForm({ name: "", phone: "", email: "", service: services[0]?.title || "", date: "", message: "" });
+      setForm({ name: "", phone: "", email: "", branch: branches[0]?.name || "", service: initialService, date: "", message: "" });
     } else {
       setStatus(content.errorText || "Unable to submit appointment.");
     }
@@ -25,6 +36,10 @@ export default function AppointmentForm({ services, content = {} }) {
 
   function update(field, value) {
     setForm((current) => ({ ...current, [field]: value }));
+  }
+
+  function updateService(value) {
+    setForm((current) => ({ ...current, service: value }));
   }
 
   return (
@@ -35,11 +50,33 @@ export default function AppointmentForm({ services, content = {} }) {
         <Field label="Phone" value={form.phone} onChange={(value) => update("phone", value)} required />
         <Field label="Email" type="email" value={form.email} onChange={(value) => update("email", value)} />
         <label className="grid gap-2 text-sm font-black text-primary">
+          Select Branch
+          <select className="min-h-12 rounded-2xl border border-primary/10 px-4 font-semibold text-ink outline-none focus:ring-4 focus:ring-primary/10" value={form.branch} onChange={(event) => update("branch", event.target.value)} required>
+            {branches.map((branch) => <option key={branch.slug || branch.name}>{branch.name}</option>)}
+          </select>
+        </label>
+        <label className="grid gap-2 text-sm font-black text-primary">
           Service
-          <select className="min-h-12 rounded-2xl border border-primary/10 px-4 font-semibold text-ink outline-none focus:ring-4 focus:ring-primary/10" value={form.service} onChange={(event) => update("service", event.target.value)}>
+          <select className="min-h-12 rounded-2xl border border-primary/10 px-4 font-semibold text-ink outline-none focus:ring-4 focus:ring-primary/10" value={form.service} onChange={(event) => updateService(event.target.value)}>
             {services.map((service) => <option key={service.slug}>{service.title}</option>)}
           </select>
         </label>
+        {requirements.length ? (
+          <div className="grid gap-4 rounded-2xl bg-paper p-4">
+            <div>
+              <p className="text-sm font-black uppercase tracking-wide text-primary/60">Details Required</p>
+              <p className="mt-1 text-sm font-bold text-muted">{selectedService.formattedPrice}</p>
+            </div>
+            <ul className="grid gap-2">
+              {requirements.map((item) => (
+                <li className="flex gap-3 rounded-xl bg-white px-4 py-3 text-sm font-bold text-ink/80" key={item}>
+                  <span className="mt-1 size-2 shrink-0 rounded-full bg-primary" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
         <Field label="Preferred Date" type="date" value={form.date} onChange={(value) => update("date", value)} />
         <label className="grid gap-2 text-sm font-black text-primary">
           Message

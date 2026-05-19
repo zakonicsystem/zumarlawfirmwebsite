@@ -1,7 +1,8 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { makeCmsDefaults } from "./cmsDefaults";
-import { formatPrice } from "./services";
+import { formatPrice, getServiceTimeline } from "./services";
+import { serviceData } from "./serviceSchemas";
 
 const dataDirectory = path.join(process.cwd(), "data");
 const dataFile = path.join(dataDirectory, "cms-content.json");
@@ -11,21 +12,35 @@ const backendToken = process.env.BACKEND_ADMIN_TOKEN || process.env.ADMIN_TOKEN;
 const cmsFetchRevalidateSeconds = Number(process.env.CMS_FETCH_REVALIDATE_SECONDS || 60);
 
 export function enrichService(service) {
-  const requirements = Array.isArray(service.requirements)
+  const schemaFields = serviceData.fields?.[service.title] || [];
+  const requirements = shouldUseSchemaServiceData(service.title)
+    ? schemaFields.map((field) => field.label).filter(Boolean)
+    : Array.isArray(service.requirements)
     ? service.requirements
     : String(service.requirements || "")
       .split("\n")
       .map((item) => item.trim())
       .filter(Boolean);
 
-  const price = normalizePrice(service.price);
+  const schemaPrice = serviceData.prices?.[service.title];
+  const price = normalizePrice(shouldUseSchemaPrice(service.title, schemaPrice) ? schemaPrice : service.price);
 
   return {
     ...service,
     price,
     requirements,
+    fields: shouldUseSchemaServiceData(service.title) ? schemaFields : Array.isArray(service.fields) && service.fields.length > 0 ? service.fields : schemaFields,
+    timeline: service.timeline || getServiceTimeline(service.title, service.category),
     formattedPrice: formatPrice(price)
   };
+}
+
+function shouldUseSchemaPrice(title, price) {
+  return price !== undefined && shouldUseSchemaServiceData(title);
+}
+
+function shouldUseSchemaServiceData(title) {
+  return /^OEP License$|^DNFBP License -/.test(String(title || ""));
 }
 
 function normalizePrice(value) {
@@ -153,11 +168,19 @@ export function normalizeCmsData(data) {
     homeContent: merged.homeContent,
     branches: normalizeBranches(Array.isArray(merged.branches) ? merged.branches : defaults.branches),
     serviceAreas: Array.isArray(merged.serviceAreas) ? merged.serviceAreas : defaults.serviceAreas,
-    services: Array.isArray(merged.services) ? merged.services.map(enrichService) : defaults.services.map(enrichService),
+    services: mergeServices(defaults.services, merged.services).map(enrichService),
     blogs: Array.isArray(merged.blogs) ? merged.blogs : defaults.blogs,
     news: Array.isArray(merged.news) ? merged.news : defaults.news,
     appointments: Array.isArray(merged.appointments) ? merged.appointments : []
   };
+}
+
+function mergeServices(defaultServices, services) {
+  const source = Array.isArray(services) ? services : defaultServices;
+  const used = new Set(source.map((service) => service.slug || service.title));
+  const missingDefaults = defaultServices.filter((service) => !used.has(service.slug || service.title));
+
+  return [...source, ...missingDefaults];
 }
 
 function normalizeBranches(branches) {

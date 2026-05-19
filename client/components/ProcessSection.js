@@ -17,8 +17,8 @@ export default function ProcessSection({ section, steps = [], className = "my-5"
           ) : null}
         </div>
         <div className="grid gap-4" data-reveal="right">
-          {steps.filter((step) => step.enabled !== false).map((step) => (
-            <div className="group grid gap-5 rounded-3xl border border-white/10 bg-white/8 p-6 backdrop-blur transition duration-300 hover:-translate-y-1 hover:bg-white/12 sm:grid-cols-[64px_1fr]" key={step.number || step.title}>
+          {steps.filter((step) => step.enabled !== false).map((step, index) => (
+            <div className="group grid gap-5 rounded-3xl border border-white/10 bg-white/8 p-6 backdrop-blur transition duration-300 hover:-translate-y-1 hover:bg-white/12 sm:grid-cols-[64px_1fr]" key={`${step.number || step.title || "step"}-${index}`}>
               <span className="grid size-16 place-items-center rounded-2xl bg-secondary text-xl font-black text-primary transition duration-300 group-hover:rotate-3">
                 {step.number}
               </span>

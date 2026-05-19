@@ -14,9 +14,10 @@ export async function generateMetadata() {
 }
 
 export default async function AppointmentPage() {
-  const { services, pageContent } = await readCmsData();
+  const { branches, services, pageContent } = await readCmsData();
   const page = pageContent.appointment;
-  const visibleServices = services.filter((service) => service.enabled !== false).slice(0, 8);
+  const visibleServices = services.filter((service) => service.enabled !== false);
+  const previewServices = visibleServices.slice(0, 8);
 
   return (
     <>
@@ -55,8 +56,8 @@ export default async function AppointmentPage() {
             </div>
           </div>
           <div className="grid gap-4">
-            <AppointmentForm services={visibleServices} content={page} />
-            {visibleServices.map((service) => (
+            <AppointmentForm branches={branches} services={visibleServices} content={page} />
+            {previewServices.map((service) => (
               <Link className="group rounded-[1.5rem] border border-primary/10 bg-white p-6 shadow-lg shadow-primary/5 transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/10" href={`/services/${service.slug}`} key={service.slug}>
                 <div>
                   <span className="rounded-full bg-secondary px-3 py-1.5 text-xs font-black text-primary">{service.category}</span>

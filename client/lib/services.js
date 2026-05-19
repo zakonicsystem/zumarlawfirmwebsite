@@ -93,6 +93,7 @@ const serviceIndex = [
   ["DNFBP License - Sole Proprietorship", "Regulatory & Licensing", icons.regulatory],
   ["DNFBP License - Company", "Regulatory & Licensing", icons.regulatory],
   ["DNFBP License - AOP/Partnership", "Regulatory & Licensing", icons.regulatory],
+  ["OEP License", "Regulatory & Licensing", icons.regulatory],
   ["Chamber of Commerce New Membership - Sole Proprietor", "Chamber of Commerce", icons.chamber],
   ["Chamber of Commerce New Membership - Company", "Chamber of Commerce", icons.chamber],
   ["Chamber of Commerce New Membership - AOP/Partnership", "Chamber of Commerce", icons.chamber],
@@ -128,6 +129,40 @@ export function formatPrice(value) {
   return `PKR ${value.toLocaleString()}`;
 }
 
+export function getServiceTimeline(title, category) {
+  const text = `${title || ""} ${category || ""}`.toLowerCase();
+
+  if (text.includes("trademark") && text.includes("usa")) {
+    return "6 to 8 months";
+  }
+
+  if (text.includes("trademark") || text.includes("copyright") || text.includes("patent")) {
+    return "2 to 8 months";
+  }
+
+  if (text.includes("oep")) {
+    return "30 to 45 working days";
+  }
+
+  if (text.includes("arms license") || text.includes("npo") || text.includes("ngo")) {
+    return "30 to 90 working days";
+  }
+
+  if (text.includes("company registration") || text.includes("llp") || text.includes("partnership")) {
+    return "3 to 10 working days";
+  }
+
+  if (text.includes("return") || text.includes("password recovery")) {
+    return "1 to 3 working days";
+  }
+
+  if (text.includes("license") || text.includes("registration") || text.includes("membership")) {
+    return "7 to 30 working days";
+  }
+
+  return "3 to 7 working days";
+}
+
 function makeSummary(title, category) {
   const shortTitle = title.replace(/\s*\([^)]*\)/g, "");
   return `Professional ${shortTitle.toLowerCase()} support with document review, filing guidance, and follow-up handled by the Zumar Law Firm team.`;
@@ -144,6 +179,7 @@ export const services = serviceIndex.map(([title, category, icon]) => {
     slug: slugify(title),
     price,
     formattedPrice: formatPrice(price),
+    timeline: getServiceTimeline(title, category),
     summary: makeSummary(title, category),
     fields,
     requirements: fields.map((field) => field.label).filter(Boolean)
@@ -158,6 +194,7 @@ export const internationalServices = [
     slug: "florida-llc-package",
     price: "$415",
     formattedPrice: "$415",
+    timeline: "7 to 14 working days",
     summary: "Florida LLC formation package with address, mail forwarding, registered agent, EIN, reseller certificate, business accounts, US phone number, tax updates, and lifetime support.",
     requirements: [
       "Unique physical address for 1 year included $85",
@@ -185,6 +222,7 @@ export const internationalServices = [
     slug: "texas-llc-package",
     price: "$600",
     formattedPrice: "$600",
+    timeline: "7 to 14 working days",
     summary: "Texas LLC formation package with physical address, mail forwarding, registered agent, state filing, EIN, business accounts, phone number, tax updates, and lifetime support.",
     requirements: [
       "Unique physical address for 1 year included $85",
@@ -210,6 +248,7 @@ export const internationalServices = [
     slug: "wyoming-llc-package",
     price: "$390",
     formattedPrice: "$390",
+    timeline: "7 to 14 working days",
     summary: "Wyoming LLC formation package with business address, mail forwarding, registered agent, state filing, EIN, reseller certificate, Zyla account, phone number, and lifetime support.",
     requirements: [
       "Unique physical address for 1 year included $80",
@@ -237,6 +276,7 @@ export const internationalServices = [
     slug: "colorado-llc-package",
     price: "$290",
     formattedPrice: "$290",
+    timeline: "7 to 14 working days",
     summary: "Colorado LLC formation package with shared business address, mail forwarding, registered agent, state filing, EIN, business accounts, phone number, and tax updates.",
     requirements: [
       "Shared business address for 1 year included $35",
@@ -263,6 +303,7 @@ export const internationalServices = [
     slug: "missouri-llc-package",
     price: "$310",
     formattedPrice: "$310",
+    timeline: "7 to 14 working days",
     summary: "Missouri LLC package with shared business address, mail forwarding, registered agent, filing, EIN, business accounts, phone number, tax updates, and lifetime support.",
     requirements: [
       "Shared business address for 1 year included $45",
@@ -290,6 +331,7 @@ export const internationalServices = [
     slug: "usa-physical-bank-account-service",
     price: "$2,250",
     formattedPrice: "$2,250",
+    timeline: "30 working days",
     summary: "USA physical bank account support for eligible clients with Bank of America, Chase Bank, Wells Fargo, Truist, and IPC options.",
     requirements: [
       "Available banks: Bank of America, Chase Bank, Wells Fargo, Truist, IPC",
@@ -310,6 +352,7 @@ export const internationalServices = [
     slug: "uk-limited-company-registration",
     price: "£250",
     formattedPrice: "£250",
+    timeline: "3 to 7 working days",
     summary: "UK Limited Company registration with registered office address, HMRC fee, incorporation documents, UTR, authentication code, gateway ID, and Companies House logins.",
     requirements: [
       "UK Limited Company Registration",
@@ -338,6 +381,7 @@ export const internationalServices = [
     slug: "australia-trademark-registration",
     price: "AUD 250 + $150 service fee",
     formattedPrice: "AUD 250 + $150 service fee",
+    timeline: "6 to 8 months",
     summary: "Australia trademark filing support for word marks or logos with applicant details, goods and services classification, and filing preparation.",
     requirements: [
       "Trademark name or logo",
@@ -362,6 +406,7 @@ export const internationalServices = [
     slug: "canada-trademark-registration",
     price: "CAD 491 + $150 service fee",
     formattedPrice: "CAD 491 + $150 service fee",
+    timeline: "6 to 12 months",
     summary: "Canada trademark filing support for Canadian or foreign applicants with agent details, Nice Classification information, and filing preparation.",
     requirements: [
       "Trademark name or logo",
@@ -387,6 +432,7 @@ export const internationalServices = [
     slug: "uk-trademark-registration",
     price: "£170 + $150 service fee",
     formattedPrice: "£170 + $150 service fee",
+    timeline: "4 to 6 months",
     summary: "UK trademark filing support for word marks, logos, device marks, and combined marks with applicant and goods/services classification details.",
     requirements: [
       "Word mark or logo that you want to register",
@@ -413,6 +459,7 @@ export const internationalServices = [
     slug: "usa-trademark-registration",
     price: "$500",
     formattedPrice: "$500",
+    timeline: "6 to 8 months",
     summary: "USA trademark filing support with USPTO class fee guidance, applicant identity details, residential address, address proof, and filing timeline.",
     requirements: [
       "Trademark name or logo",

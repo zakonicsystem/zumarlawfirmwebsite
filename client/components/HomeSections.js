@@ -4,7 +4,6 @@ import ProcessSection from "@/components/ProcessSection";
 import ServiceCarousel from "@/components/ServiceCarousel";
 import ServiceBrowser from "@/components/ServiceBrowser";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
-import GoogleReviewsWidget from "@/components/GoogleReviewsWidget";
 
 export function SectionDivider() {
   return (
@@ -64,8 +63,8 @@ export function HomeWhyChooseSection({ content }) {
               {content?.panelTitle}
             </h2>
             <div className="mt-10 grid gap-7">
-              {strengths.map((item) => (
-                <div key={item.label}>
+              {strengths.map((item, index) => (
+                <div key={`${item.label || "strength"}-${index}`}>
                   <div className="mb-3 flex items-center justify-between gap-4 text-sm font-black sm:text-base">
                     <span>{item.label}</span>
                     <span className="text-secondary">{item.value}</span>
@@ -91,8 +90,8 @@ export function HomeWhyChooseSection({ content }) {
           </p>
 
           <div className="mt-7 grid gap-x-8 gap-y-4 sm:grid-cols-2">
-            {benefits.map((item) => (
-              <div className="flex items-center gap-3 text-sm font-bold text-ink/75" key={item.text}>
+            {benefits.map((item, index) => (
+              <div className="flex items-center gap-3 text-sm font-bold text-ink/75" key={`${item.text || "benefit"}-${index}`}>
                 <span className="grid size-5 shrink-0 place-items-center rounded border border-primary/20 bg-secondary/60 text-primary">
                   <FaIcon className="size-3" name={item.icon || "check"} />
                 </span>
@@ -192,33 +191,6 @@ export function HomeTestimonialsSection({ content }) {
         </div>
 
         <TestimonialCarousel items={testimonials} />
-      </div>
-    </section>
-  );
-}
-
-export function HomeGoogleReviewsSection({ content }) {
-  if (content?.enabled === false) {
-    return null;
-  }
-
-  return (
-    <section className="bg-white py-12 sm:py-16" data-reveal="up">
-      <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
-        <div>
-          <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-primary">{content?.eyebrow}</p>
-          <h2 className="text-3xl font-black leading-tight text-primary sm:text-5xl">{content?.title}</h2>
-          <p className="mt-5 text-base leading-8 text-muted">{content?.copy}</p>
-          <div className="mt-7 flex flex-wrap gap-3">
-            <a className="inline-flex min-h-12 items-center justify-center rounded-md bg-primary px-6 text-sm font-black text-white transition hover:-translate-y-1" href={content?.placeUrl || "#"} target="_blank" rel="noreferrer">
-              {content?.buttonText || "Open Google Reviews"}
-            </a>
-            <a className="inline-flex min-h-12 items-center justify-center rounded-md border border-primary/15 px-6 text-sm font-black text-primary transition hover:-translate-y-1 hover:bg-secondary" href={content?.writeReviewUrl || content?.placeUrl || "#"} target="_blank" rel="noreferrer">
-              {content?.writeButtonText || "Write a Review"}
-            </a>
-          </div>
-        </div>
-        <GoogleReviewsWidget content={content} />
       </div>
     </section>
   );

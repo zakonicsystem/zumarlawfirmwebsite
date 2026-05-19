@@ -50,9 +50,10 @@ export const serviceData = Object.freeze({
     'DTS License': 50000,
     'Medical Store License': 50000,
     'Import Export License': 5000,
-    'DNFBP License - Sole Proprietorship': 7000,
-    'DNFBP License - Company': 15000,
-    'DNFBP License - AOP/Partnership': 15000,
+    'DNFBP License - Sole Proprietorship': 10000,
+    'DNFBP License - Company': 20000,
+    'DNFBP License - AOP/Partnership': 20000,
+    'OEP License': 300000,
     'Chamber of Commerce New Membership - Sole Proprietor': 10000,
     'Chamber of Commerce New Membership - Company': 25000,
     'Chamber of Commerce New Membership - AOP/Partnership': 20000,
@@ -518,40 +519,24 @@ export const serviceData = Object.freeze({
       { name: 'phone', label: 'Business Phone No', type: 'tel' }
     ],
 
-    'DNFBP License - Sole Proprietorship': [
-      { name: 'institute_name', label: 'Institute Name', type: 'text' },
-      { name: 'institute_nature', label: 'Institute Nature', type: 'text' },
-      { name: 'institute_address', label: 'Institute Address', type: 'text' },
-      { name: 'email_id', label: 'Email ID', type: 'email' },
-      { name: 'phone_no', label: 'Phone No', type: 'tel' },
-      { name: 'fbr_login_id', label: 'FBR Login ID', type: 'text' },
-      { name: 'owner_cnic_front', label: 'Owner CNIC Front', type: 'file' },
-      { name: 'owner_cnic_back', label: 'Owner CNIC Back', type: 'file' },
-      { name: 'police_character_cert', label: 'Police Character Certificate', type: 'file' }
-    ],
+    'DNFBP License - Sole Proprietorship': dnfbpFields('Sole Proprietor'),
 
-    'DNFBP License - Company': [
-      { name: 'institute_name', label: 'Institute Name', type: 'text' },
-      { name: 'institute_nature', label: 'Institute Nature', type: 'text' },
-      { name: 'institute_address', label: 'Institute Address', type: 'text' },
-      { name: 'email_id', label: 'Email ID', type: 'email' },
-      { name: 'phone_no', label: 'Phone No', type: 'tel' },
-      { name: 'fbr_login_id', label: 'FBR Login ID', type: 'text' },
-      { name: 'owner_cnic_front', label: 'Owner CNIC Front', type: 'file' },
-      { name: 'owner_cnic_back', label: 'Owner CNIC Back', type: 'file' },
-      { name: 'police_character_cert', label: 'Police Character Certificate', type: 'file' }
-    ],
+    'DNFBP License - Company': dnfbpFields('Company'),
 
-    'DNFBP License - AOP/Partnership': [
-      { name: 'institute_name', label: 'Institute Name', type: 'text' },
-      { name: 'institute_nature', label: 'Institute Nature', type: 'text' },
-      { name: 'institute_address', label: 'Institute Address', type: 'text' },
+    'DNFBP License - AOP/Partnership': dnfbpFields('Partnership Firm'),
+
+    'OEP License': [
+      { name: 'agency_name', label: 'Agency Name', type: 'text' },
+      { name: 'agency_address', label: 'Agency Address', type: 'text' },
       { name: 'email_id', label: 'Email ID', type: 'email' },
       { name: 'phone_no', label: 'Phone No', type: 'tel' },
-      { name: 'fbr_login_id', label: 'FBR Login ID', type: 'text' },
-      { name: 'owner_cnic_front', label: 'Owner CNIC Front', type: 'file' },
-      { name: 'owner_cnic_back', label: 'Owner CNIC Back', type: 'file' },
-      { name: 'police_character_cert', label: 'Police Character Certificate', type: 'file' }
+      { name: 'owner_cnic', label: 'Owner CNIC', type: 'file' },
+      { name: 'bank_maintenance_certificate', label: 'Bank Maintenance Certificate', type: 'file' },
+      { name: 'qualification_certificate', label: 'Qualification Certificate', type: 'file' },
+      { name: 'owner_ntn', label: 'NTN Owner', type: 'file' },
+      { name: 'business_registration_certificate', label: 'Business Registration Certificate', type: 'file' },
+      { name: 'owner_cv', label: 'Owner CV', type: 'file' },
+      { name: 'character_certificate', label: 'Character Certificate', type: 'file' }
     ],
 
     'Chamber of Commerce New Membership - Sole Proprietor': [
@@ -696,3 +681,26 @@ export const serviceData = Object.freeze({
 
   }
 });
+
+function dnfbpFields(defaultBusinessType = "") {
+  return [
+    { name: 'user_name', label: 'User Name', type: 'text' },
+    { name: 'email_or_phone', label: 'Email / Phone No', type: 'text' },
+    {
+      name: 'business_type',
+      label: 'Business Type',
+      type: 'select',
+      options: ['Company', 'Sole Proprietor', 'Partnership Firm'],
+      defaultValue: defaultBusinessType
+    },
+    { name: 'fbr_login_id', label: 'FBR Login ID', type: 'text' },
+    { name: 'gmail_id', label: 'Gmail ID', type: 'email' },
+    { name: 'phone_no', label: 'Phone No', type: 'tel' },
+    {
+      name: 'province',
+      label: 'Province',
+      type: 'select',
+      options: ['Punjab', 'KPK', 'Sindh', 'Balochistan', 'Azad Kashmir', 'Islamabad']
+    }
+  ];
+}

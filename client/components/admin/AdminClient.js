@@ -53,6 +53,7 @@ const emptyService = {
   icon: "scale",
   image: "",
   price: "",
+  timeline: "",
   summary: "",
   requirements: [],
   metaTitle: "",
@@ -94,7 +95,6 @@ const pageSidebarItems = [
   ["CEO & History", "/admin/pages?page=team", "landmark"],
   ["Services", "/admin/pages?page=services", "scale"],
   ["Calculators", "/admin/pages?page=calculators", "tax"],
-  ["Google Reviews", "/admin/pages?page=googleReviews", "star"],
   ["Service Areas", "/admin/pages?page=serviceAreas", "filing"],
   ["Service Area Detail", "/admin/pages?page=serviceAreaDetail", "filing"],
   ["Branches", "/admin/pages?page=branches", "landmark"],
@@ -424,6 +424,7 @@ function PageContentEditor({ data, updateData, save, initialPage }) {
             <Field label="Requirements Title" value={page.requirementsTitle} onChange={(value) => updatePage("requirementsTitle", value)} />
             <Textarea label="Empty Requirements Text" value={page.emptyRequirementsText} onChange={(value) => updatePage("emptyRequirementsText", value)} />
             <Field label="Fee Label" value={page.feeLabel} onChange={(value) => updatePage("feeLabel", value)} />
+            <Field label="Timeline Label" value={page.timelineLabel} onChange={(value) => updatePage("timelineLabel", value)} />
             <Textarea label="Fee Note" value={page.feeNote} onChange={(value) => updatePage("feeNote", value)} />
             <Field label="Start Online Label" value={page.startOnlineLabel} onChange={(value) => updatePage("startOnlineLabel", value)} />
             <Field label="Start Online URL" value={page.startOnlineHref} onChange={(value) => updatePage("startOnlineHref", value)} />
@@ -448,28 +449,6 @@ function PageContentEditor({ data, updateData, save, initialPage }) {
             <Textarea label="Business Copy" value={page.businessCopy} onChange={(value) => updatePage("businessCopy", value)} />
             <Field label="Consultation Button Label" value={page.consultationLabel} onChange={(value) => updatePage("consultationLabel", value)} />
             <Field label="Consultation Button URL" value={page.consultationHref} onChange={(value) => updatePage("consultationHref", value)} />
-          </>
-        ) : null}
-
-        {active === "googleReviews" ? (
-          <>
-            <Field label="Rating" value={page.rating} onChange={(value) => updatePage("rating", value)} />
-            <Field label="Review Count Text" value={page.reviewCount} onChange={(value) => updatePage("reviewCount", value)} />
-            <Field label="Google Place ID" value={page.placeId} onChange={(value) => updatePage("placeId", value)} />
-            <Field label="Google Reviews URL" value={page.placeUrl} onChange={(value) => updatePage("placeUrl", value)} />
-            <Field label="Write Review URL" value={page.writeReviewUrl} onChange={(value) => updatePage("writeReviewUrl", value)} />
-            <Field label="Button Text" value={page.buttonText} onChange={(value) => updatePage("buttonText", value)} />
-            <Field label="Write Button Text" value={page.writeButtonText} onChange={(value) => updatePage("writeButtonText", value)} />
-            <EditableList
-              title="Fallback Reviews"
-              items={page.fallbackReviews || []}
-              fields={["author", "rating", "time", "text"]}
-              multilineFields={["text"]}
-              onUpdate={(index, field, value) => updatePageList("fallbackReviews", index, field, value)}
-              onAdd={() => addPageListItem("fallbackReviews", { author: "Google Reviewer", rating: "5", time: "Google review", text: "Review text" })}
-              onRemove={(index) => removePageListItem("fallbackReviews", index)}
-            />
-            <Toggle label="Visible" checked={page.enabled !== false} onChange={(value) => updatePage("enabled", value)} />
           </>
         ) : null}
 
@@ -773,7 +752,7 @@ function Dashboard({ data }) {
       <div className="rounded-lg bg-gradient-to-br from-primary to-[#4b1933] p-7 text-white">
         <p className="text-sm font-black uppercase text-secondary">Zumar CMS</p>
         <h1 className="mt-2 text-4xl font-black">Admin Dashboard</h1>
-        <p className="mt-3 max-w-2xl leading-7 text-white/75">Manage public pages, service records, SEO, calculators, Google reviews, social links, appointments, and uploadable images from one panel.</p>
+        <p className="mt-3 max-w-2xl leading-7 text-white/75">Manage public pages, service records, SEO, calculators, social links, appointments, and uploadable images from one panel.</p>
       </div>
       <div className="mt-6 grid gap-4 md:grid-cols-4">
         {stats.map(([label, value]) => (
@@ -1432,7 +1411,17 @@ function Appointments({ data, save }) {
               <div>
                 <h2 className="text-xl font-black text-primary">{item.name}</h2>
                 <p className="text-sm text-muted">{item.phone} | {item.email}</p>
-                <p className="mt-2 font-bold text-ink">{item.service} {item.date ? `| ${item.date}` : ""}</p>
+                <p className="mt-2 font-bold text-ink">{item.service} {item.branch ? `| ${item.branch}` : ""} {item.date ? `| ${item.date}` : ""}</p>
+                {item.details && Object.keys(item.details).length ? (
+                  <dl className="mt-3 grid gap-2 rounded-xl bg-paper p-3 text-sm">
+                    {Object.entries(item.details).map(([key, value]) => (
+                      <div className="grid gap-1 sm:grid-cols-[180px_1fr]" key={key}>
+                        <dt className="font-black text-primary">{labelFromKey(key)}</dt>
+                        <dd className="font-semibold text-muted">{String(value)}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                ) : null}
                 <p className="mt-2 text-sm leading-6 text-muted">{item.message}</p>
               </div>
               <div className="flex flex-wrap items-start gap-2">
@@ -1453,6 +1442,12 @@ function Appointments({ data, save }) {
   );
 }
 
+function labelFromKey(value) {
+  return String(value || "")
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
 function ServiceFields({ data, form, setForm }) {
   return (
     <>
@@ -1463,6 +1458,7 @@ function ServiceFields({ data, form, setForm }) {
       <ImageField label="Image URL" value={form.image} onChange={(value) => setForm({ ...form, image: value })} />
       <Field label="Service Type" value={form.serviceType} onChange={(value) => setForm({ ...form, serviceType: value })} />
       <Field label="Price" value={String(form.price || "")} onChange={(value) => setForm({ ...form, price: value })} />
+      <Field label="Timeline" value={form.timeline || ""} onChange={(value) => setForm({ ...form, timeline: value })} />
       <Textarea label="Summary" value={form.summary} onChange={(value) => setForm({ ...form, summary: value })} />
       <Field label="Meta Title" value={form.metaTitle} onChange={(value) => setForm({ ...form, metaTitle: value })} />
       <Textarea label="Meta Description" value={form.metaDescription} onChange={(value) => setForm({ ...form, metaDescription: value })} />

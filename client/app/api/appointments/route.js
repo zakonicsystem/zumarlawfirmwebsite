@@ -22,6 +22,7 @@ export async function POST(request) {
     name: payload.name || "",
     phone: payload.phone || "",
     email: payload.email || "",
+    branch: payload.branch || "",
     service: payload.service || "",
     date: payload.date || "",
     message: payload.message || "",

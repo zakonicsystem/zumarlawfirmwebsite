@@ -4,7 +4,6 @@ import Reveal from "@/components/Reveal";
 import {
   HomeBranchesSection,
   HomeFeaturedSection,
-  HomeGoogleReviewsSection,
   HomeProcessSection,
   HomeServiceAreasSection,
   HomeServicesSection,
@@ -49,8 +48,6 @@ export default async function HomePage() {
       <HomeServiceAreasSection content={cms.homeContent?.serviceAreas} serviceAreas={cms.serviceAreas} />
       <SectionDivider />
       <HomeTestimonialsSection content={cms.homeContent?.testimonials} />
-      <SectionDivider />
-      <HomeGoogleReviewsSection content={cms.pageContent?.googleReviews} />
       <SectionDivider />
       <HomeUpdatesSection content={cms.homeContent?.updates} newsItems={newsItems} blogPosts={blogPosts} />
       <SectionDivider />

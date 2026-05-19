@@ -21,8 +21,8 @@ export default async function PrivacyPolicyPage() {
           <p className="text-lg leading-8 text-ink/75">
             {page.copy}
           </p>
-          {(page.sections || []).map((section) => (
-            <div key={section.title}>
+          {(page.sections || []).map((section, index) => (
+            <div key={`${section.title || "section"}-${index}`}>
               <h2 className="mt-9 inline-flex items-center gap-3 text-3xl font-black text-primary">
                 <FaIcon className="size-6" name={section.icon} />
                 {section.title}

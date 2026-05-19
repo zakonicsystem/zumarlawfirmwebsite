@@ -24,8 +24,8 @@ export default async function ContactPage() {
             <div className="overflow-hidden rounded-[2rem] border border-primary/10 shadow-xl shadow-primary/10">
               <img className="h-64 w-full object-cover" src={page.image || contactImage} alt="Professional client handshake from Unsplash" />
             </div>
-            {(page.links || []).map((link) => (
-              <div className="rounded-[2rem] border border-primary/10 bg-white p-6 shadow-lg shadow-primary/5" key={link.title}>
+            {(page.links || []).map((link, index) => (
+              <div className="rounded-[2rem] border border-primary/10 bg-white p-6 shadow-lg shadow-primary/5" key={`${link.title || "link"}-${index}`}>
                 <strong className="inline-flex items-center gap-2 text-lg font-black text-primary">
                   <FaIcon className="size-4" name={link.icon} />
                   {link.title}

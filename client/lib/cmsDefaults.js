@@ -347,6 +347,7 @@ export const defaultPageContent = {
     requirementsTitle: "Required Details / Documents",
     emptyRequirementsText: "Requirements are confirmed during consultation because this service may vary by case.",
     feeLabel: "Professional fee",
+    timelineLabel: "Timeline",
     feeNote: "Final government fees, challans, and case-specific expenses may vary where applicable.",
     startOnlineLabel: "Start Online",
     startOnlineHref: "https://app.zumarlawfirm.com/signup",
@@ -495,29 +496,6 @@ export const defaultPageContent = {
     businessCopy: "Estimate individual or AOP business income tax from tax year 2022 to 2026.",
     consultationLabel: "Review With Tax Team",
     consultationHref: "/appointment"
-  },
-  googleReviews: {
-    label: "Google Reviews",
-    eyebrow: "Google Reviews",
-    title: "Client feedback on Google",
-    copy: "Read public Google reviews and share your experience with Zumar Law Firm.",
-    rating: "5.0",
-    reviewCount: "Client reviews",
-    placeUrl: "https://www.google.com/search?q=Zumar+Law+Firm+reviews",
-    writeReviewUrl: "https://www.google.com/search?q=Zumar+Law+Firm+reviews",
-    placeId: "",
-    embedUrl: "",
-    buttonText: "Open Google Reviews",
-    writeButtonText: "Write a Review",
-    fallbackReviews: [
-      {
-        author: "Google Reviewer",
-        rating: "5",
-        text: "Professional guidance and clear service process.",
-        time: "Google review"
-      }
-    ],
-    enabled: true
   },
   careers: {
     label: "Careers",
@@ -764,6 +742,7 @@ function normalizeService(service) {
     icon: service.icon || "scale",
     image: service.image || "",
     price: service.price || "",
+    timeline: service.timeline || "",
     summary: service.summary,
     requirements: service.requirements || [],
     serviceType: service.serviceType || "national",

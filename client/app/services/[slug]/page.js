@@ -48,12 +48,25 @@ export default async function ServiceDetailPage({ params }) {
         <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
             <p className="mb-3 text-sm font-black uppercase text-primary">{service.category || detailContent.eyebrowFallback}</p>
-            <h1 className="text-5xl font-black leading-tight text-primary sm:text-5xl">{service.title}</h1>
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+              <span className="grid size-20 shrink-0 place-items-center rounded-[1.5rem] bg-white shadow-xl shadow-primary/10 ring-1 ring-primary/10">
+                <FaIcon className="size-9 text-primary" name={service.icon} />
+              </span>
+              <h1 className="text-5xl font-black leading-tight text-primary sm:text-5xl">{service.title}</h1>
+            </div>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">{service.summary}</p>
           </div>
-          <span className="grid size-24 place-items-center rounded-[2rem] bg-white shadow-2xl shadow-primary/10 ring-1 ring-primary/10">
-            <FaIcon className="size-12 text-primary" name={service.icon} />
-          </span>
+          <div className="grid min-w-64 gap-4 rounded-[2rem] bg-white p-6 shadow-2xl shadow-primary/10 ring-1 ring-primary/10">
+            <div>
+              <p className="text-xs font-black uppercase tracking-wide text-primary/50">{detailContent.feeLabel}</p>
+              <strong className="mt-2 block text-2xl font-black text-primary">{service.formattedPrice}</strong>
+            </div>
+            <div className="h-px bg-primary/10" />
+            <div>
+              <p className="text-xs font-black uppercase tracking-wide text-primary/50">{detailContent.timelineLabel || "Timeline"}</p>
+              <strong className="mt-2 block text-xl font-black text-ink">{service.timeline}</strong>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -93,11 +106,7 @@ export default async function ServiceDetailPage({ params }) {
           </div>
 
           <aside className="sticky top-28 rounded-[2rem] border border-primary/10 bg-primary p-7 text-white shadow-2xl shadow-primary/20">
-            <p className="text-sm font-black uppercase text-secondary">{detailContent.feeLabel}</p>
-            <h2 className="mt-3 text-3xl font-black">{service.formattedPrice}</h2>
-            <p className="mt-5 leading-7 text-white/70">
-              {detailContent.feeNote}
-            </p>
+            <p className="leading-7 text-white/70">{detailContent.feeNote}</p>
             <div className="mt-7 grid gap-3">
               <a className="inline-flex min-h-12 items-center justify-center rounded-full bg-secondary px-5 text-sm font-black text-primary transition hover:-translate-y-1" href={detailContent.startOnlineHref}>
                 <FaIcon className="mr-2 size-4" name="registration" />
