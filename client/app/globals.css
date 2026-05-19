@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@source "../app";
+@source "../components";
+@source "../lib";
+
+@theme {
+  --color-primary: #51213d;
+  --color-secondary: #efdac7;
+  --color-ink: #141114;
+  --color-muted: #6f6670;
+  --color-paper: #fffaf6;
+  --font-sans: var(--font-jakarta), Arial, Helvetica, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #fffdfb;
+}
+
+@keyframes heroFade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroRise {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

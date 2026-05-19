@@ -1,0 +1,15 @@
+node_modules/
+client/node_modules/
+server/node_modules/
+client/.next/
+client/.vercel/
+client/.env.local
+client/test-results/
+client/next-dev*.log
+server/.env
+server/uploads/
+server/data/
+server/*-dev.log
+server/*-build.log
+server/*.err.log
+npm-debug.log*

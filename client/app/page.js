@@ -1,0 +1,69 @@
+import HomeHeroSlider from "@/components/HomeHeroSlider";
+import HomeStatsSection from "@/components/HomeStatsSection";
+import Reveal from "@/components/Reveal";
+import {
+  HomeBranchesSection,
+  HomeFeaturedSection,
+  HomeGoogleReviewsSection,
+  HomeProcessSection,
+  HomeServiceAreasSection,
+  HomeServicesSection,
+  HomeTestimonialsSection,
+  HomeUpdatesSection,
+  HomeWhyChooseSection,
+  SectionDivider
+} from "@/components/HomeSections";
+import { readCmsData } from "@/lib/cmsStore";
+import { getPageMetadata } from "@/lib/seo";
+
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata() {
+  return getPageMetadata("home");
+}
+
+export default async function HomePage() {
+  const cms = await readCmsData();
+  const home = Object.fromEntries(cms.homeSections.map((section) => [section.id, section]));
+  const services = cms.services.filter((service) => service.enabled !== false);
+  const serviceSelections = cms.homeContent?.serviceSelections || {};
+  const featuredServices = selectServices(services, serviceSelections.featuredSlugs);
+  const homeGridServices = selectServices(services, serviceSelections.homeGridSlugs);
+  const newsItems = cms.news.filter((item) => item.enabled !== false);
+  const blogPosts = cms.blogs.filter((post) => post.enabled !== false);
+
+  return (
+    <>
+      <Reveal />
+      <HomeHeroSlider slides={cms.heroSlides} />
+      <HomeStatsSection stats={cms.homeStats} />
+      <SectionDivider />
+      <HomeWhyChooseSection content={cms.homeContent?.whyChoose} />
+      <SectionDivider />
+      <HomeFeaturedSection section={home.featured} services={featuredServices} />
+      <SectionDivider />
+      <HomeProcessSection section={cms.homeContent?.sharedProcess} steps={cms.homeContent?.sharedProcess?.steps} />
+      <SectionDivider />
+      <HomeServicesSection section={home.services} services={homeGridServices} categories={cms.categories} />
+      <SectionDivider />
+      <HomeServiceAreasSection content={cms.homeContent?.serviceAreas} serviceAreas={cms.serviceAreas} />
+      <SectionDivider />
+      <HomeTestimonialsSection content={cms.homeContent?.testimonials} />
+      <SectionDivider />
+      <HomeGoogleReviewsSection content={cms.pageContent?.googleReviews} />
+      <SectionDivider />
+      <HomeUpdatesSection content={cms.homeContent?.updates} newsItems={newsItems} blogPosts={blogPosts} />
+      <SectionDivider />
+      <HomeBranchesSection content={cms.homeContent?.branches} branches={cms.branches} />
+    </>
+  );
+}
+
+function selectServices(services, slugs = []) {
+  if (!Array.isArray(slugs) || slugs.length === 0) {
+    return services;
+  }
+
+  const selected = new Set(slugs);
+  return services.filter((service) => selected.has(service.slug));
+}

@@ -1,0 +1,334 @@
+import Link from "next/link";
+import FaIcon from "@/components/FaIcon";
+import ProcessSection from "@/components/ProcessSection";
+import ServiceCarousel from "@/components/ServiceCarousel";
+import ServiceBrowser from "@/components/ServiceBrowser";
+import TestimonialCarousel from "@/components/TestimonialCarousel";
+import GoogleReviewsWidget from "@/components/GoogleReviewsWidget";
+
+export function SectionDivider() {
+  return (
+    <div className="relative bg-[#fffdfb]" aria-hidden="true">
+      <div className="mx-auto flex h-12 w-[min(1180px,calc(100%-32px))] items-center">
+        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-primary/15 to-transparent" />
+        <div className="mx-5 grid size-9 place-items-center rounded-full border border-primary/10 bg-white shadow-lg shadow-primary/5">
+          <span className="size-2 rounded-full bg-secondary" />
+        </div>
+        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-primary/15 to-transparent" />
+      </div>
+    </div>
+  );
+}
+
+export function HomeFeaturedSection({ section, services }) {
+  if (section?.enabled === false) {
+    return null;
+  }
+
+  return (
+    <section className="my-10 py-5 sm:py-10" aria-label="Featured service carousel" data-reveal="up">
+      <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
+        <div className="mb-10 grid gap-6 lg:grid-cols-[0.75fr_1fr] lg:items-end">
+          <div data-reveal="left">
+            <p className="mb-3 text-sm font-black uppercase text-primary">{section?.eyebrow}</p>
+            <h2 className="text-4xl font-black leading-tight text-primary sm:text-6xl">{section?.title}</h2>
+          </div>
+          <p className="text-base leading-8 text-muted lg:text-lg" data-reveal="right">
+            {section?.copy}
+          </p>
+        </div>
+        <div data-reveal="zoom">
+          <ServiceCarousel items={services} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function HomeWhyChooseSection({ content }) {
+  if (content?.enabled === false) {
+    return null;
+  }
+
+  const strengths = (content?.strengths || []).filter((item) => item.enabled !== false);
+  const benefits = (content?.benefits || []).filter((item) => item.enabled !== false);
+
+  return (
+    <section className="bg-white py-12 sm:py-16" data-reveal="up">
+      <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[0.95fr_1fr] lg:items-center">
+        <div className="relative overflow-hidden rounded-lg bg-primary p-7 text-white shadow-2xl shadow-primary/15 sm:p-10" data-reveal="left">
+          <img className="absolute inset-0 h-full w-full object-cover opacity-35" src={content?.image} alt="" aria-hidden="true" />
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/95 via-primary/85 to-primary/65" />
+          <div className="relative z-10">
+            <h2 className="max-w-xl text-3xl font-black leading-tight sm:text-4xl">
+              {content?.panelTitle}
+            </h2>
+            <div className="mt-10 grid gap-7">
+              {strengths.map((item) => (
+                <div key={item.label}>
+                  <div className="mb-3 flex items-center justify-between gap-4 text-sm font-black sm:text-base">
+                    <span>{item.label}</span>
+                    <span className="text-secondary">{item.value}</span>
+                  </div>
+                  <div className="h-3 overflow-hidden rounded-full bg-white/25">
+                    <div className="h-full rounded-full bg-secondary shadow-[0_0_18px_rgba(239,218,199,0.45)]" style={{ width: item.value }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="lg:pl-4" data-reveal="right">
+          <p className="mb-4 inline-flex border-b-2 border-secondary pb-2 text-sm font-black text-primary">
+            {content?.eyebrow}
+          </p>
+          <h2 className="max-w-2xl text-3xl font-black leading-tight text-ink sm:text-4xl">
+            {content?.title}
+          </h2>
+          <p className="mt-6 max-w-2xl text-base leading-8 text-muted">
+            {content?.copy}
+          </p>
+
+          <div className="mt-7 grid gap-x-8 gap-y-4 sm:grid-cols-2">
+            {benefits.map((item) => (
+              <div className="flex items-center gap-3 text-sm font-bold text-ink/75" key={item.text}>
+                <span className="grid size-5 shrink-0 place-items-center rounded border border-primary/20 bg-secondary/60 text-primary">
+                  <FaIcon className="size-3" name={item.icon || "check"} />
+                </span>
+                {item.text}
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-9 flex flex-wrap gap-3">
+            <SmartLink className="inline-flex min-h-12 items-center justify-center rounded-md bg-primary px-6 text-sm font-black text-white transition hover:-translate-y-1 hover:bg-primary/90" href={content?.primaryHref || "/appointment"}>
+              {content?.primaryLabel}
+            </SmartLink>
+            <SmartLink className="inline-flex min-h-12 items-center justify-center rounded-md border border-primary/15 bg-white px-6 text-sm font-black text-primary transition hover:-translate-y-1 hover:bg-secondary" href={content?.secondaryHref || "/services"}>
+              {content?.secondaryLabel}
+            </SmartLink>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function HomeProcessSection({ section, steps = [] }) {
+  return <ProcessSection section={section} steps={steps} />;
+}
+
+export function HomeServicesSection({ section, services, categories }) {
+  if (section?.enabled === false) {
+    return null;
+  }
+
+  return (
+    <section className="my-10 py-5 sm:py-10" id="services" data-reveal="up">
+      <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
+        <div className="mb-10 max-w-3xl" data-reveal="up">
+          <p className="mb-3 text-sm font-black uppercase text-primary">{section?.eyebrow}</p>
+          <h2 className="text-4xl font-black leading-tight text-primary sm:text-6xl">
+            {section?.title}
+          </h2>
+        </div>
+        <ServiceBrowser limit={6} showAllButton services={services} categories={categories} />
+      </div>
+    </section>
+  );
+}
+
+export function HomeServiceAreasSection({ content, serviceAreas = [] }) {
+  if (content?.enabled === false) {
+    return null;
+  }
+
+  return (
+    <section className="my-10 bg-paper py-5 sm:py-10" data-reveal="up">
+      <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
+        <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between" data-reveal="up">
+          <div>
+            <p className="mb-3 text-sm font-black uppercase text-primary">{content?.eyebrow}</p>
+            <h2 className="text-4xl font-black leading-tight text-primary sm:text-6xl">{content?.title}</h2>
+          </div>
+          <SmartLink className="inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-black text-white" href={content?.buttonHref || "/service-areas"}>
+            {content?.buttonText}
+          </SmartLink>
+        </div>
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+          {serviceAreas.filter((area) => area.enabled !== false).slice(0, Number(content?.limit || 4)).map((area) => (
+            <Link className="group overflow-hidden rounded-[2rem] border border-primary/10 bg-white shadow-xl shadow-primary/5 transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/15" href={`/service-areas/${area.slug}`} key={area.slug}>
+              <img className="h-44 w-full object-cover transition duration-500 group-hover:scale-105" src={area.image} alt={area.title} />
+              <div className="p-5">
+                <FaIcon className="mb-4 size-7 text-primary" name={area.icon} />
+                <h3 className="text-xl font-black text-primary">{area.title}</h3>
+                <p className="mt-3 text-sm leading-6 text-muted">{area.summary}</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function HomeTestimonialsSection({ content }) {
+  if (content?.enabled === false) {
+    return null;
+  }
+
+  const testimonials = (content?.items || []).filter((item) => item.enabled !== false);
+
+  return (
+    <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-[#37152a] py-14 text-white sm:py-20" data-reveal="up">
+      <div className="absolute left-[-8rem] top-[-8rem] size-72 rounded-full bg-secondary/10 blur-3xl" />
+      <div className="absolute bottom-[-10rem] right-[-6rem] size-80 rounded-full bg-white/10 blur-3xl" />
+      <div className="relative z-10 mx-auto w-[min(1180px,calc(100%-32px))]">
+        <div className="mx-auto mb-10 max-w-3xl text-center" data-reveal="up">
+          <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-secondary">{content?.eyebrow}</p>
+          <h2 className="text-4xl font-black leading-tight sm:text-6xl">{content?.title}</h2>
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/72">{content?.copy}</p>
+        </div>
+
+        <TestimonialCarousel items={testimonials} />
+      </div>
+    </section>
+  );
+}
+
+export function HomeGoogleReviewsSection({ content }) {
+  if (content?.enabled === false) {
+    return null;
+  }
+
+  return (
+    <section className="bg-white py-12 sm:py-16" data-reveal="up">
+      <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+        <div>
+          <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-primary">{content?.eyebrow}</p>
+          <h2 className="text-3xl font-black leading-tight text-primary sm:text-5xl">{content?.title}</h2>
+          <p className="mt-5 text-base leading-8 text-muted">{content?.copy}</p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <a className="inline-flex min-h-12 items-center justify-center rounded-md bg-primary px-6 text-sm font-black text-white transition hover:-translate-y-1" href={content?.placeUrl || "#"} target="_blank" rel="noreferrer">
+              {content?.buttonText || "Open Google Reviews"}
+            </a>
+            <a className="inline-flex min-h-12 items-center justify-center rounded-md border border-primary/15 px-6 text-sm font-black text-primary transition hover:-translate-y-1 hover:bg-secondary" href={content?.writeReviewUrl || content?.placeUrl || "#"} target="_blank" rel="noreferrer">
+              {content?.writeButtonText || "Write a Review"}
+            </a>
+          </div>
+        </div>
+        <GoogleReviewsWidget content={content} />
+      </div>
+    </section>
+  );
+}
+
+export function HomeUpdatesSection({ content, newsItems = [], blogPosts = [] }) {
+  if (content?.enabled === false) {
+    return null;
+  }
+
+  return (
+    <section className="my-10 py-5 sm:py-10" data-reveal="up">
+      <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-12 lg:grid-cols-2">
+        <ArticlePreviewColumn
+          eyebrow={content?.newsEyebrow}
+          title={content?.newsTitle}
+          linkText={content?.newsButtonText}
+          linkHref={content?.newsButtonHref || "/news"}
+          items={newsItems}
+          basePath="/news"
+        />
+        <ArticlePreviewColumn
+          eyebrow={content?.blogEyebrow}
+          title={content?.blogTitle}
+          linkText={content?.blogButtonText}
+          linkHref={content?.blogButtonHref || "/blog"}
+          items={blogPosts}
+          basePath="/blog"
+        />
+      </div>
+    </section>
+  );
+}
+
+export function HomeBranchesSection({ content, branches = [] }) {
+  if (content?.enabled === false) {
+    return null;
+  }
+
+  return (
+    <section className="mt-10 bg-primary py-5 text-white sm:py-10" data-reveal="up">
+      <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
+        <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between" data-reveal="up">
+          <div>
+            <p className="mb-3 text-sm font-black uppercase text-secondary">{content?.eyebrow}</p>
+            <h2 className="text-4xl font-black leading-tight sm:text-6xl">{content?.title}</h2>
+          </div>
+          <SmartLink className="inline-flex min-h-12 items-center justify-center rounded-full bg-secondary px-6 text-sm font-black text-primary" href={content?.buttonHref || "/branches"}>
+            {content?.buttonText}
+          </SmartLink>
+        </div>
+        <div className="grid gap-6 md:grid-cols-2">
+          {branches.filter((branch) => branch.enabled !== false).slice(0, Number(content?.limit || 2)).map((branch) => (
+            <article className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 shadow-xl shadow-black/10 transition hover:-translate-y-1" key={branch.slug}>
+              <Link className="block" href={`/branches/${branch.slug}`}>
+                <img className="h-56 w-full object-cover" src={branch.image} alt={`${branch.name} branch`} />
+              </Link>
+              <div className="p-6">
+                <Link className="inline-flex items-center gap-3 text-xl font-black transition hover:text-secondary" href={`/branches/${branch.slug}`}>
+                  <FaIcon className="size-5 text-secondary" name="landmark" />
+                  {branch.name}
+                </Link>
+                <p className="mt-4 text-white/75">{branch.phone}</p>
+                <p className="text-white/75">{branch.email}</p>
+                <a className="mt-3 inline-flex items-start gap-2 leading-7 text-white/75 transition hover:text-secondary" href={branch.googleMapUrl} target="_blank" rel="noreferrer">
+                  <FaIcon className="mt-1 size-4 shrink-0 text-secondary" name="globe" />
+                  <span>{branch.address}</span>
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ArticlePreviewColumn({ eyebrow, title, linkText, linkHref, items, basePath }) {
+  return (
+    <div data-reveal="up">
+      <div className="mb-8 flex items-end justify-between gap-4">
+        <div>
+          <p className="mb-3 text-sm font-black uppercase text-primary">{eyebrow}</p>
+          <h2 className="text-4xl font-black text-primary">{title}</h2>
+        </div>
+        <SmartLink className="font-black text-primary" href={linkHref}>{linkText}</SmartLink>
+      </div>
+      <div className="grid gap-4">
+        {items.slice(0, 2).map((item) => (
+          <Link className="grid gap-4 rounded-[1.5rem] border border-primary/10 bg-white p-4 shadow-lg shadow-primary/5 transition hover:-translate-y-1 sm:grid-cols-[150px_1fr]" href={`${basePath}/${item.slug}`} key={item.slug}>
+            <img className="h-36 w-full rounded-2xl object-cover" src={item.image} alt={item.title} />
+            <div>
+              <p className="text-xs font-black uppercase text-primary/60">{item.date}</p>
+              <h3 className="mt-2 text-xl font-black text-primary">{item.title}</h3>
+              <p className="mt-2 text-sm leading-6 text-muted">{item.summary}</p>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SmartLink({ href, className, children }) {
+  const value = href || "/";
+  const isExternal = /^https?:\/\//i.test(value);
+
+  if (isExternal) {
+    return <a className={className} href={value}>{children}</a>;
+  }
+
+  return <Link className={className} href={value}>{children}</Link>;
+}
