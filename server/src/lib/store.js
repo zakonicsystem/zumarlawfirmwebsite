@@ -23,11 +23,8 @@ export function resolveDataFile(configuredPath) {
 }
 
 export function createStore(config) {
-  if (config.mongoUri) {
-    return createMongoStore(config);
-  }
-
-  return createFileStore(config.dataFile);
+  const baseStore = config.mongoUri ? createMongoStore(config) : createFileStore(config.dataFile);
+  return createCachedStore(baseStore, config);
 }
 
 export function createFileStore(dataFile) {
@@ -211,4 +208,85 @@ function withUpdatedAt(data) {
 function withoutMongoId(document) {
   const { _id, ...data } = document || {};
   return data;
+}
+
+function createCachedStore(baseStore, config) {
+  const ttlMs = Number(config.cmsCacheTtlMs || 0);
+  let cachedData = null;
+  let cachedUntil = 0;
+
+  function cacheEnabled() {
+    return ttlMs > 0;
+  }
+
+  function clone(data) {
+    return typeof structuredClone === "function"
+      ? structuredClone(data)
+      : JSON.parse(JSON.stringify(data));
+  }
+
+  async function read() {
+    const now = Date.now();
+
+    if (cacheEnabled() && cachedData && cachedUntil > now) {
+      return clone(cachedData);
+    }
+
+    const data = await baseStore.read();
+
+    if (cacheEnabled()) {
+      cachedData = clone(data);
+      cachedUntil = now + ttlMs;
+    }
+
+    return data;
+  }
+
+  function setCache(data) {
+    if (!cacheEnabled()) {
+      cachedData = null;
+      cachedUntil = 0;
+      return;
+    }
+
+    cachedData = clone(data);
+    cachedUntil = Date.now() + ttlMs;
+  }
+
+  function clearCache() {
+    cachedData = null;
+    cachedUntil = 0;
+  }
+
+  return {
+    mode: baseStore.mode,
+    async health() {
+      return {
+        ...(await baseStore.health()),
+        cache: {
+          enabled: cacheEnabled(),
+          ttlMs,
+          warm: Boolean(cachedData),
+          expiresAt: cachedUntil ? new Date(cachedUntil).toISOString() : null
+        }
+      };
+    },
+    read,
+    async write(data) {
+      const saved = await baseStore.write(data);
+      setCache(saved);
+      return clone(saved);
+    },
+    async update(updater) {
+      const current = await read();
+      const next = await updater(current);
+      const saved = await baseStore.write(next);
+      setCache(saved);
+      return clone(saved);
+    },
+    async close() {
+      clearCache();
+      await baseStore.close();
+    }
+  };
 }

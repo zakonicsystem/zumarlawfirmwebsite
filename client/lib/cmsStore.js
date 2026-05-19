@@ -8,6 +8,7 @@ const dataFile = path.join(dataDirectory, "cms-content.json");
 const lahoreBranchImage = "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=85";
 const backendUrl = process.env.BACKEND_API_URL;
 const backendToken = process.env.BACKEND_ADMIN_TOKEN || process.env.ADMIN_TOKEN;
+const cmsFetchRevalidateSeconds = Number(process.env.CMS_FETCH_REVALIDATE_SECONDS || 60);
 
 export function enrichService(service) {
   const requirements = Array.isArray(service.requirements)
@@ -96,7 +97,7 @@ export async function writeCmsData(data) {
 
 async function readBackendCmsData() {
   const response = await fetch(`${backendUrl}/api/content`, {
-    cache: "no-store"
+    next: { revalidate: cmsFetchRevalidateSeconds }
   });
 
   if (!response.ok) {

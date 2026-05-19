@@ -13,6 +13,12 @@ loadEnvFile();
 
 const config = loadConfig();
 const store = createStore(config);
+const publicCacheHeaders = {
+  "Cache-Control": `public, max-age=${Math.max(0, Math.floor(config.publicCacheTtlMs / 1000))}, stale-while-revalidate=${Math.max(0, Math.floor(config.publicStaleTtlMs / 1000))}`
+};
+const privateNoStoreHeaders = {
+  "Cache-Control": "no-store"
+};
 
 const server = http.createServer(async (request, response) => {
   const corsHeaders = createCorsHeaders(request.headers.origin, config.clientOrigin);
@@ -38,7 +44,7 @@ async function route(request, response, headers) {
 
   if (request.method === "GET" && parts.join("/") === "health") {
     const storage = await store.health();
-    sendJson(response, 200, { ok: true, service: "zumar-law-firm-backend", storage }, headers);
+    sendJson(response, 200, { ok: true, service: "zumar-law-firm-backend", storage }, { ...headers, ...privateNoStoreHeaders });
     return;
   }
 
@@ -70,7 +76,7 @@ async function route(request, response, headers) {
     }
 
     const data = await store.read();
-    sendJson(response, 200, publicCmsData(data), headers);
+    sendJson(response, 200, publicCmsData(data), { ...headers, ...publicCacheHeaders });
     return;
   }
 
@@ -82,7 +88,7 @@ async function route(request, response, headers) {
       return data;
     });
 
-    sendJson(response, 201, { ok: true, appointment: saved.appointments[0] }, headers);
+    sendJson(response, 201, { ok: true, appointment: saved.appointments[0] }, { ...headers, ...privateNoStoreHeaders });
     return;
   }
 
@@ -102,19 +108,19 @@ async function routeAdmin(request, response, headers, parts) {
       return;
     }
 
-    sendJson(response, 201, await saveUploadedImage(request), headers);
+    sendJson(response, 201, await saveUploadedImage(request), { ...headers, ...privateNoStoreHeaders });
     return;
   }
 
   if (parts[2] === "content") {
     if (request.method === "GET") {
-      sendJson(response, 200, await store.read(), headers);
+      sendJson(response, 200, await store.read(), { ...headers, ...privateNoStoreHeaders });
       return;
     }
 
     if (request.method === "PUT") {
       const payload = await readJson(request);
-      sendJson(response, 200, await store.write(payload), headers);
+      sendJson(response, 200, await store.write(payload), { ...headers, ...privateNoStoreHeaders });
       return;
     }
 
@@ -133,7 +139,7 @@ async function routeAdmin(request, response, headers, parts) {
 async function routeAdminAppointments(request, response, headers, id) {
   if (request.method === "GET" && !id) {
     const data = await store.read();
-    sendJson(response, 200, data.appointments || [], headers);
+    sendJson(response, 200, data.appointments || [], { ...headers, ...privateNoStoreHeaders });
     return;
   }
 
@@ -143,7 +149,7 @@ async function routeAdminAppointments(request, response, headers, id) {
       data.appointments = (data.appointments || []).map((item) => (item.id === id ? { ...item, ...payload, id: item.id, createdAt: item.createdAt } : item));
       return data;
     });
-    sendJson(response, 200, saved.appointments.find((item) => item.id === id) || null, headers);
+    sendJson(response, 200, saved.appointments.find((item) => item.id === id) || null, { ...headers, ...privateNoStoreHeaders });
     return;
   }
 
@@ -175,7 +181,7 @@ async function routePublicCollection(request, response, headers, parts) {
   const data = await store.read();
   const records = (data[key] || []).filter((item) => item.enabled !== false);
   const id = parts[2];
-  sendJson(response, 200, id ? records.find((item) => item.id === id || item.slug === id) || null : records, headers);
+  sendJson(response, 200, id ? records.find((item) => item.id === id || item.slug === id) || null : records, { ...headers, ...publicCacheHeaders });
 }
 
 async function routeAdminCollection(request, response, headers, parts) {
@@ -189,7 +195,7 @@ async function routeAdminCollection(request, response, headers, parts) {
 
   if (request.method === "GET") {
     const data = await store.read();
-    sendJson(response, 200, id ? (data[key] || []).find((item) => item.id === id || item.slug === id) || null : data[key] || [], headers);
+    sendJson(response, 200, id ? (data[key] || []).find((item) => item.id === id || item.slug === id) || null : data[key] || [], { ...headers, ...privateNoStoreHeaders });
     return;
   }
 
@@ -199,7 +205,7 @@ async function routeAdminCollection(request, response, headers, parts) {
       data[key] = [payload, ...(data[key] || [])];
       return data;
     });
-    sendJson(response, 201, saved[key][0], headers);
+    sendJson(response, 201, saved[key][0], { ...headers, ...privateNoStoreHeaders });
     return;
   }
 
@@ -209,7 +215,7 @@ async function routeAdminCollection(request, response, headers, parts) {
       data[key] = (data[key] || []).map((item) => (item.id === id || item.slug === id ? normalizeRecord({ ...item, ...payload, id: item.id }, key) : item));
       return data;
     });
-    sendJson(response, 200, (saved[key] || []).find((item) => item.id === id || item.slug === id) || null, headers);
+    sendJson(response, 200, (saved[key] || []).find((item) => item.id === id || item.slug === id) || null, { ...headers, ...privateNoStoreHeaders });
     return;
   }
 
@@ -239,6 +245,9 @@ function loadConfig() {
     mongoCollection: process.env.MONGODB_COLLECTION || "cms_content",
     mongoMaxPoolSize: process.env.MONGODB_MAX_POOL_SIZE || "10",
     mongoServerSelectionTimeoutMs: process.env.MONGODB_SERVER_SELECTION_TIMEOUT_MS || "5000",
+    cmsCacheTtlMs: Number(process.env.CMS_CACHE_TTL_SECONDS || 60) * 1000,
+    publicCacheTtlMs: Number(process.env.PUBLIC_CACHE_TTL_SECONDS || 60) * 1000,
+    publicStaleTtlMs: Number(process.env.PUBLIC_STALE_TTL_SECONDS || 300) * 1000,
     adminEmail: process.env.ADMIN_EMAIL || "admin@zumarlawfirm.com",
     adminPassword: process.env.ADMIN_PASSWORD || "admin123",
     adminToken: process.env.ADMIN_TOKEN || "change-this-token-before-production"

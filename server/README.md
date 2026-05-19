@@ -23,7 +23,19 @@ MONGODB_DATABASE=zumar_law_firm
 MONGODB_COLLECTION=cms_content
 ```
 
+Atlas connection:
+
+```powershell
+MONGODB_URI=mongodb+srv://USER:PASSWORD@CLUSTER.mongodb.net/?retryWrites=true&w=majority
+MONGODB_DATABASE=zumar_law_firm
+MONGODB_COLLECTION=cms_content
+```
+
 The server stores CMS data as one document in `cms_content` with `_id: "singleton"`. On first startup, it seeds from `CMS_DATA_FILE`; if that file does not exist, it falls back to `client/data/cms-content.json`.
+
+## Cache
+
+The backend keeps CMS reads in memory for `CMS_CACHE_TTL_SECONDS` and clears that cache whenever admin content is changed. Public API responses also send cache headers controlled by `PUBLIC_CACHE_TTL_SECONDS` and `PUBLIC_STALE_TTL_SECONDS`.
 
 ## Image Uploads
 

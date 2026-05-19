@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { makeSlug } from "@/lib/cmsDefaults";
 import { normalizeCmsData, readCmsData, writeCmsData } from "@/lib/cmsStore";
 
@@ -33,6 +34,7 @@ export async function PUT(request) {
   const data = await request.json();
   const normalized = normalizeIncomingData(data);
   const saved = await writeCmsData(normalized);
+  revalidatePath("/", "layout");
   return NextResponse.json(saved);
 }
 
@@ -59,6 +61,9 @@ async function proxyBackend(method, body) {
   });
 
   const data = await response.json();
+  if (method === "PUT" && response.ok) {
+    revalidatePath("/", "layout");
+  }
   return NextResponse.json(normalizeCmsData(data), { status: response.status });
 }
 
