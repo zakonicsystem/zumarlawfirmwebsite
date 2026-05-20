@@ -176,11 +176,11 @@ export function normalizeCmsData(data) {
 }
 
 function mergeServices(defaultServices, services) {
-  const source = Array.isArray(services) ? services : defaultServices;
-  const used = new Set(source.map((service) => service.slug || service.title));
-  const missingDefaults = defaultServices.filter((service) => !used.has(service.slug || service.title));
+  if (!Array.isArray(services)) {
+    return defaultServices;
+  }
 
-  return [...source, ...missingDefaults];
+  return services;
 }
 
 function normalizeBranches(branches) {

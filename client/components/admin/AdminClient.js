@@ -158,6 +158,21 @@ export default function AdminClient({ view, editId }) {
   const router = useRouter();
   const [data, setData] = useState(null);
   const [status, setStatus] = useState("Loading...");
+  const [toast, setToast] = useState(null);
+
+  function showToast(message, type = "success") {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 2600);
+  }
+
+  useEffect(() => {
+    function handleToast(event) {
+      showToast(event.detail?.message || "Changes updated.", event.detail?.type || "success");
+    }
+
+    window.addEventListener("zumar-admin-toast", handleToast);
+    return () => window.removeEventListener("zumar-admin-toast", handleToast);
+  }, []);
 
   useEffect(() => {
     if (localStorage.getItem("zumar-admin-auth") !== "true") {
@@ -175,11 +190,16 @@ export default function AdminClient({ view, editId }) {
       .then((payload) => {
         setData(payload);
         setStatus("");
+        const pendingToast = sessionStorage.getItem("zumar-admin-toast");
+        if (pendingToast) {
+          sessionStorage.removeItem("zumar-admin-toast");
+          showToast(pendingToast);
+        }
       })
       .catch(() => setStatus("Unable to load CMS content."));
   }, [router]);
 
-  async function save(nextData = data) {
+  async function save(nextData = data, message = "Changes saved.", persistToast = false) {
     setStatus("Saving...");
     const response = await fetch("/api/admin/content", {
       method: "PUT",
@@ -190,9 +210,21 @@ export default function AdminClient({ view, editId }) {
       body: JSON.stringify(nextData)
     });
     const payload = await response.json();
+    if (!response.ok) {
+      const errorMessage = payload.error || "Unable to save changes.";
+      setStatus(errorMessage);
+      showToast(errorMessage, "error");
+      throw new Error(errorMessage);
+    }
+
     setData(payload);
     setStatus("Saved.");
+    if (persistToast) {
+      sessionStorage.setItem("zumar-admin-toast", message);
+    }
+    showToast(message);
     setTimeout(() => setStatus(""), 1800);
+    return payload;
   }
 
 function updateData(key, value) {
@@ -206,7 +238,7 @@ function updateData(key, value) {
   const id = editId;
 
   return (
-    <AdminFrame status={status} onLogout={() => {
+    <AdminFrame status={status} toast={toast} onLogout={() => {
       localStorage.removeItem("zumar-admin-auth");
       localStorage.removeItem("zumar-admin-token");
       router.push("/admin/login");
@@ -600,7 +632,10 @@ function EditableList({ title, items, fields, multilineFields = [], onUpdate, on
                     <Field key={field} label={fieldLabel(field)} value={item[field]} onChange={(value) => onUpdate(index, field, value)} />
                   )
                 )}
-                <button type="button" className="w-fit rounded-full border border-red-200 px-4 py-2 text-sm font-black text-red-700" onClick={() => onRemove(index)}>
+                <button type="button" className="w-fit rounded-full border border-red-200 px-4 py-2 text-sm font-black text-red-700" onClick={() => {
+                  onRemove(index);
+                  notifyAdminToast(`${title} item deleted. Save changes to apply.`);
+                }}>
                   Delete
                 </button>
               </div>
@@ -637,7 +672,10 @@ function StringListEditor({ title, items, onUpdate }) {
             {openItems[index] ? (
               <div className="mt-3 grid gap-2">
                 <Field label={`Item ${index + 1}`} value={item} onChange={(value) => updateItem(index, value)} />
-                <button type="button" className="w-fit rounded-full border border-red-200 px-4 py-2 text-sm font-black text-red-700" onClick={() => onUpdate(items.filter((_, itemIndex) => itemIndex !== index))}>
+                <button type="button" className="w-fit rounded-full border border-red-200 px-4 py-2 text-sm font-black text-red-700" onClick={() => {
+                  onUpdate(items.filter((_, itemIndex) => itemIndex !== index));
+                  notifyAdminToast(`${title} item deleted. Save changes to apply.`);
+                }}>
                   Delete
                 </button>
               </div>
@@ -651,7 +689,7 @@ function StringListEditor({ title, items, onUpdate }) {
 
 function ServiceList({ data, save }) {
   function remove(id) {
-    save({ ...data, services: data.services.filter((item) => item.id !== id && item.slug !== id) });
+    save({ ...data, services: data.services.filter((item) => item.id !== id && item.slug !== id) }, "Service deleted.");
   }
 
   return (
@@ -682,7 +720,7 @@ function ServiceList({ data, save }) {
   );
 }
 
-function AdminFrame({ children, status, onLogout }) {
+function AdminFrame({ children, status, toast, onLogout }) {
   const [currentUrl, setCurrentUrl] = useState("");
 
   useEffect(() => {
@@ -727,6 +765,11 @@ function AdminFrame({ children, status, onLogout }) {
           {children}
         </main>
       </div>
+      {toast ? (
+        <div className={`fixed bottom-6 right-6 z-50 max-w-sm rounded-2xl px-5 py-4 text-sm font-black text-white shadow-2xl shadow-primary/20 ${toast.type === "error" ? "bg-red-700" : "bg-primary"}`} role="status">
+          {toast.message}
+        </div>
+      ) : null}
     </section>
   );
 }
@@ -1309,21 +1352,19 @@ function ServiceForm({ data, id, save }) {
   const router = useRouter();
   const current = data.services.find((item) => item.id === id || item.slug === id);
   const [form, setForm] = useState(current || emptyService);
+  const isEditing = Boolean(current);
 
   function submit(event) {
     event.preventDefault();
     const slug = uniqueSlug(makeSlug(form.slug || form.title), data.services, current?.id || form.id);
     const record = {
       ...form,
-      id: current?.id || form.id || slug,
+      id: slug,
       slug,
       requirements: splitLines(form.requirements)
     };
-    const exists = data.services.some((item) => item.id === record.id);
-    const next = exists
-      ? data.services.map((item) => (item.id === record.id ? record : item))
-      : [record, ...data.services];
-    save({ ...data, services: next }).then(() => router.push("/admin/services"));
+    const next = upsertRecord(data.services, record, current, id);
+    save({ ...data, services: next }, isEditing ? "Service updated." : "Service created.", true).then(() => router.push("/admin/services"));
   }
 
   return (
@@ -1339,7 +1380,7 @@ function ArticleList({ type, data, save }) {
   const publicBase = type === "blogs" ? "/blog" : "/news";
 
   function remove(id) {
-    save({ ...data, [type]: rows.filter((item) => item.id !== id && item.slug !== id) });
+    save({ ...data, [type]: rows.filter((item) => item.id !== id && item.slug !== id) }, `${type === "blogs" ? "Blog" : "News"} deleted.`);
   }
 
   return (
@@ -1375,14 +1416,15 @@ function ArticleForm({ type, data, id, save }) {
   const current = data[type].find((item) => item.id === id || item.slug === id);
   const [form, setForm] = useState(current || emptyArticle);
   const isNews = type === "news";
+  const label = isNews ? "News" : "Blog";
+  const isEditing = Boolean(current);
 
   function submit(event) {
     event.preventDefault();
     const slug = uniqueSlug(makeSlug(form.slug || form.title), data[type], current?.id || form.id);
-    const record = { ...form, id: current?.id || form.id || slug, slug, type: isNews ? "news" : "blog" };
-    const exists = data[type].some((item) => item.id === record.id);
-    const next = exists ? data[type].map((item) => (item.id === record.id ? record : item)) : [record, ...data[type]];
-    save({ ...data, [type]: next }).then(() => router.push(isNews ? "/admin/news" : "/admin/blogs"));
+    const record = { ...form, id: slug, slug, type: isNews ? "news" : "blog" };
+    const next = upsertRecord(data[type], record, current, id);
+    save({ ...data, [type]: next }, `${label} ${isEditing ? "updated" : "created"}.`, true).then(() => router.push(isNews ? "/admin/news" : "/admin/blogs"));
   }
 
   return (
@@ -1394,11 +1436,11 @@ function ArticleForm({ type, data, id, save }) {
 
 function Appointments({ data, save }) {
   function updateStatus(id, status) {
-    save({ ...data, appointments: data.appointments.map((item) => (item.id === id ? { ...item, status } : item)) });
+    save({ ...data, appointments: data.appointments.map((item) => (item.id === id ? { ...item, status } : item)) }, "Appointment updated.");
   }
 
   function remove(id) {
-    save({ ...data, appointments: data.appointments.filter((item) => item.id !== id) });
+    save({ ...data, appointments: data.appointments.filter((item) => item.id !== id) }, "Appointment deleted.");
   }
 
   return (
@@ -1710,4 +1752,42 @@ function uniqueSlug(value, records, currentId) {
   }
 
   return candidate;
+}
+
+function upsertRecord(records, record, current, lookupId) {
+  if (!current) {
+    return [record, ...(records || [])];
+  }
+
+  let replaced = false;
+  const next = [];
+
+  for (const item of records || []) {
+    if (matchesEditedRecord(item, record, current, lookupId)) {
+      if (!replaced) {
+        next.push(record);
+        replaced = true;
+      }
+      continue;
+    }
+
+    next.push(item);
+  }
+
+  return replaced ? next : [record, ...next];
+}
+
+function matchesEditedRecord(item, record, current, lookupId) {
+  const ids = new Set([current?.id, current?.slug, lookupId].filter(Boolean));
+  const slugs = new Set([current?.slug, record?.slug, lookupId].filter(Boolean));
+
+  return ids.has(item.id) || ids.has(item.slug) || slugs.has(item.slug);
+}
+
+function notifyAdminToast(message, type = "success") {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.dispatchEvent(new CustomEvent("zumar-admin-toast", { detail: { message, type } }));
 }
