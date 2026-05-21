@@ -30,7 +30,14 @@ export default async function ContactPage() {
                   <FaIcon className="size-4" name={link.icon} />
                   {link.title}
                 </strong>
-                <a className="mt-2 block font-semibold text-muted transition hover:text-primary" href={link.href}>{link.text}</a>
+                <a
+                  className="mt-2 block font-semibold text-muted transition hover:text-primary"
+                  href={link.href}
+                  target={isExternalUrl(link.href) ? "_blank" : undefined}
+                  rel={isExternalUrl(link.href) ? "noreferrer" : undefined}
+                >
+                  {link.text}
+                </a>
               </div>
             ))}
           </div>
@@ -58,4 +65,8 @@ export default async function ContactPage() {
       </section>
     </>
   );
+}
+
+function isExternalUrl(value = "") {
+  return /^https?:\/\//i.test(value);
 }

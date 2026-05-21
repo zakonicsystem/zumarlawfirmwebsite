@@ -399,9 +399,9 @@ function PageContentEditor({ data, updateData, save, initialPage }) {
             <EditableList
               title="Team Members"
               items={page.members || []}
-              fields={["name", "designation", "image", "enabled"]}
+              fields={["name", "designation", "branch", "image", "enabled"]}
               onUpdate={(index, field, value) => updatePageList("members", index, field, value)}
-              onAdd={() => addPageListItem("members", { name: "New Team Member", designation: "Designation", image: "", enabled: true })}
+              onAdd={() => addPageListItem("members", { name: "New Team Member", designation: "Designation", branch: "", image: "", enabled: true })}
               onRemove={(index) => removePageListItem("members", index)}
             />
           </>
@@ -1054,6 +1054,46 @@ function HomeEditor({ data, updateData, save }) {
     });
   }
 
+  function updateYoutubeVideo(index, field, value) {
+    const youtubeVideos = homeContent.youtubeVideos || {};
+    updateData("homeContent", {
+      ...homeContent,
+      youtubeVideos: {
+        ...youtubeVideos,
+        items: (youtubeVideos.items || []).map((item, itemIndex) => (itemIndex === index ? { ...item, [field]: value } : item))
+      }
+    });
+  }
+
+  function addYoutubeVideo() {
+    const youtubeVideos = homeContent.youtubeVideos || {};
+    updateData("homeContent", {
+      ...homeContent,
+      youtubeVideos: {
+        ...youtubeVideos,
+        items: [
+          ...(youtubeVideos.items || []),
+          {
+            title: "New YouTube Video",
+            embedUrl: "Z4d5k5MxK9k?si=B_SZaJFCpzWH_ioD",
+            enabled: true
+          }
+        ]
+      }
+    });
+  }
+
+  function removeYoutubeVideo(index) {
+    const youtubeVideos = homeContent.youtubeVideos || {};
+    updateData("homeContent", {
+      ...homeContent,
+      youtubeVideos: {
+        ...youtubeVideos,
+        items: (youtubeVideos.items || []).filter((_, itemIndex) => itemIndex !== index)
+      }
+    });
+  }
+
   function updateServiceSelection(field, slugs) {
     updateData("homeContent", {
       ...homeContent,
@@ -1183,6 +1223,24 @@ function HomeEditor({ data, updateData, save }) {
         fields={["eyebrow", "title", "buttonText", "buttonHref", "limit", "enabled"]}
         onUpdate={(field, value) => updateHomeBlock("branches", field, value)}
       />
+      <div className="my-7 border-t border-primary/10" />
+      <HomeBlockEditor
+        title="YouTube Video Carousel"
+        block={homeContent.youtubeVideos || {}}
+        fields={["eyebrow", "title", "copy", "channelLabel", "channelHref", "enabled"]}
+        multilineFields={["copy"]}
+        onUpdate={(field, value) => updateHomeBlock("youtubeVideos", field, value)}
+      />
+      <div className="mt-4">
+        <EditableList
+          title="YouTube Videos"
+          items={homeContent.youtubeVideos?.items || []}
+          fields={["title", "embedUrl", "enabled"]}
+          onUpdate={updateYoutubeVideo}
+          onAdd={addYoutubeVideo}
+          onRemove={removeYoutubeVideo}
+        />
+      </div>
       <div className="my-7 border-t border-primary/10" />
       <div className="mb-5 flex flex-wrap gap-2">
         {data.homeSections.map((item) => (

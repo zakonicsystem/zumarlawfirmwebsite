@@ -4,11 +4,13 @@ server/node_modules/
 client/.next/
 client/.vercel/
 client/.env.local
+client/data/cms-content.json
 client/test-results/
 client/next-dev*.log
 server/.env
 server/uploads/
 server/data/
+backups/
 server/*-dev.log
 server/*-build.log
 server/*.err.log

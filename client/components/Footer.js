@@ -47,7 +47,7 @@ export default async function Footer() {
             <div className="grid gap-2 text-sm font-semibold text-white/70">
               {quickLinks.map((link) =>
                 link.href.startsWith("http") ? (
-                  <a className="inline-flex items-center gap-2 transition-colors hover:text-secondary" key={link.href} href={link.href}>
+                  <a className="inline-flex items-center gap-2 transition-colors hover:text-secondary" key={link.href} href={link.href} target="_blank" rel="noreferrer">
                     <FaIcon className="size-3.5" name={link.title.includes("Account") ? "registration" : "lock"} />
                     {link.title}
                   </a>

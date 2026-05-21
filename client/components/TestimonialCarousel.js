@@ -33,7 +33,7 @@ export default function TestimonialCarousel({ items = [] }) {
         >
           {slides.map((slide, slideIndex) => (
             <div className="min-w-full px-1 sm:px-2" key={`testimonial-slide-${slideIndex}`}>
-              <div className="grid gap-5 lg:grid-cols-3">
+              <div className="grid items-stretch gap-5 lg:grid-cols-3">
                 {slide.map((item, itemIndex) => (
                   <TestimonialCard item={item} key={`${item.name}-${itemIndex}`} />
                 ))}
@@ -86,9 +86,9 @@ function chunkItems(items, size) {
 
 function TestimonialCard({ item }) {
   return (
-    <article className="group relative min-h-80 overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.08] p-6 shadow-2xl shadow-black/10 backdrop-blur transition duration-300 hover:-translate-y-2 hover:bg-white/[0.13]">
+    <article className="group relative flex h-[440px] flex-col justify-between overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/[0.08] p-6 shadow-2xl shadow-black/10 backdrop-blur transition duration-300 hover:-translate-y-2 hover:bg-white/[0.13] sm:h-[400px] lg:h-[460px]">
       <div className="absolute -right-10 -top-10 size-32 rounded-full bg-secondary/10 transition duration-500 group-hover:scale-125" />
-      <div className="relative">
+      <div className="relative flex h-full flex-col">
         <div className="flex items-center justify-between gap-4">
           <span className="grid size-16 place-items-center rounded-2xl bg-secondary text-primary shadow-xl shadow-black/10">
             <FaIcon className="size-8" name={item.icon || "quote"} />
@@ -99,8 +99,10 @@ function TestimonialCard({ item }) {
             ))}
           </div>
         </div>
-        <p className="mt-7 text-lg font-semibold leading-8 text-white/82">"{item.quote}"</p>
-        <div className="mt-7 border-t border-white/10 pt-5">
+        <div className="mt-7 min-h-0 flex-1 overflow-y-auto pr-1 [scrollbar-width:thin]">
+          <p className="text-lg font-semibold leading-8 text-white/82">"{item.quote}"</p>
+        </div>
+        <div className="mt-7 shrink-0 border-t border-white/10 pt-5">
           <h3 className="text-xl font-black">{item.name}</h3>
           <p className="mt-1 text-sm font-bold text-secondary/90">{item.role}</p>
         </div>

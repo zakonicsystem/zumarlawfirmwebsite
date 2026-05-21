@@ -108,7 +108,7 @@ export default async function ServiceDetailPage({ params }) {
           <aside className="sticky top-28 rounded-[2rem] border border-primary/10 bg-primary p-7 text-white shadow-2xl shadow-primary/20">
             <p className="leading-7 text-white/70">{detailContent.feeNote}</p>
             <div className="mt-7 grid gap-3">
-              <a className="inline-flex min-h-12 items-center justify-center rounded-full bg-secondary px-5 text-sm font-black text-primary transition hover:-translate-y-1" href={detailContent.startOnlineHref}>
+              <a className="inline-flex min-h-12 items-center justify-center rounded-full bg-secondary px-5 text-sm font-black text-primary transition hover:-translate-y-1" href={detailContent.startOnlineHref} target="_blank" rel="noreferrer">
                 <FaIcon className="mr-2 size-4" name="registration" />
                 {detailContent.startOnlineLabel}
               </a>

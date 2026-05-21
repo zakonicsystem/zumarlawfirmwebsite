@@ -31,6 +31,7 @@ import {
   faStamp,
   faStar,
   faTrophy,
+  faUser,
   faUserPlus,
   faUsers
 } from "@fortawesome/free-solid-svg-icons";
@@ -70,7 +71,8 @@ const icons = {
   star: faStar,
   tax: faFileInvoiceDollar,
   trophy: faTrophy,
-  trademark: faBullhorn
+  trademark: faBullhorn,
+  user: faUser
 };
 
 export default function FaIcon({ name, className = "" }) {

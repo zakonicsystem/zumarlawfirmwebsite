@@ -3,6 +3,7 @@ import PageHeader from "@/components/PageHeader";
 import FaIcon from "@/components/FaIcon";
 import ProcessSection from "@/components/ProcessSection";
 import Reveal from "@/components/Reveal";
+import TeamMemberCard from "@/components/TeamMemberCard";
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
 
@@ -95,16 +96,7 @@ export default async function AboutPage() {
 
               <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
                 {teamMembers.map((member) => (
-                  <article className="overflow-hidden rounded-[2rem] border border-primary/10 bg-white shadow-xl shadow-primary/5 transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/10" key={member.name}>
-                    <img className="h-72 w-full object-cover" src={member.image} alt={member.name} />
-                    <div className="p-6">
-                      <p className="mb-3 inline-flex items-center gap-2 text-xs font-black uppercase text-primary/60">
-                        <FaIcon className="size-3.5" name="headset" />
-                        {member.designation || member.role}
-                      </p>
-                      <h3 className="text-2xl font-black text-primary">{member.name}</h3>
-                    </div>
-                  </article>
+                  <TeamMemberCard member={member} headingLevel="h3" key={member.name} />
                 ))}
               </div>
             </section>

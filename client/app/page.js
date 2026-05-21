@@ -10,6 +10,7 @@ import {
   HomeTestimonialsSection,
   HomeUpdatesSection,
   HomeWhyChooseSection,
+  HomeYoutubeSection,
   SectionDivider
 } from "@/components/HomeSections";
 import { readCmsData } from "@/lib/cmsStore";
@@ -51,6 +52,7 @@ export default async function HomePage() {
       <SectionDivider />
       <HomeUpdatesSection content={cms.homeContent?.updates} newsItems={newsItems} blogPosts={blogPosts} />
       <SectionDivider />
+      <HomeYoutubeSection content={cms.homeContent?.youtubeVideos} />
       <HomeBranchesSection content={cms.homeContent?.branches} branches={cms.branches} />
     </>
   );

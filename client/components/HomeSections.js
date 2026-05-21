@@ -4,6 +4,7 @@ import ProcessSection from "@/components/ProcessSection";
 import ServiceCarousel from "@/components/ServiceCarousel";
 import ServiceBrowser from "@/components/ServiceBrowser";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
+import YoutubeVideoCarousel from "@/components/YoutubeVideoCarousel";
 
 export function SectionDivider() {
   return (
@@ -231,7 +232,7 @@ export function HomeBranchesSection({ content, branches = [] }) {
   }
 
   return (
-    <section className="mt-10 bg-primary py-5 text-white sm:py-10" data-reveal="up">
+    <section className="bg-primary py-5 text-white sm:py-10" data-reveal="up">
       <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
         <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between" data-reveal="up">
           <div>
@@ -268,6 +269,36 @@ export function HomeBranchesSection({ content, branches = [] }) {
   );
 }
 
+export function HomeYoutubeSection({ content }) {
+  if (content?.enabled === false) {
+    return null;
+  }
+
+  const videos = (content?.items || []).filter((item) => item.enabled !== false && item.embedUrl);
+
+  if (!videos.length) {
+    return null;
+  }
+
+  return (
+    <section className="bg-primary py-0 text-white" data-reveal="up">
+      <div className="mx-auto w-[min(1180px,calc(100%-32px))] py-12 sm:py-16">
+        <div className="mb-7 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+          <div className="max-w-3xl">
+            <p className="mb-3 text-sm font-black uppercase text-secondary">{content?.eyebrow}</p>
+            <h2 className="text-4xl font-black leading-tight sm:text-6xl">{content?.title}</h2>
+            <p className="mt-5 text-base leading-8 text-white/70 sm:text-lg">{content?.copy}</p>
+          </div>
+          <SmartLink className="inline-flex min-h-12 items-center justify-center rounded-full bg-secondary px-6 text-sm font-black text-primary transition hover:-translate-y-1 hover:bg-white" href={content?.channelHref || "https://www.youtube.com/@zumarlawfirm"}>
+            {content?.channelLabel || "Visit Channel"}
+          </SmartLink>
+        </div>
+        <YoutubeVideoCarousel videos={videos} />
+      </div>
+    </section>
+  );
+}
+
 function ArticlePreviewColumn({ eyebrow, title, linkText, linkHref, items, basePath }) {
   return (
     <div data-reveal="up">
@@ -299,7 +330,7 @@ function SmartLink({ href, className, children }) {
   const isExternal = /^https?:\/\//i.test(value);
 
   if (isExternal) {
-    return <a className={className} href={value}>{children}</a>;
+    return <a className={className} href={value} target="_blank" rel="noreferrer">{children}</a>;
   }
 
   return <Link className={className} href={value}>{children}</Link>;

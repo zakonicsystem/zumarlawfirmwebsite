@@ -94,7 +94,7 @@ function SmartLink({ href, className, children }) {
 
   if (isExternal) {
     return (
-      <a className={className} href={value}>
+      <a className={className} href={value} target="_blank" rel="noreferrer">
         {children}
       </a>
     );

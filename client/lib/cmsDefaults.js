@@ -116,6 +116,62 @@ export const defaultHomeStats = [
   }
 ];
 
+const clientReviewTestimonials = [
+  { icon: "star", name: "Haris Ali", role: "5/5 Client Review", quote: "I am very satisfied with their services. They respond on time and show full commitment. The work is completed within the given deadlines. Once you hand over the work to them, they take full responsibility, handle all the stress, and complete it with passion and dedication.", rating: "5", enabled: true },
+  { icon: "tax", name: "Kazim Ali", role: "5/5 Income Tax Filing", quote: "I had my income tax return filed through Mr. Arslan Sahib from Zumar Law Firm, and I received my return in just 1 hour. Very fast and professional services.", rating: "5", enabled: true },
+  { icon: "building", name: "Irfan Haider", role: "5/5 Company Registration", quote: "Highly recommend Zumar Law Firm. Mr. Arsalan guided me positively even late at night and completed my company registration in SECP and Tourism Department efficiently.", rating: "5", enabled: true },
+  { icon: "building", name: "Muhammad Salman Hashmi", role: "5/5 Company Registration", quote: "We registered our company through Zumar Law Firm and were extremely satisfied with their professionalism, smooth process, supportive team, and affordable pricing.", rating: "5", enabled: true },
+  { icon: "certificate", name: "Abrar Manzoor", role: "5/5 Registration Client", quote: "I appreciate the competence of Mr. Abdullah. My company registration was completed in a very short time. The staff is competent and trustworthy.", rating: "5", enabled: true },
+  { icon: "globe", name: "Qazi Muhammad Jalal ud din", role: "5/5 Online Services", quote: "Zumar Law Firm is a trustworthy online services platform. I appreciate its performance.", rating: "5", enabled: true },
+  { icon: "tax", name: "imran khan", role: "5/5 Legal & Registration", quote: "Exceptional legal and registration services in Lahore. Expertise in NTN registration, tax returns, intellectual property, and business registration. Highly recommended.", rating: "5", enabled: true },
+  { icon: "globe", name: "Yasmin Imtiaz", role: "5/5 Trade & Licensing", quote: "Trusted and highly professional legal service provider. Helped with international trade consulting, import/export licenses, NGO registrations, and DTS license processing.", rating: "5", enabled: true },
+  { icon: "headset", name: "News Plus LIVE", role: "5/5 Legal Guidance", quote: "Exceptional experience with Zumar Law Firm. Professional team, attentive communication, and clear legal guidance throughout the process.", rating: "5", enabled: true },
+  { icon: "headset", name: "Khurram khokhar", role: "5/5 Client Support", quote: "Very cooperative staff. All my queries were resolved within a few minutes.", rating: "5", enabled: true },
+  { icon: "registration", name: "Dr sardar", role: "5/5 Registration Client", quote: "Their service is very fast and they helped us in every step of registration. Recommended.", rating: "5", enabled: true },
+  { icon: "star", name: "Imran Chughata", role: "5/5 Fast Service", quote: "Very good and very fast service.", rating: "5", enabled: true },
+  { icon: "headset", name: "Muhammad Asif Hashmi", role: "5/5 Long-Term Client", quote: "Connected with Zumar Law Firm since 2023. Excellent work and 100% chat response.", rating: "5", enabled: true },
+  { icon: "check", name: "zohaib alam", role: "5/5 Client Review", quote: "Good firm and my work was completed without any hesitation.", rating: "5", enabled: true },
+  { icon: "handshake", name: "Hilal Bahoo", role: "5/5 Client Review", quote: "I am very satisfied with their service. They are very cooperative and sincere.", rating: "5", enabled: true },
+  { icon: "headset", name: "Arbi Sound & Minhaaj TV", role: "5/5 Client Support", quote: "Very nice service with humble staff.", rating: "5", enabled: true },
+  { icon: "star", name: "Rao Kashan", role: "5/5 Fast Service", quote: "Excellent and speedy work.", rating: "5", enabled: true },
+  { icon: "star", name: "Muhammad Irfan Awais", role: "5/5 Client Review", quote: "Best services provided.", rating: "5", enabled: true },
+  { icon: "business", name: "GOFAST ENTERPRISES", role: "5/5 Business Client", quote: "Best and quick services provider.", rating: "5", enabled: true },
+  { icon: "receipt", name: "zaheer naseer", role: "5/5 Professional Services", quote: "Very professional and committed. Provide good services at very reasonable prices.", rating: "5", enabled: true },
+  { icon: "headset", name: "Muhammad Zubair", role: "5/5 Client Support", quote: "Quick and responsive. Highly recommended.", rating: "5", enabled: true },
+  { icon: "filing", name: "Hmrsj Hmrsj", role: "5/5 Assignment Support", quote: "I got my assignment done from Zumar Law Firm and they were very helpful.", rating: "5", enabled: true },
+  { icon: "headset", name: "ASIF ARSHAD", role: "5/5 Client Review", quote: "Very professional staff.", rating: "5", enabled: true },
+  { icon: "check", name: "Khizar Shah", role: "5/5 Quality Services", quote: "Appreciate their commitment to quality services and valuing client feedback.", rating: "5", enabled: true },
+  { icon: "star", name: "Malik Atif", role: "5/5 Client Review", quote: "Very good experience. May Allah bless your work further.", rating: "5", enabled: true },
+  { icon: "star", name: "Ali Shoujah", role: "5/5 Client Review", quote: "Excellent feedback for Zumar Law Firm.", rating: "5", enabled: true },
+  { icon: "check", name: "چوبرجی", role: "5/5 Client Review", quote: "Positive experience with professional and dedicated service.", rating: "5", enabled: true },
+  { icon: "check", name: "Nimra Simra", role: "5/5 Client Review", quote: "Positive experience with Zumar Law Firm and professional services.", rating: "5", enabled: true },
+  { icon: "headset", name: "Mian Maqsood Rehan C.E.O 91HD News", role: "5/5 Legal Services", quote: "Positive feedback for excellent legal services.", rating: "5", enabled: true },
+  { icon: "handshake", name: "Syed Ahmad Raza", role: "5/5 Trusted Services", quote: "Positive experience with Zumar Law Firm and trusted services.", rating: "5", enabled: true },
+  { icon: "appointment", name: "Saima Akmal", role: "5/5 Timely Services", quote: "Positive feedback for timely and proactive services.", rating: "5", enabled: true },
+  { icon: "shield", name: "gone news", role: "5/5 Legal Support", quote: "Excellent service and trusted legal support.", rating: "5", enabled: true },
+  { icon: "globe", name: "Express Cargo", role: "5/5 Legal Assistance", quote: "Positive experience and expert legal assistance.", rating: "5", enabled: true },
+  { icon: "star", name: "Mian Maan", role: "5/5 Client Review", quote: "Appreciated the services and continuous improvement efforts.", rating: "5", enabled: true },
+  { icon: "building", name: "Asif Arshad", role: "5/5 Company Registration", quote: "I recently availed the services of Zumar Law Firm to register my company, and I am extremely satisfied with their professionalism and efficiency. Their response time is impressively fast, and the entire process was smooth and hassle-free.", rating: "5", enabled: true },
+  { icon: "building", name: "Xmn.21", role: "5/5 Company Registration", quote: "I had a great experience working with Zumar Law Firm in Pakistan for my company registration. They handled my case professionally, completed everything on time, and guided me through every legal step with transparency and efficiency.", rating: "5", enabled: true },
+  { icon: "building", name: "CH Nabeel", role: "5/5 Company Registration", quote: "I recently registered my company through Zumar Law Firm and was extremely satisfied with their fast, reliable, and trustworthy services. The process was smooth and stress-free.", rating: "5", enabled: true },
+  { icon: "shield", name: "LP Assassin SnS", role: "5/5 Legal Support", quote: "Exceptional service and expertise. The team handled my case with care and professionalism, maintained top-notch communication, and provided excellent legal support throughout the process.", rating: "5", enabled: true },
+  { icon: "business", name: "Amir Ali", role: "5/5 Business Registration", quote: "Zumar Law Firm is a reliable company providing excellent business registration services. I received very fast and efficient service for my shop registration.", rating: "5", enabled: true },
+  { icon: "check", name: "Sir Zain 57", role: "5/5 Quality Work", quote: "Good experience with quality work. The team response was highly appreciable, and they guided everything professionally.", rating: "5", enabled: true },
+  { icon: "star", name: "Arslan Umer", role: "5/5 Client Review", quote: "Excellent service. I recently had an experience with them and really appreciated their work.", rating: "5", enabled: true },
+  { icon: "headset", name: "ASIF ARSHAD", role: "5/5 Client Review", quote: "Very professional staff.", rating: "5", enabled: true },
+  { icon: "globe", name: "Moazzam Ali Jakhar", role: "5/5 Online Registration", quote: "This platform was perfect for me. I filed my company registration online through their portal, and the process was completed without delay.", rating: "5", enabled: true },
+  { icon: "globe", name: "Iftakhar Awan", role: "5/5 Islamabad Services", quote: "Zumar Law Firm Islamabad completed my online and foreign-related work very quickly with professional team support.", rating: "5", enabled: true },
+  { icon: "registration", name: "Zaki 1683", role: "5/5 Company Registration", quote: "Very nice and competent staff. My company registration and online work were completed immediately. Highly recommended.", rating: "5", enabled: true },
+  { icon: "globe", name: "Ehsan Qadir", role: "5/5 Online Services", quote: "I got my online work completed through Zumar Law Firm, and their team handled foreign-related work efficiently.", rating: "5", enabled: true },
+  { icon: "star", name: "Zeeahan Saqib", role: "5/5 Client Review", quote: "Mashallah good service.", rating: "5", enabled: true },
+  { icon: "check", name: "Rana Ehsan", role: "5/5 Islamabad Services", quote: "Positive experience with Zumar Law Firm Islamabad.", rating: "5", enabled: true },
+  { icon: "certificate", name: "Farhan Ali Hamza", role: "5/5 Legal Services", quote: "Positive experience with professional and quality legal services.", rating: "5", enabled: true },
+  { icon: "headset", name: "malik zohaib aslam", role: "5/5 Professional Services", quote: "Excellent and professional service experience with Zumar Law Firm.", rating: "5", enabled: true },
+  { icon: "handshake", name: "Namal Namal", role: "5/5 Client-Focused Services", quote: "Positive experience with professional, efficient, and client-focused services.", rating: "5", enabled: true },
+  { icon: "shield", name: "Abdullah Raja", role: "5/5 Reliable Services", quote: "Satisfied with the reliable and high-quality services provided by Zumar Law Firm.", rating: "5", enabled: true },
+  { icon: "headset", name: "Muhammad Rizwan", role: "5/5 Client Support", quote: "Great experience with Zumar Law Firm and highly appreciated their support and services.", rating: "5", enabled: true }
+];
+
 export const defaultHomeContent = {
   sharedProcess: {
     enabled: true,
@@ -180,62 +236,7 @@ export const defaultHomeContent = {
     title: "Trusted by taxpayers, founders, and growing businesses.",
     copy:
       "Clients choose Zumar Law Firm for practical documentation, clear pricing, and follow-up across tax, corporate, registration, and compliance work.",
-    items: [
-      {
-        icon: "tax",
-        name: "Business Owner",
-        role: "Corporate Registration Client",
-        quote:
-          "The team explained the complete registration process, shared a clear document checklist, and kept our company filing moving without confusion.",
-        rating: "5",
-        enabled: true
-      },
-      {
-        icon: "receipt",
-        name: "Taxpayer Client",
-        role: "Income Tax Filing",
-        quote:
-          "My tax return and profile work were handled with practical guidance. The communication was direct and the requirements were easy to understand.",
-        rating: "5",
-        enabled: true
-      },
-      {
-        icon: "globe",
-        name: "Freelance Professional",
-        role: "PSEB & Compliance Support",
-        quote:
-          "Zumar Law Firm helped us understand the service steps, prepare details correctly, and complete the compliance process through organized follow-up.",
-        rating: "5",
-        enabled: true
-      },
-      {
-        icon: "building",
-        name: "Startup Founder",
-        role: "SECP Company Incorporation",
-        quote:
-          "The incorporation process was explained clearly from name reservation to documentation. Their follow-up made the steps much easier to manage.",
-        rating: "5",
-        enabled: true
-      },
-      {
-        icon: "certificate",
-        name: "Import Business Client",
-        role: "Licensing & Registration",
-        quote:
-          "We received practical guidance for the registration requirements and supporting documents. The team kept the process organized throughout.",
-        rating: "5",
-        enabled: true
-      },
-      {
-        icon: "headset",
-        name: "SME Client",
-        role: "Ongoing Compliance Advisory",
-        quote:
-          "Their team is responsive and professional. We use them for compliance questions because they give direct answers and clear next steps.",
-        rating: "5",
-        enabled: true
-      }
-    ]
+    items: clientReviewTestimonials
   },
   updates: {
     enabled: true,
@@ -255,6 +256,31 @@ export const defaultHomeContent = {
     buttonText: "View Branches",
     buttonHref: "/branches",
     limit: "2"
+  },
+  youtubeVideos: {
+    enabled: true,
+    eyebrow: "YouTube",
+    title: "Watch Zumar Law Firm updates.",
+    copy: "Practical videos from our YouTube channel covering tax, registration, compliance, and business support.",
+    channelLabel: "Visit Channel",
+    channelHref: "https://www.youtube.com/@zumarlawfirm",
+    items: [
+      {
+        title: "Tax registration guidance",
+        embedUrl: "Z4d5k5MxK9k?si=B_SZaJFCpzWH_ioD",
+        enabled: true
+      },
+      {
+        title: "Business compliance updates",
+        embedUrl: "Z4d5k5MxK9k?si=B_SZaJFCpzWH_ioD",
+        enabled: true
+      },
+      {
+        title: "Legal and corporate services",
+        embedUrl: "Z4d5k5MxK9k?si=B_SZaJFCpzWH_ioD",
+        enabled: true
+      }
+    ]
   }
 };
 
@@ -430,41 +456,72 @@ export const defaultPageContent = {
     title: "Meet the people behind the work",
     copy: "A focused professional team handling client intake, documentation, filing, and regulatory follow-up.",
     ceoEyebrow: "Leadership",
-    ceoName: "Chief Executive Officer",
-    ceoRole: "CEO, Zumar Law Firm",
+    ceoName: "Zumar Law Firm",
+    ceoRole: "Brand of Zumar Law Associate (SMC-Private) Limited",
     ceoImage: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=900&q=85",
     ceoBio:
-      "The CEO leads client service standards, documentation discipline, and practical advisory across tax, corporate registration, licensing, intellectual property, and compliance matters.",
-    historyEyebrow: "History",
-    historyTitle: "Built around practical filing support",
+      "Zumar Law Firm is the brand name of Zumar Law Associate (SMC-Private) Limited, established with the vision of providing professional legal, corporate, tax, licensing, and intellectual property services across Pakistan and internationally.",
+    historyEyebrow: "Company History",
+    historyTitle: "Registered, digital, and client-focused since 2018.",
     historyCopy:
-      "Zumar Law Firm grew from everyday tax and registration support into a wider advisory practice for individuals, startups, companies, NGOs, freelancers, and professionals. The firm continues to focus on clear requirements, organized records, and accountable follow-up.",
+      "The firm has been registered with the Securities and Exchange Commission of Pakistan, Federal Board of Revenue, Labour Department, PESSI, and Intellectual Property Organization of Pakistan since 2018. Since its establishment, Zumar Law Firm has remained committed to professionalism, transparency, and client satisfaction while serving individuals, startups, and businesses across various sectors.",
     history: [
-      { year: "Foundation", title: "Tax and registration support", copy: "The firm began with practical support for NTN, income tax, business registration, and client documentation." },
-      { year: "Expansion", title: "Corporate and licensing services", copy: "Service coverage expanded into company registration, chamber matters, PSEB, import/export, and intellectual property support." },
-      { year: "Today", title: "Portal-based client workflow", copy: "The website and client portal help clients understand requirements, start service requests, and track communication more clearly." }
+      { year: "2018", title: "Registered professional firm", copy: "Zumar Law Associate (SMC-Private) Limited was established and registered with SECP, FBR, Labour Department, PESSI, and IPO Pakistan." },
+      { year: "Services", title: "Legal, tax, corporate, and IP support", copy: "The firm provides legal, corporate, tax, licensing, intellectual property, and regulatory services for individuals, startups, companies, and growing businesses." },
+      { year: "Digital", title: "Complete online service access", copy: "Clients can submit cases from home through the public portal, share requirements digitally, and receive organized updates without unnecessary office visits." },
+      { year: "Branches", title: "Branch-based client support", copy: "Multiple branches assist clients, answer queries, coordinate documentation, and support timely resolution of service matters." },
+      { year: "24/7", title: "Customer support and case updates", copy: "Zumar Law Firm provides continuous customer support and regular case updates to maintain service quality, trust, and effective communication." },
+      { year: "Today", title: "National and international services", copy: "The firm continues serving clients in Pakistan and internationally with transparent pricing, professional follow-up, and documented workflows." }
     ],
     members: [
       {
-        name: "Zumar Law Firm Team",
-        designation: "Tax & Corporate Consultants",
-        role: "Tax & Corporate Consultants",
-        image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=900&q=85",
-        bio: "Coordinates registrations, tax filings, compliance documentation, and client communication across service categories."
+        name: "Bushra Niazi",
+        designation: "HR Manager",
+        role: "HR Manager",
+        branch: "Islamabad Branch",
+        image: "/images/Bushra.webp",
+        bio: "Supports HR coordination, team communication, and branch administration for Islamabad office operations."
       },
       {
-        name: "Documentation Desk",
-        designation: "Client Records & Filing",
-        role: "Client Records & Filing",
-        image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=900&q=85",
-        bio: "Reviews required details, prepares checklists, and keeps supporting records organized before submission."
+        name: "Mr. Asif Arslan",
+        designation: "Corporate Compliance Officer",
+        role: "Corporate Compliance Officer",
+        branch: "Lahore Branch",
+        image: "/images/Asif.webp",
+        bio: "Coordinates corporate compliance documentation, company matters, and regulatory follow-up from the Lahore branch."
+      },
+   
+      {
+        name: "Ms. Aqsa Ahmad",
+        designation: "IP Compliance Officer",
+        role: "IP Compliance Officer",
+        branch: "Lahore Branch",
+        image: "/images/aqssa%20ahmed.webp",
+        bio: "Handles intellectual property compliance coordination, document review, and client follow-up."
+      },
+         {
+        name: "Ms. Hifza Tabasam",
+        designation: "Tax Compliance Officer",
+        role: "Tax Compliance Officer",
+        branch: "Lahore Branch",
+        image: "",
+        bio: "Supports tax compliance work, filing coordination, and client documentation for Lahore branch matters."
       },
       {
-        name: "Regulatory Support",
-        designation: "Licensing & Follow-up",
-        role: "Licensing & Follow-up",
-        image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=900&q=85",
-        bio: "Tracks authority requirements and supports follow-up for licensing, registrations, and compliance matters."
+        name: "Ms. Sadia Khan",
+        designation: "DTS Compliance Manager",
+        role: "DTS Compliance Manager",
+        branch: "Islamabad Branch",
+        image: "",
+        bio: "Manages DTS compliance coordination and branch-level follow-up for Islamabad service workflows."
+      },
+      {
+        name: "Ms. Ayesha",
+        designation: "Tax Representative Officer",
+        role: "Tax Representative Officer",
+        branch: "Lahore Branch",
+        image: "",
+        bio: "Assists with tax representation, client coordination, and compliance support for Lahore branch cases."
       }
     ]
   },

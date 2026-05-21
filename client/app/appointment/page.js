@@ -45,7 +45,7 @@ export default async function AppointmentPage() {
               ))}
             </ul>
             <div className="mt-7 flex flex-wrap gap-3">
-              <a className="inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-black text-white transition hover:-translate-y-1" href={page.startOnlineHref || "https://app.zumarlawfirm.com/signup"}>
+              <a className="inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-black text-white transition hover:-translate-y-1" href={page.startOnlineHref || "https://app.zumarlawfirm.com/signup"} target="_blank" rel="noreferrer">
                 <FaIcon className="mr-2 size-4" name="registration" />
                 {page.startOnlineLabel}
               </a>

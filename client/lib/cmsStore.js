@@ -209,14 +209,53 @@ function normalizeBranches(branches) {
 
 function mergePageContent(defaults, pages = {}) {
   return Object.fromEntries(
-    Object.entries(defaults).map(([key, value]) => [
-      key,
-      {
+    Object.entries(defaults).map(([key, value]) => {
+      const page = {
         ...value,
         ...(pages?.[key] || {})
-      }
-    ])
+      };
+
+      return [
+        key,
+        key === "team"
+          ? mergeTeamPageContent(value, page)
+          : page
+      ];
+    })
   );
+}
+
+function mergeTeamPageContent(defaults, page) {
+  const shouldUseDefaultHistory =
+    page.ceoName === "Chief Executive Officer" ||
+    page.ceoBio === "The CEO leads client service standards, documentation discipline, and practical advisory across tax, corporate registration, licensing, intellectual property, and compliance matters." ||
+    page.historyTitle === "Built around practical filing support";
+
+  return {
+    ...page,
+    ...(shouldUseDefaultHistory
+      ? {
+        ceoEyebrow: defaults.ceoEyebrow,
+        ceoName: defaults.ceoName,
+        ceoRole: defaults.ceoRole,
+        ceoBio: defaults.ceoBio,
+        historyEyebrow: defaults.historyEyebrow,
+        historyTitle: defaults.historyTitle,
+        historyCopy: defaults.historyCopy,
+        history: defaults.history
+      }
+      : {}),
+    members: shouldUseDefaultTeamMembers(page.members) ? defaults.members : page.members
+  };
+}
+
+function shouldUseDefaultTeamMembers(members) {
+  if (!Array.isArray(members) || members.length === 0) {
+    return true;
+  }
+
+  const legacyNames = new Set(["Zumar Law Firm Team", "Documentation Desk", "Regulatory Support"]);
+  return members.every((member) => legacyNames.has(member?.name));
 }
 
 function mergeSeoPages(defaults, pages = {}) {
@@ -255,11 +294,33 @@ function mergeHomeContent(defaults, content = {}) {
     testimonials: {
       ...defaults.testimonials,
       ...(content?.testimonials || {}),
-      items: Array.isArray(content?.testimonials?.items) ? content.testimonials.items : defaults.testimonials.items
+      items: mergeTestimonials(defaults.testimonials.items, content?.testimonials?.items)
     },
     updates: { ...defaults.updates, ...(content?.updates || {}) },
-    branches: { ...defaults.branches, ...(content?.branches || {}) }
+    branches: { ...defaults.branches, ...(content?.branches || {}) },
+    youtubeVideos: {
+      ...defaults.youtubeVideos,
+      ...(content?.youtubeVideos || {}),
+      items: Array.isArray(content?.youtubeVideos?.items) ? content.youtubeVideos.items : defaults.youtubeVideos.items
+    }
   };
+}
+
+function mergeTestimonials(defaultItems, items) {
+  if (shouldUseDefaultTestimonials(defaultItems, items)) {
+    return defaultItems;
+  }
+
+  return items;
+}
+
+function shouldUseDefaultTestimonials(defaultItems, items) {
+  if (!Array.isArray(items) || items.length === 0) {
+    return true;
+  }
+
+  const legacyNames = new Set(["Business Owner", "Taxpayer Client", "Freelance Professional", "Startup Founder", "Import Business Client", "SME Client"]);
+  return items.every((item) => legacyNames.has(item?.name));
 }
 
 export function findBySlug(items, slug) {
