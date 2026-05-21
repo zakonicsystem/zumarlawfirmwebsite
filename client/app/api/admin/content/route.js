@@ -23,7 +23,7 @@ export async function GET(request) {
 export async function PUT(request) {
   if (backendUrl) {
     const data = await request.json();
-    return proxyBackend("PUT", JSON.stringify(normalizeIncomingData(data)));
+    return proxyBackend("PUT", JSON.stringify(normalizeCmsData(normalizeIncomingData(data))));
   }
 
   const authError = await requireAdmin(request);
