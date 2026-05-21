@@ -10,6 +10,10 @@ const branchImages = {
   lahore: "/images/Lahore%20Branch.webp",
   "rawalpindi-islamabad": "/images/Islamabad%20Branch.webp"
 };
+const branchMapUrls = {
+  lahore: "https://www.google.com/maps/place/Zumar+Law+Firm/@31.5545954,74.3028964,676m/data=!3m3!1e3!4b1!5s0x3919035239402f37:0xab082b65398f26be!4m6!3m5!1s0x3919019c399b3c3f:0x8386d63b401f100a!8m2!3d31.5545909!4d74.3054713!16s%2Fg%2F11l1f488xq?entry=ttu&g_ep=EgoyMDI2MDUxMy4wIKXMDSoASAFQAw%3D%3D",
+  "rawalpindi-islamabad": "https://www.google.com/maps/place/ZUMAR+LAW+FIRM+ISLAMABAD/@33.5951302,73.0370388,2643m/data=!3m2!1e3!4b1!4m6!3m5!1s0x38df95720e9437fb:0xab6d1a24fef97ef1!8m2!3d33.5951137!4d73.0554928!16s%2Fg%2F11zj82y2kg?entry=ttu&g_ep=EgoyMDI2MDUxMy4wIKXMDSoASAFQAw%3D%3D"
+};
 const backendUrl = process.env.BACKEND_API_URL;
 const backendToken = process.env.BACKEND_ADMIN_TOKEN || process.env.ADMIN_TOKEN;
 const cmsFetchRevalidateSeconds = Number(process.env.CMS_FETCH_REVALIDATE_SECONDS || 60);
@@ -191,7 +195,7 @@ function normalizeBranches(branches) {
     const addressQuery = [branch.address, branch.name, "Pakistan"].filter(Boolean).join(" ");
     const normalizedBranch = {
       ...branch,
-      googleMapUrl: branch.googleMapUrl || branch.mapUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressQuery)}`
+      googleMapUrl: branchMapUrls[branch.slug] || branch.googleMapUrl || branch.mapUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressQuery)}`
     };
 
     return branchImages[branch.slug]
