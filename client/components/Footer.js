@@ -13,7 +13,7 @@ export default async function Footer() {
       <div className="mx-auto w-[min(1180px,calc(100%-32px))] py-16">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.1fr_0.8fr_0.8fr_0.8fr_1.15fr]">
           <div>
-            <img className="mb-5 rounded-2xl bg-white p-2 object-contain" src="/images/zumar-logo.png" alt="Zumar Law Firm logo" />
+            <img className="mb-5 rounded-2xl bg-white p-2 object-contain" src="/images/zumar-logo.webp" alt="Zumar Law Firm logo" />
 
             <p className="mt-4 max-w-sm leading-7 text-white/75">
               Clean, accountable support for tax filings, company registration, licensing,

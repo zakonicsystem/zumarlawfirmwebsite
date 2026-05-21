@@ -539,7 +539,7 @@ export const branches = [
     phone: "042-3724555",
     email: "team@zumarlawfirm.com",
     address: "Al Meraj Arcade Chowk Chaburji Lahore",
-    image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=85"
+    image: "/images/Lahore%20Branch.webp"
   },
   {
     name: "Rawalpindi/Islamabad",
@@ -547,7 +547,7 @@ export const branches = [
     phone: "051-8445595",
     email: "team@zumarlawfirm.com",
     address: "Office No 8B 5th Floor Rizwan Arcade Adam Jee Road Sadar",
-    image: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1100&q=85"
+    image: "/images/Islamabad%20Branch.webp"
   }
 ];
 

@@ -114,7 +114,7 @@ const pageSidebarItems = [
 export function LoginForm() {
   const router = useRouter();
   const [email, setEmail] = useState("admin@zumarlawfirm.com");
-  const [password, setPassword] = useState("admin123");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   async function submit(event) {
@@ -140,13 +140,13 @@ export function LoginForm() {
 
   return (
     <section className="min-h-[calc(100vh-80px)] bg-paper py-16">
-      <form onSubmit={submit} className="mx-auto grid w-[min(460px,calc(100%-32px))] gap-5 rounded-[1.5rem] border border-primary/10 bg-white p-7 shadow-2xl shadow-primary/10">
+      <form onSubmit={submit} autoComplete="off" className="mx-auto grid w-[min(460px,calc(100%-32px))] gap-5 rounded-[1.5rem] border border-primary/10 bg-white p-7 shadow-2xl shadow-primary/10">
         <div>
           <p className="text-sm font-black uppercase text-primary">Admin Login</p>
           <h1 className="mt-2 text-4xl font-black text-primary">Zumar CMS</h1>
         </div>
-        <Field label="Email" value={email} onChange={setEmail} />
-        <Field label="Password" type="password" value={password} onChange={setPassword} />
+        <Field label="Email" value={email} onChange={setEmail} autoComplete="username" />
+        <Field label="Password" type="password" value={password} onChange={setPassword} autoComplete="new-password" />
         {error ? <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm font-bold text-red-700">{error}</p> : null}
         <button className="min-h-12 rounded-full bg-primary px-6 text-sm font-black text-white">Login</button>
       </form>
@@ -732,7 +732,7 @@ function AdminFrame({ children, status, toast, onLogout }) {
       <div className="mx-auto grid w-[min(1280px,calc(100%-32px))] gap-6 lg:grid-cols-[260px_1fr]">
         <aside className="h-fit rounded-lg border border-primary/10 bg-white p-4 shadow-xl shadow-primary/5 lg:sticky lg:top-6">
           <Link className="mb-4 flex flex-col items-center gap-3 rounded-2xl bg-paper p-3 font-black text-primary" href="/admin">
-            <img className="" src="/images/zumar-logo.png" alt="Zumar Law Firm" />
+            <img className="" src="/images/zumar-logo.webp" alt="Zumar Law Firm" />
             Admin Panel
           </Link>
           <nav className="grid gap-1 text-sm font-black text-ink/75">
@@ -1557,11 +1557,11 @@ function FormShell({ title, onSubmit, children }) {
   );
 }
 
-function Field({ label, value, onChange, type = "text", disabled = false }) {
+function Field({ label, value, onChange, type = "text", disabled = false, autoComplete }) {
   return (
     <label className="grid gap-2 text-sm font-black text-primary">
       {label}
-      <input className="min-h-12 rounded-2xl border border-primary/10 px-4 font-semibold text-ink outline-none focus:ring-4 focus:ring-primary/10 disabled:bg-paper disabled:text-muted" type={type} value={value || ""} onChange={(event) => onChange(event.target.value)} disabled={disabled} />
+      <input className="min-h-12 rounded-2xl border border-primary/10 px-4 font-semibold text-ink outline-none focus:ring-4 focus:ring-primary/10 disabled:bg-paper disabled:text-muted" type={type} value={value || ""} onChange={(event) => onChange(event.target.value)} disabled={disabled} autoComplete={autoComplete} />
     </label>
   );
 }

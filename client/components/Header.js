@@ -171,7 +171,7 @@ export default function Header() {
           </div>
 
           <Link className="justify-self-center rounded-full bg-white p-3 shadow-xl shadow-primary/10 ring-1 ring-primary/10" href="/" aria-label="Zumar Law Firm home">
-            <img className="h-16 w-auto object-contain sm:h-24" src="/images/zumar-logo.png" alt="Zumar Law Firm logo" />
+            <img className="h-16 w-auto object-contain sm:h-24" src="/images/zumar-logo.webp" alt="Zumar Law Firm logo" />
           </Link>
 
           <div className="grid gap-2 justify-items-center md:justify-items-end md:text-right">

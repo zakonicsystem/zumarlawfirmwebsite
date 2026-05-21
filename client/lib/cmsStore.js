@@ -6,7 +6,10 @@ import { serviceData } from "./serviceSchemas";
 
 const dataDirectory = path.join(process.cwd(), "data");
 const dataFile = path.join(dataDirectory, "cms-content.json");
-const lahoreBranchImage = "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=85";
+const branchImages = {
+  lahore: "/images/Lahore%20Branch.webp",
+  "rawalpindi-islamabad": "/images/Islamabad%20Branch.webp"
+};
 const backendUrl = process.env.BACKEND_API_URL;
 const backendToken = process.env.BACKEND_ADMIN_TOKEN || process.env.ADMIN_TOKEN;
 const cmsFetchRevalidateSeconds = Number(process.env.CMS_FETCH_REVALIDATE_SECONDS || 60);
@@ -16,11 +19,11 @@ export function enrichService(service) {
   const requirements = shouldUseSchemaServiceData(service.title)
     ? schemaFields.map((field) => field.label).filter(Boolean)
     : Array.isArray(service.requirements)
-    ? service.requirements
-    : String(service.requirements || "")
-      .split("\n")
-      .map((item) => item.trim())
-      .filter(Boolean);
+      ? service.requirements
+      : String(service.requirements || "")
+        .split("\n")
+        .map((item) => item.trim())
+        .filter(Boolean);
 
   const schemaPrice = serviceData.prices?.[service.title];
   const price = normalizePrice(shouldUseSchemaPrice(service.title, schemaPrice) ? schemaPrice : service.price);
@@ -191,10 +194,10 @@ function normalizeBranches(branches) {
       googleMapUrl: branch.googleMapUrl || branch.mapUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressQuery)}`
     };
 
-    return branch.slug === "lahore"
+    return branchImages[branch.slug]
       ? {
         ...normalizedBranch,
-        image: lahoreBranchImage
+        image: branchImages[branch.slug]
       }
       : normalizedBranch;
   });
