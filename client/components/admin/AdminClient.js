@@ -632,7 +632,7 @@ function EditableList({ title, items, fields, multilineFields = [], onUpdate, on
                   ) : field.toLowerCase().includes("image") ? (
                     <ImageField key={field} label={fieldLabel(field)} value={item[field]} onChange={(value) => onUpdate(index, field, value)} />
                   ) : multilineFields.includes(field) ? (
-                    <Textarea key={field} label={fieldLabel(field)} value={lines(item[field])} onChange={(value) => onUpdate(index, field, value)} />
+                    <Textarea key={field} label={fieldLabel(field)} value={lines(item[field])} placeholder={fieldPlaceholder(field)} onChange={(value) => onUpdate(index, field, value)} />
                   ) : (
                     <Field key={field} label={fieldLabel(field)} value={item[field]} onChange={(value) => onUpdate(index, field, value)} />
                   )
@@ -1709,11 +1709,11 @@ function ImageField({ label, value, onChange }) {
   );
 }
 
-function Textarea({ label, value, onChange }) {
+function Textarea({ label, value, onChange, placeholder = "" }) {
   return (
     <label className="grid gap-2 text-sm font-black text-primary">
       {label}
-      <textarea className="min-h-28 rounded-2xl border border-primary/10 px-4 py-3 font-semibold text-ink outline-none focus:ring-4 focus:ring-primary/10" value={value || ""} onChange={(event) => onChange(event.target.value)} />
+      <textarea className="min-h-28 rounded-2xl border border-primary/10 px-4 py-3 font-semibold text-ink outline-none placeholder:text-muted/60 focus:ring-4 focus:ring-primary/10" value={value || ""} placeholder={placeholder} onChange={(event) => onChange(event.target.value)} />
     </label>
   );
 }
@@ -1772,6 +1772,14 @@ function fieldLabel(value) {
   return String(value || "")
     .replace(/([A-Z])/g, " $1")
     .replace(/^./, (letter) => letter.toUpperCase());
+}
+
+function fieldPlaceholder(field) {
+  if (field === "relatedCategories") {
+    return "Enter one service category per line, for example:\nNTN\nSales Tax\nIncome Tax\nCompany Reg";
+  }
+
+  return "";
 }
 
 function isActiveAdminLink(currentUrl, href) {
