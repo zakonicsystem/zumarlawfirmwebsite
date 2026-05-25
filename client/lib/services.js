@@ -560,32 +560,84 @@ export function getBranchBySlug(slug) {
 
 export const serviceAreas = [
   {
-    title: "Tax Registration & Filing",
-    slug: "tax-registration-filing",
-    icon: "tax",
-    image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1100&q=85",
-    summary: "NTN, income tax, sales tax registration, and routine filing support for individuals and businesses."
+    title: "Lahore",
+    slug: "lahore",
+    province: "Punjab",
+    icon: "landmark",
+    image: "/images/Lahore%20Branch.webp",
+    summary: "Tax, company registration, sales tax, trademark, licensing, and compliance support for Lahore clients.",
+    coverage: "Our Lahore team supports individuals, startups, retailers, exporters, service businesses, and companies across the city with online filing and branch-based consultation.",
+    relatedCategories: ["NTN", "Sales Tax", "Income Tax", "Company Reg", "Intellectual Property"]
   },
   {
-    title: "Corporate & Business Registration",
-    slug: "corporate-business-registration",
+    title: "Rawalpindi / Islamabad",
+    slug: "rawalpindi-islamabad",
+    province: "Punjab / Islamabad",
+    icon: "landmark",
+    image: "/images/Islamabad%20Branch.webp",
+    summary: "Registration, tax filing, corporate compliance, and licensing support for Rawalpindi and Islamabad.",
+    coverage: "We assist clients across Rawalpindi, Islamabad, Saddar, Blue Area, I-8, G-9, Bahria, DHA, and nearby business locations.",
+    relatedCategories: ["NTN", "Sales Tax", "Income Tax", "Company Reg", "Regulatory & Licensing"]
+  },
+  {
+    title: "Faisalabad",
+    slug: "faisalabad",
+    province: "Punjab",
     icon: "building",
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1100&q=85",
-    summary: "Company, partnership, LLP, SECP, and business setup services for founders and operators."
+    summary: "Business registration, income tax, sales tax, import export, and compliance help for Faisalabad businesses.",
+    coverage: "Zumar Law Firm supports textile businesses, traders, manufacturers, service providers, and salaried taxpayers in Faisalabad through remote and appointment-based services.",
+    relatedCategories: ["NTN", "Sales Tax", "Income Tax", "Import Export", "Company Reg"]
   },
   {
-    title: "Licensing & Regulatory Compliance",
-    slug: "licensing-regulatory-compliance",
+    title: "Okara",
+    slug: "okara",
+    province: "Punjab",
     icon: "shield",
-    image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1100&q=85",
-    summary: "PSEB, chamber, import export, DNFBP, labour, PEC, and authority registrations."
+    image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1100&q=85",
+    summary: "Online tax, registration, company, and compliance services for Okara and nearby business communities.",
+    coverage: "Clients in Okara can start consultations online, share documents securely, and receive filing support for FBR, SECP, sales tax, and licensing matters.",
+    relatedCategories: ["NTN", "Income Tax", "Sales Tax", "Company Reg", "Professional Registration"]
   },
   {
-    title: "Intellectual Property",
-    slug: "intellectual-property",
-    icon: "trademark",
-    image: "https://images.unsplash.com/photo-1589391886645-d51941baf7fb?auto=format&fit=crop&w=1100&q=85",
-    summary: "Trademark, copyright, and patent registration support with document preparation and follow-up."
+    title: "Karachi",
+    slug: "karachi",
+    province: "Sindh",
+    icon: "globe",
+    image: "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1100&q=85",
+    summary: "FBR, SRB, company registration, trademark, import export, and business compliance support for Karachi.",
+    coverage: "We support Karachi clients remotely for registrations, filings, documentation, notices, and recurring compliance across federal and Sindh authorities.",
+    relatedCategories: ["NTN", "Sales Tax", "Income Tax", "Company Reg", "Intellectual Property", "Import Export"]
+  },
+  {
+    title: "Multan",
+    slug: "multan",
+    province: "Punjab",
+    icon: "tax",
+    image: "https://images.unsplash.com/photo-1519451241324-20b4ea2c4220?auto=format&fit=crop&w=1100&q=85",
+    summary: "Taxpayer registration, return filing, business setup, and licensing support for Multan clients.",
+    coverage: "Our online workflow helps Multan clients complete documentation, submit records, and track tax and corporate work without visiting a branch.",
+    relatedCategories: ["NTN", "Income Tax", "Sales Tax", "Company Reg", "Chamber of Commerce"]
+  },
+  {
+    title: "Peshawar",
+    slug: "peshawar",
+    province: "Khyber Pakhtunkhwa",
+    icon: "filing",
+    image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1100&q=85",
+    summary: "KPRA, FBR, company registration, licensing, and filing support for Peshawar clients.",
+    coverage: "We help Peshawar individuals and businesses prepare documents, register with authorities, and manage tax and compliance steps online.",
+    relatedCategories: ["NTN", "Income Tax", "Sales Tax", "Company Reg", "Regulatory & Licensing"]
+  },
+  {
+    title: "Quetta",
+    slug: "quetta",
+    province: "Balochistan",
+    icon: "scale",
+    image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1100&q=85",
+    summary: "Federal tax, sales tax, business registration, and compliance assistance for Quetta clients.",
+    coverage: "Quetta clients can work with our team remotely for registration, filing, licensing, and document review across common business services.",
+    relatedCategories: ["NTN", "Income Tax", "Sales Tax", "Company Reg", "Regulatory & Licensing"]
   }
 ];
 

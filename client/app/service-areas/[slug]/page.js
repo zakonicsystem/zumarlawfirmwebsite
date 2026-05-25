@@ -34,7 +34,7 @@ function matchingServices(area, services) {
     return services.filter((service) => service.category === "Intellectual Property");
   }
 
-  return services.filter((service) => ["PSEB Reg", "Regulatory & Licensing", "Chamber of Commerce", "Professional Registration", "Labour Registration", "Import Export"].includes(service.category)).slice(0, 8);
+  return services.filter((service) => ["NTN", "Sales Tax", "Income Tax", "Company Reg", "Intellectual Property", "Regulatory & Licensing", "Import Export"].includes(service.category)).slice(0, 8);
 }
 
 export default async function ServiceAreaDetailPage({ params }) {
@@ -51,22 +51,55 @@ export default async function ServiceAreaDetailPage({ params }) {
 
   return (
     <>
-      <section className="border-b border-primary/10 bg-gradient-to-br from-paper via-white to-secondary/60 py-16 sm:py-20">
+      <section className="border-b border-primary/10 bg-gradient-to-br from-paper via-white to-secondary/60 py-14 sm:py-20">
         <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[1fr_420px] lg:items-center">
-          <div>
+          <div className="min-w-0">
             <p className="mb-3 inline-flex items-center gap-2 text-sm font-black uppercase text-primary">
-              <FaIcon className="size-4" name={area.icon} />
+              <FaIcon className="size-4" name={area.icon || "landmark"} />
               {page.eyebrow || "Service Area"}
             </p>
-            <h1 className="text-5xl font-black leading-tight text-primary sm:text-5xl">{area.title}</h1>
+            <h1 className="text-4xl font-black leading-tight text-primary sm:text-5xl">{area.title}</h1>
+            {area.province ? <p className="mt-3 inline-flex rounded-full bg-white px-4 py-2 text-sm font-black text-primary shadow-lg shadow-primary/5">{area.province}</p> : null}
             <p className="mt-5 text-lg leading-8 text-muted">{area.summary}</p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link className="inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-black text-white" href={page.appointmentHref || "/appointment"}>
+                <FaIcon className="mr-2 size-4" name="appointment" />
+                {page.appointmentLabel || "Book Appointment"}
+              </Link>
+              <Link className="inline-flex min-h-12 items-center justify-center rounded-full border border-primary/15 bg-white px-6 text-sm font-black text-primary" href="/service-areas">
+                <FaIcon className="mr-2 size-4" name="arrowLeft" />
+                {page.allAreasLabel || "All Service Areas"}
+              </Link>
+            </div>
           </div>
-          <img className="h-80 w-full rounded-[2rem] object-cover shadow-2xl shadow-primary/10" src={area.image} alt={area.title} />
+          <img className="h-72 w-full rounded-[2rem] object-cover shadow-2xl shadow-primary/10 sm:h-80" src={area.image || "/images/zumar-logo.webp"} alt={area.title} />
         </div>
       </section>
-      <section className="py-16 sm:py-20">
+
+      <section className="py-12 sm:py-16">
+        <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+          <div className="rounded-3xl border border-primary/10 bg-white p-6 shadow-xl shadow-primary/5 sm:p-8">
+            <FaIcon className="mb-5 size-8 text-primary" name="globe" />
+            <h2 className="text-3xl font-black text-primary">{page.coverageTitle || "How we support this city"}</h2>
+            <p className="mt-4 leading-8 text-muted">{area.coverage || page.coverageFallback || area.summary}</p>
+          </div>
+          <div className="rounded-3xl bg-primary p-6 text-white shadow-2xl shadow-primary/15 sm:p-8">
+            <p className="text-sm font-black uppercase text-secondary">Available support</p>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {["Online consultation", "Document review", "FBR and SECP filing", "Follow-up and compliance"].map((item) => (
+                <div className="flex gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 font-bold" key={item}>
+                  <FaIcon className="mt-1 size-4 shrink-0 text-secondary" name="check" />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-paper py-14 sm:py-20">
         <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
-          <h2 className="mb-8 text-4xl font-black text-primary">{page.relatedTitle || "Related Services"}</h2>
+          <h2 className="mb-8 text-3xl font-black text-primary sm:text-4xl">{page.relatedTitle || "Related Services"}</h2>
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
             {related.map((service) => (
               <Link className="rounded-[1.5rem] border border-primary/10 bg-white p-5 shadow-lg shadow-primary/5 transition hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/10" href={`/services/${service.slug}`} key={service.slug}>
@@ -76,6 +109,7 @@ export default async function ServiceAreaDetailPage({ params }) {
               </Link>
             ))}
           </div>
+          {related.length === 0 ? <p className="rounded-2xl bg-white p-5 font-bold text-muted">Related services will appear here after categories are selected in the admin panel.</p> : null}
         </div>
       </section>
     </>

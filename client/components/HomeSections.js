@@ -161,7 +161,10 @@ export function HomeServiceAreasSection({ content, serviceAreas = [] }) {
             <Link className="group overflow-hidden rounded-[2rem] border border-primary/10 bg-white shadow-xl shadow-primary/5 transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/15" href={`/service-areas/${area.slug}`} key={area.slug}>
               <img className="h-44 w-full object-cover transition duration-500 group-hover:scale-105" src={area.image} alt={area.title} />
               <div className="p-5">
-                <FaIcon className="mb-4 size-7 text-primary" name={area.icon} />
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <FaIcon className="size-7 text-primary" name={area.icon || "landmark"} />
+                  {area.province ? <span className="rounded-full bg-secondary px-3 py-1 text-xs font-black text-primary">{area.province}</span> : null}
+                </div>
                 <h3 className="text-xl font-black text-primary">{area.title}</h3>
                 <p className="mt-3 text-sm leading-6 text-muted">{area.summary}</p>
               </div>

@@ -517,7 +517,12 @@ function PageContentEditor({ data, updateData, save, initialPage }) {
 
         {active === "serviceAreaDetail" ? (
           <>
+            <Field label="Coverage Title" value={page.coverageTitle} onChange={(value) => updatePage("coverageTitle", value)} />
+            <Textarea label="Coverage Fallback" value={page.coverageFallback} onChange={(value) => updatePage("coverageFallback", value)} />
             <Field label="Related Title" value={page.relatedTitle} onChange={(value) => updatePage("relatedTitle", value)} />
+            <Field label="Appointment Label" value={page.appointmentLabel} onChange={(value) => updatePage("appointmentLabel", value)} />
+            <Field label="Appointment URL" value={page.appointmentHref} onChange={(value) => updatePage("appointmentHref", value)} />
+            <Field label="All Areas Label" value={page.allAreasLabel} onChange={(value) => updatePage("allAreasLabel", value)} />
           </>
         ) : null}
 
@@ -547,12 +552,12 @@ function PageContentEditor({ data, updateData, save, initialPage }) {
 
         {active === "serviceAreas" ? (
           <EditableList
-            title="Service Areas"
+            title="City Service Areas"
             items={data.serviceAreas || []}
-            fields={["title", "slug", "icon", "image", "summary", "relatedCategories"]}
-            multilineFields={["summary", "relatedCategories"]}
+            fields={["title", "slug", "province", "icon", "image", "summary", "coverage", "relatedCategories", "enabled"]}
+            multilineFields={["summary", "coverage", "relatedCategories"]}
             onUpdate={(index, field, value) => updateCollection("serviceAreas", index, field, field === "relatedCategories" ? splitLines(value) : value)}
-            onAdd={() => addCollectionItem("serviceAreas", { title: "New Service Area", slug: "new-service-area", icon: "scale", image: "", summary: "", relatedCategories: [] })}
+            onAdd={() => addCollectionItem("serviceAreas", { title: "New City", slug: "new-city", province: "Punjab", icon: "landmark", image: "", summary: "", coverage: "", relatedCategories: [], enabled: true })}
             onRemove={(index) => removeCollectionItem("serviceAreas", index)}
           />
         ) : null}

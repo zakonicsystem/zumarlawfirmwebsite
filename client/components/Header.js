@@ -17,7 +17,7 @@ const navGroups = [
     icon: "filing",
     items: [
       { label: "All Services", href: "/services", icon: "filing", copy: "Prices, categories, and document requirements." },
-      { label: "Service Areas", href: "/service-areas", icon: "shield", copy: "Tax, corporate, licensing, and compliance focus." },
+      { label: "Service Areas", href: "/service-areas", icon: "globe", copy: "City-by-city coverage across Pakistan." },
       { label: "Tax Calculators", href: "/calculators", icon: "tax", copy: "Salary and business tax estimators." },
       { label: "Book Appointment", href: "/appointment", icon: "appointment", copy: "Request a consultation with our team." }
     ]

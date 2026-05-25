@@ -4,8 +4,9 @@ import { policyLinks, quickLinks } from "@/lib/services";
 import { readCmsData } from "@/lib/cmsStore";
 
 export default async function Footer() {
-  const { branches, categories, settings } = await readCmsData();
+  const { branches, categories, serviceAreas, settings } = await readCmsData();
   const serviceGroups = categories.slice(0, 7);
+  const footerAreas = (serviceAreas || []).filter((area) => area.enabled !== false).slice(0, 8);
   const socialLinks = (settings?.socialLinks || []).filter((link) => link.enabled !== false && link.href);
 
   return (
@@ -75,6 +76,19 @@ export default async function Footer() {
                 </Link>
               ))}
             </div>
+            {footerAreas.length ? (
+              <div className="mt-8">
+                <h4 className="mb-4 font-extrabold">Service Areas</h4>
+                <div className="grid gap-2 text-sm font-semibold text-white/70">
+                  {footerAreas.map((area) => (
+                    <Link className="inline-flex items-center gap-2 transition-colors hover:text-secondary" key={area.slug} href={`/service-areas/${area.slug}`}>
+                      <FaIcon className="size-3.5" name="globe" />
+                      {area.title}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
 
           <div>

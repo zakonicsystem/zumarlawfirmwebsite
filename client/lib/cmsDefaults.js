@@ -390,13 +390,18 @@ export const defaultPageContent = {
   serviceAreas: {
     label: "Service Areas",
     eyebrow: "Service Areas",
-    title: "Focused practice areas",
-    copy: "Explore the core service areas covered by Zumar Law Firm across tax, corporate, licensing, and intellectual property work."
+    title: "Service coverage across Pakistan",
+    copy: "Zumar Law Firm serves clients city by city through branch support, online consultation, document handling, and authority filing workflows across Pakistan."
   },
   serviceAreaDetail: {
     label: "Service Area Detail",
-    eyebrow: "Service Area",
-    relatedTitle: "Related Services"
+    eyebrow: "City Coverage",
+    coverageTitle: "How we support this city",
+    coverageFallback: "Our team supports this city through online consultation, document review, filing preparation, and follow-up with relevant tax, corporate, licensing, and regulatory authorities.",
+    relatedTitle: "Popular services in this city",
+    appointmentLabel: "Book Appointment",
+    appointmentHref: "/appointment",
+    allAreasLabel: "All Service Areas"
   },
   branches: {
     label: "Branches",
