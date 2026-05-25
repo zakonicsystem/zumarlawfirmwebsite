@@ -20,7 +20,15 @@ export const metadata = {
   },
   description:
     "Professional tax, company registration, intellectual property, licensing, and regulatory services in Pakistan.",
-  metadataBase: new URL("https://zumarlawfirm.com")
+  metadataBase: new URL("https://zumarlawfirm.com"),
+  verification: {
+    google: "P7eQOJbCElXiZJRUTwP9L-0_8IWA17poAURJNjFlo2w"
+  },
+  icons: {
+    icon: "/images/favicon.png",
+    shortcut: "/images/favicon.png",
+    apple: "/images/favicon.png"
+  }
 };
 
 export default function RootLayout({ children }) {
