@@ -461,11 +461,11 @@ export const defaultPageContent = {
     title: "Meet the people behind the work",
     copy: "A focused professional team handling client intake, documentation, filing, and regulatory follow-up.",
     ceoEyebrow: "Leadership",
-    ceoName: "Zumar Law Firm",
-    ceoRole: "Brand of Zumar Law Associate (SMC-Private) Limited",
+    ceoName: "Arslan Rana",
+    ceoRole: "CEO OF ZUMAR LAW FIRM",
     ceoImage: "/images/CEO.webp",
     ceoBio:
-      "Zumar Law Firm is the brand name of Zumar Law Associate (SMC-Private) Limited, established with the vision of providing professional legal, corporate, tax, licensing, and intellectual property services across Pakistan and internationally.",
+      "Our vision is to become a trusted leader in Corporate, Taxation, and IPO Consultancy services by delivering excellence, integrity, and innovative legal solutions. We aim to empower businesses, entrepreneurs, and investors with professional guidance that supports sustainable growth and long-term success.\n\nWe believe that strong legal foundations create strong businesses. Therefore, our focus is to provide strategic corporate and tax solutions that help organizations operate with confidence, compliance, and transparency in today's evolving business environment.\n\nOur commitment is to build lasting relationships with clients through professionalism, trust, and exceptional service standards while continuously adapting to modern legal and corporate challenges.",
     historyEyebrow: "Company History",
     historyTitle: "Registered, digital, and client-focused since 2018.",
     historyCopy:
