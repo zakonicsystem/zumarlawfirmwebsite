@@ -28,15 +28,16 @@ export default function HomeHeroSlider({ slides = [] }) {
 
   return (
     <section className="relative min-h-[500px] overflow-hidden bg-primary text-white sm:min-h-[500px]" data-page-load>
-      {visibleSlides.map((slide, index) => (
-        <img
-          className={`absolute inset-0 h-full w-full object-cover transition duration-[1400ms] ${index === active ? "scale-100 opacity-100" : "scale-105 opacity-0"}`}
-          src={slide.image}
-          alt=""
-          aria-hidden="true"
-          key={`${slide.title}-${index}`}
-        />
-      ))}
+      <img
+        className="absolute inset-0 h-full w-full object-cover transition duration-[1400ms]"
+        src={current.image}
+        alt=""
+        aria-hidden="true"
+        fetchPriority="high"
+        loading="eager"
+        decoding="async"
+        key={`${current.title}-${active}`}
+      />
       <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/78 to-primary/20" />
       <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-ink/20" />
 

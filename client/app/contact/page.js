@@ -22,7 +22,7 @@ export default async function ContactPage() {
         <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="grid gap-4">
             <div className="overflow-hidden rounded-[2rem] border border-primary/10 bg-white shadow-xl shadow-primary/10">
-              <img className="h-80 w-full object-contain object-center sm:h-[420px]" src={page.image || contactImage} alt="Zumar Law Firm contact support" />
+              <img className="h-80 w-full object-cover object-top sm:h-[420px]" src={page.image || contactImage} alt="Zumar Law Firm contact support" loading="lazy" decoding="async" />
             </div>
             {(page.links || []).map((link, index) => (
               <div className="rounded-[2rem] border border-primary/10 bg-white p-6 shadow-lg shadow-primary/5" key={`${link.title || "link"}-${index}`}>

@@ -3,7 +3,7 @@ import { readCmsData } from "@/lib/cmsStore";
 const siteUrl = "https://zumarlawfirm.com";
 
 const staticRoutes = [
-  "",
+  "/",
   "/about",
   "/appointment",
   "/blog",
@@ -25,9 +25,13 @@ const staticRoutes = [
 ];
 
 function entry(pathname, updatedAt) {
+  const normalizedPath = pathname === "/" ? "" : pathname;
+
   return {
-    url: `${siteUrl}${pathname}`,
-    lastModified: updatedAt ? new Date(updatedAt) : new Date()
+    url: `${siteUrl}${normalizedPath}`,
+    lastModified: updatedAt ? new Date(updatedAt) : new Date(),
+    changeFrequency: pathname === "/" ? "daily" : "weekly",
+    priority: pathname === "/" ? 1 : pathname.split("/").length === 2 ? 0.8 : 0.6
   };
 }
 
