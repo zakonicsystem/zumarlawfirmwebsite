@@ -65,7 +65,14 @@ async function route(request, response, headers) {
     }
 
     const payload = await readJson(request);
-    sendJson(response, 200, login(payload, config), headers);
+    const data = await store.read();
+    const authConfig = {
+      ...config,
+      adminEmail: data.settings?.adminEmail || config.adminEmail,
+      adminPassword: data.settings?.adminPassword || config.adminPassword
+    };
+
+    sendJson(response, 200, login(payload, authConfig), headers);
     return;
   }
 

@@ -15,6 +15,7 @@ export default function MouseEffect() {
     }
 
     let frame = 0;
+    let running = false;
 
     const move = (event) => {
       target.current.x = event.clientX;
@@ -22,6 +23,11 @@ export default function MouseEffect() {
 
       if (wrap.current) {
         wrap.current.style.opacity = "1";
+      }
+
+      if (!running) {
+        running = true;
+        frame = requestAnimationFrame(tick);
       }
     };
 
@@ -42,13 +48,15 @@ export default function MouseEffect() {
         ring.current.style.transform = `translate3d(${position.ringX}px, ${position.ringY}px, 0) translate(-50%, -50%)`;
       }
 
-      frame = requestAnimationFrame(tick);
+      if (running) {
+        frame = requestAnimationFrame(tick);
+      }
     };
 
     window.addEventListener("pointermove", move);
-    frame = requestAnimationFrame(tick);
 
     return () => {
+      running = false;
       window.removeEventListener("pointermove", move);
       cancelAnimationFrame(frame);
     };

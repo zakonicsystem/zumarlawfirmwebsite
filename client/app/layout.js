@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import MouseEffect from "@/components/MouseEffect";
 import PageTransition from "@/components/PageTransition";
 import StickyWhatsappButton from "@/components/StickyWhatsappButton";
+import { readCmsData } from "@/lib/cmsStore";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -13,23 +14,43 @@ const jakarta = Plus_Jakarta_Sans({
   display: "swap"
 });
 
-export const metadata = {
-  title: {
-    default: "Zumar Law Firm | Tax, Corporate & Regulatory Services",
-    template: "%s | Zumar Law Firm"
-  },
-  description:
-    "Professional tax, company registration, intellectual property, licensing, and regulatory services in Pakistan.",
-  metadataBase: new URL("https://zumarlawfirm.com"),
-  verification: {
-    google: "P7eQOJbCElXiZJRUTwP9L-0_8IWA17poAURJNjFlo2w"
-  },
-  icons: {
-    icon: "/images/favicon.ico",
-    shortcut: "/images/favicon.ico",
-    apple: "/images/favicon.ico"
+export async function generateMetadata() {
+  const data = await readCmsData();
+  const googleSiteVerifications = normalizeGoogleSiteVerifications(data.settings?.googleSiteVerifications);
+
+  return {
+    title: {
+      default: "Zumar Law Firm | Tax, Corporate & Regulatory Services",
+      template: "%s | Zumar Law Firm"
+    },
+    description:
+      "Professional tax, company registration, intellectual property, licensing, and regulatory services in Pakistan.",
+    metadataBase: new URL("https://zumarlawfirm.com"),
+    verification: googleSiteVerifications.length ? { google: googleSiteVerifications } : undefined,
+    icons: {
+      icon: "/images/favicon.ico",
+      shortcut: "/images/favicon.ico",
+      apple: "/images/favicon.ico"
+    }
+  };
+}
+
+function normalizeGoogleSiteVerifications(value) {
+  return (Array.isArray(value) ? value : [value])
+    .map((item) => extractGoogleSiteVerification(item))
+    .filter(Boolean)
+    .slice(0, 3);
+}
+
+function extractGoogleSiteVerification(value) {
+  const text = String(value || "").trim();
+
+  if (!text) {
+    return "";
   }
-};
+
+  return text.match(/content=["']([^"']+)["']/i)?.[1]?.trim() || text;
+}
 
 export default function RootLayout({ children }) {
   return (

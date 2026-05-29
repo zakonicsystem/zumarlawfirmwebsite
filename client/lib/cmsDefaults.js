@@ -836,6 +836,7 @@ export function makeCmsDefaults() {
       updatedAt: new Date().toISOString(),
       adminEmail: "admin@zumarlawfirm.com",
       adminPassword: "admin123",
+      googleSiteVerifications: ["P7eQOJbCElXiZJRUTwP9L-0_8IWA17poAURJNjFlo2w"],
       socialLinks: [
         { label: "Facebook", href: "https://www.facebook.com/zumarlawfirm", enabled: true },
         { label: "TikTok", href: "https://www.tiktok.com/@zumarlawfirmofficial", enabled: true },

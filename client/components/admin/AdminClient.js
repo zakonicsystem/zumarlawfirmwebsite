@@ -227,7 +227,7 @@ export default function AdminClient({ view, editId }) {
     return payload;
   }
 
-function updateData(key, value) {
+  function updateData(key, value) {
     setData((current) => ({ ...current, [key]: value }));
   }
 
@@ -652,8 +652,9 @@ function EditableList({ title, items, fields, multilineFields = [], onUpdate, on
   );
 }
 
-function StringListEditor({ title, items, onUpdate }) {
+function StringListEditor({ title, items, onUpdate, maxItems = Infinity, addLabel = "Add", placeholder = "" }) {
   const [openItems, setOpenItems] = useState({});
+  const canAdd = (items || []).length < maxItems;
 
   function updateItem(index, value) {
     onUpdate(items.map((item, itemIndex) => (itemIndex === index ? value : item)));
@@ -663,9 +664,13 @@ function StringListEditor({ title, items, onUpdate }) {
     <div className="rounded-2xl border border-primary/10 p-4">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-2xl font-black text-primary">{title}</h2>
-        <button type="button" className="rounded-full bg-secondary px-4 py-2 text-sm font-black text-primary" onClick={() => onUpdate([...(items || []), "New item"])}>
-          Add
-        </button>
+        {canAdd ? (
+          <button type="button" className="rounded-full bg-secondary px-4 py-2 text-sm font-black text-primary" onClick={() => onUpdate([...(items || []), ""])}>
+            {addLabel}
+          </button>
+        ) : (
+          <span className="rounded-full bg-paper px-4 py-2 text-sm font-black text-primary/60">Limit {maxItems}</span>
+        )}
       </div>
       <div className="grid gap-3">
         {(items || []).map((item, index) => (
@@ -676,7 +681,7 @@ function StringListEditor({ title, items, onUpdate }) {
             </button>
             {openItems[index] ? (
               <div className="mt-3 grid gap-2">
-                <Field label={`Item ${index + 1}`} value={item} onChange={(value) => updateItem(index, value)} />
+                <Textarea label={`Item ${index + 1}`} value={item} placeholder={placeholder} onChange={(value) => updateItem(index, value)} />
                 <button type="button" className="w-fit rounded-full border border-red-200 px-4 py-2 text-sm font-black text-red-700" onClick={() => {
                   onUpdate(items.filter((_, itemIndex) => itemIndex !== index));
                   notifyAdminToast(`${title} item deleted. Save changes to apply.`);
@@ -831,6 +836,7 @@ function Dashboard({ data }) {
 function SettingsEditor({ data, updateData, save }) {
   const settings = data.settings || {};
   const socialLinks = settings.socialLinks || [];
+  const googleSiteVerifications = normalizeStringList(settings.googleSiteVerifications).slice(0, 3);
 
   function updateSettings(field, value) {
     updateData("settings", { ...settings, [field]: value });
@@ -858,7 +864,15 @@ function SettingsEditor({ data, updateData, save }) {
     <Editor title="Site Settings" onSave={() => save()}>
       <div className="grid gap-4">
         <Field label="Admin Email" value={settings.adminEmail} onChange={(value) => updateSettings("adminEmail", value)} />
-        <Field label="Admin Password" value={settings.adminPassword} onChange={(value) => updateSettings("adminPassword", value)} />
+        <Field label="Admin Password" type="password" value={settings.adminPassword} autoComplete="new-password" onChange={(value) => updateSettings("adminPassword", value)} />
+        <StringListEditor
+          title="Google Site Verification Tags"
+          items={googleSiteVerifications}
+          maxItems={3}
+          addLabel="Add Verification"
+          placeholder={`Paste the verification code or full meta tag, for example:\n<meta name="google-site-verification" content="P7eQOJbCElXiZJRUTwP9L-0_8IWA17poAURJNjFlo2w" />`}
+          onUpdate={(items) => updateSettings("googleSiteVerifications", normalizeStringList(items).slice(0, 3))}
+        />
         <StringListEditor
           title="Service Categories"
           items={data.categories || []}

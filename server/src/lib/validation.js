@@ -74,6 +74,7 @@ export function publicCmsData(data) {
   return {
     ...data,
     settings: {
+      ...(data.settings || {}),
       updatedAt: data.settings?.updatedAt || null,
       adminEmail: undefined,
       adminPassword: undefined
