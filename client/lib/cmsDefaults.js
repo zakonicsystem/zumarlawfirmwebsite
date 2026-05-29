@@ -463,7 +463,7 @@ export const defaultPageContent = {
     ceoEyebrow: "Leadership",
     ceoName: "Zumar Law Firm",
     ceoRole: "Brand of Zumar Law Associate (SMC-Private) Limited",
-    ceoImage: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=900&q=85",
+    ceoImage: "/images/CEO.webp",
     ceoBio:
       "Zumar Law Firm is the brand name of Zumar Law Associate (SMC-Private) Limited, established with the vision of providing professional legal, corporate, tax, licensing, and intellectual property services across Pakistan and internationally.",
     historyEyebrow: "Company History",
@@ -535,7 +535,7 @@ export const defaultPageContent = {
     eyebrow: "Contact",
     title: "Talk to the team",
     copy: "Send your service query or start directly from the online client portal.",
-    image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1000&q=85",
+    image: "/images/Contact%20Page.webp",
     formTitle: "Inquiry Form",
     formCopy:
       "This frontend form is ready for backend integration. For active submission, connect it to the Node.js contact endpoint used by the app.",

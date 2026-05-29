@@ -120,7 +120,7 @@ export default function TaxCalculators({ page, mode = "all" }) {
           <TaxCalculator
             title={page.salaryTitle}
             copy={page.salaryCopy}
-            defaultMonthlyIncome={150000}
+            defaultMonthlyIncome={0}
             incomeLabel="Monthly Salary"
             helperText="Enter gross monthly salary in PKR."
             tableKey="salary"
@@ -131,7 +131,7 @@ export default function TaxCalculators({ page, mode = "all" }) {
           <TaxCalculator
             title={page.businessTitle}
             copy={page.businessCopy}
-            defaultMonthlyIncome={250000}
+            defaultMonthlyIncome={0}
             incomeLabel="Monthly Business Income"
             helperText="Enter estimated monthly taxable business income in PKR."
             tableKey="business"
