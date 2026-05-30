@@ -10,6 +10,7 @@ export default function ServiceCarousel({ items }) {
   const [index, setIndex] = useState(0);
   const [activeHeight, setActiveHeight] = useState(0);
   const viewport = useRef(null);
+  const thumbnailScroll = useRef(null);
   const slideRefs = useRef([]);
   const featured = useMemo(() => (Array.isArray(items) && items.length > 0 ? items : services).filter((service) => service.enabled !== false).slice(0, 14), [items]);
 
@@ -51,6 +52,28 @@ export default function ServiceCarousel({ items }) {
     return () => window.removeEventListener("resize", updateHeight);
   }, [featured.length, index]);
 
+  useEffect(() => {
+    if (!thumbnailScroll.current) {
+      return;
+    }
+
+    const container = thumbnailScroll.current;
+    const buttons = container.querySelectorAll("button");
+    const activeButton = buttons[index];
+
+    if (activeButton) {
+      const containerWidth = container.offsetWidth;
+      const buttonWidth = activeButton.offsetWidth;
+      const buttonLeft = activeButton.offsetLeft;
+      const scrollPosition = buttonLeft - (containerWidth / 2) + (buttonWidth / 2);
+
+      container.scrollTo({
+        left: Math.max(0, scrollPosition),
+        behavior: "smooth"
+      });
+    }
+  }, [index]);
+
   if (featured.length === 0) {
     return null;
   }
@@ -89,13 +112,13 @@ export default function ServiceCarousel({ items }) {
         <div ref={viewport} className="flex">
           {featured.map((service, itemIndex) => (
             <div
-              className="min-w-full"
+              className={`min-w-full transition-all duration-300 ${itemIndex === index ? "scale-100 opacity-100" : "scale-95 opacity-70"}`}
               key={service.slug}
               ref={(element) => {
                 slideRefs.current[itemIndex] = element;
               }}
             >
-              <Link href={`/services/${service.slug}`} className="group block overflow-hidden bg-white">
+              <Link href={`/services/${service.slug}`} className={`group block overflow-hidden bg-white rounded-[1.5rem] transition-all duration-300 ${itemIndex === index ? "ring-2 ring-secondary shadow-2xl shadow-secondary/30" : ""}`}>
                 <div className="relative flex flex-col overflow-hidden p-5 sm:p-7 lg:p-8">
                   <div className="pointer-events-none absolute -right-20 -top-24 size-72 rounded-full bg-secondary/45 blur-3xl" />
                   <div className="pointer-events-none absolute -bottom-28 left-1/2 size-80 rounded-full bg-primary/10 blur-3xl" />
@@ -134,11 +157,11 @@ export default function ServiceCarousel({ items }) {
       </div>
 
       <div className="relative mt-5 overflow-hidden rounded-[1.25rem] bg-paper p-2">
-        <div className="flex gap-2 overflow-x-auto pb-1">
-          {featured.slice(0, 8).map((service, itemIndex) => (
+        <div ref={thumbnailScroll} className="flex gap-2 overflow-x-auto pb-1 snap-x scroll-smooth hide-scrollbar">
+          {featured.map((service, itemIndex) => (
             <button
               aria-label={`Show ${service.title}`}
-              className={`min-w-[150px] rounded-2xl p-3 text-left transition sm:min-w-[180px] ${itemIndex === index ? "bg-primary text-white shadow-lg shadow-primary/15" : "bg-white text-primary hover:bg-secondary/45"}`}
+              className={`min-w-[150px] rounded-2xl p-3 text-left transition snap-start sm:min-w-[180px] ${itemIndex === index ? "bg-primary text-white shadow-lg shadow-primary/15" : "bg-white text-primary hover:bg-secondary/45"}`}
               key={service.slug}
               onClick={() => setIndex(itemIndex)}
               type="button"

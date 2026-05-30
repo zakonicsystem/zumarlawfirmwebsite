@@ -15,10 +15,12 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   background: #fffdfb;
+  overflow-x: hidden;
 }
 
 @keyframes heroFade {
@@ -41,4 +43,14 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Hide scrollbar while keeping scroll functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
 }
