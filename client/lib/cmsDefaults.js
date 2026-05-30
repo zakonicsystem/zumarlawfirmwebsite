@@ -304,8 +304,6 @@ export const defaultAboutContent = {
   title: "Zumar Law Firm",
   copy: "A professional services firm focused on tax, business registration, regulatory licensing, intellectual property, and compliance support for individuals, startups, companies, NGOs, freelancers, and professionals.",
   image: "https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&w=1200&q=85",
-  imageOverlayEyebrow: "Document-first advisory",
-  imageOverlayTitle: "Tax, corporate, licensing, and compliance support.",
   introEyebrow: "About the firm",
   introTitle: "Practical advisory built around clear documents and accountable follow-up.",
   introCopy:

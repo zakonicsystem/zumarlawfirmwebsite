@@ -1522,8 +1522,6 @@ function AboutEditor({ data, updateData, save }) {
         <Field label="Title" value={about.title} onChange={(value) => updateAbout("title", value)} />
         <Textarea label="Header Copy" value={about.copy} onChange={(value) => updateAbout("copy", value)} />
         <ImageField label="Image URL" value={about.image} onChange={(value) => updateAbout("image", value)} />
-        <Field label="Image Overlay Eyebrow" value={about.imageOverlayEyebrow} onChange={(value) => updateAbout("imageOverlayEyebrow", value)} />
-        <Field label="Image Overlay Title" value={about.imageOverlayTitle} onChange={(value) => updateAbout("imageOverlayTitle", value)} />
         <Field label="Intro Eyebrow" value={about.introEyebrow} onChange={(value) => updateAbout("introEyebrow", value)} />
         <Field label="Intro Title" value={about.introTitle} onChange={(value) => updateAbout("introTitle", value)} />
         <Textarea label="Intro Copy" value={about.introCopy} onChange={(value) => updateAbout("introCopy", value)} />

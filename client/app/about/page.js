@@ -29,12 +29,7 @@ export default async function AboutPage() {
             <div className="relative" data-reveal="left">
               <div className="absolute -left-8 -top-8 h-40 w-40 rounded-full bg-secondary/50 blur-3xl" />
               <div className="relative overflow-hidden rounded-[2rem] border border-primary/10 bg-white p-3 shadow-2xl shadow-primary/15">
-                <img className="h-[520px] w-full rounded-[1.5rem] object-cover" src={about.image} alt="Zumar Law Firm about" />
-                <div className="absolute inset-3 rounded-[1.5rem] bg-gradient-to-t from-primary/70 via-primary/10 to-transparent" />
-                <div className="absolute bottom-8 left-8 right-8 rounded-2xl border border-white/15 bg-white/12 p-5 text-white backdrop-blur">
-                  <p className="text-sm font-black uppercase text-secondary">{about.imageOverlayEyebrow}</p>
-                  <h2 className="mt-2 text-3xl font-black">{about.imageOverlayTitle}</h2>
-                </div>
+                <img className="h-full w-full rounded-[1.5rem] object-cover" src={about.image} alt="Zumar Law Firm about" />
               </div>
             </div>
 
