@@ -111,6 +111,10 @@ const pageSidebarItems = [
   ["Terms & Conditions", "/admin/pages?page=termsAndConditions", "filing"]
 ];
 
+function normalizeStringList(items = []) {
+  return [...new Set((items || []).map((item) => String(item || "").trim()).filter(Boolean))];
+}
+
 export function LoginForm() {
   const router = useRouter();
   const [email, setEmail] = useState("admin@zumarlawfirm.com");
@@ -652,6 +656,93 @@ function EditableList({ title, items, fields, multilineFields = [], onUpdate, on
   );
 }
 
+function HeroSlidesEditor({ slides, onUpdate, onAdd, onRemove, onUpdateBlock, onAddBlock, onRemoveBlock }) {
+  const [openItems, setOpenItems] = useState({});
+
+  function toggleItem(index) {
+    setOpenItems((current) => ({ ...current, [index]: !current[index] }));
+  }
+
+  return (
+    <div className="rounded-2xl border border-primary/10 p-4">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-2xl font-black text-primary">Hero Slider</h2>
+        <button type="button" className="rounded-full bg-secondary px-4 py-2 text-sm font-black text-primary" onClick={onAdd}>Add Slide</button>
+      </div>
+      <div className="grid gap-4">
+        {(slides || []).map((slide, index) => (
+          <div className="rounded-2xl bg-paper p-3" key={`hero-slide-${index}`}>
+            <button className="flex min-h-12 w-full items-center justify-between gap-3 rounded-xl bg-white px-4 py-3 text-left font-black text-primary" type="button" onClick={() => toggleItem(index)}>
+              <span className="min-w-0">
+                <span className="block truncate">{slide.title || `Hero Slide ${index + 1}`}</span>
+                <span className="mt-1 block truncate text-xs font-bold text-muted">{slide.eyebrow || slide.copy || ""}</span>
+              </span>
+              <span className="text-xl">{openItems[index] ? "-" : "+"}</span>
+            </button>
+            {openItems[index] ? (
+              <div className="mt-3 grid gap-4">
+                <Toggle label="Enabled" checked={slide.enabled !== false} onChange={(value) => onUpdate(index, "enabled", value)} />
+                <Field label="Eyebrow" value={slide.eyebrow || ""} onChange={(value) => onUpdate(index, "eyebrow", value)} />
+                <Field label="Title" value={slide.title || ""} onChange={(value) => onUpdate(index, "title", value)} />
+                <Textarea label="Copy" value={slide.copy || ""} onChange={(value) => onUpdate(index, "copy", value)} />
+                <ImageField label="Image URL" value={slide.image || ""} onChange={(value) => onUpdate(index, "image", value)} />
+                <div className="grid gap-3 md:grid-cols-2">
+                  <Field label="Primary Button Label" value={slide.primaryLabel || ""} onChange={(value) => onUpdate(index, "primaryLabel", value)} />
+                  <Field label="Primary Button URL" value={slide.primaryHref || ""} onChange={(value) => onUpdate(index, "primaryHref", value)} />
+                  <Field label="Secondary Button Label" value={slide.secondaryLabel || ""} onChange={(value) => onUpdate(index, "secondaryLabel", value)} />
+                  <Field label="Secondary Button URL" value={slide.secondaryHref || ""} onChange={(value) => onUpdate(index, "secondaryHref", value)} />
+                </div>
+                <HeroSlideBlocks
+                  blocks={slide.blocks || []}
+                  slideIndex={index}
+                  onUpdateBlock={onUpdateBlock}
+                  onAddBlock={onAddBlock}
+                  onRemoveBlock={onRemoveBlock}
+                />
+                <button type="button" className="w-fit rounded-full border border-red-200 px-4 py-2 text-sm font-black text-red-700" onClick={() => {
+                  onRemove(index);
+                  notifyAdminToast("Hero slide deleted. Save changes to apply.");
+                }}>
+                  Delete Slide
+                </button>
+              </div>
+            ) : null}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function HeroSlideBlocks({ blocks, slideIndex, onUpdateBlock, onAddBlock, onRemoveBlock }) {
+  return (
+    <div className="rounded-2xl border border-primary/10 bg-white p-4">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <h3 className="text-lg font-black text-primary">Slide Feature Blocks</h3>
+        <button type="button" className="rounded-full bg-primary px-4 py-2 text-xs font-black text-white" onClick={() => onAddBlock(slideIndex)}>Add Block</button>
+      </div>
+      <div className="grid gap-3">
+        {blocks.map((block, blockIndex) => (
+          <div className="grid gap-3 rounded-2xl bg-paper p-3" key={`hero-slide-${slideIndex}-block-${blockIndex}`}>
+            <Toggle label="Enabled" checked={block.enabled !== false} onChange={(value) => onUpdateBlock(slideIndex, blockIndex, "enabled", value)} />
+            <div className="grid gap-3 md:grid-cols-3">
+              <IconField label="Icon" value={block.icon || "scale"} onChange={(value) => onUpdateBlock(slideIndex, blockIndex, "icon", value)} />
+              <Field label="Label" value={block.label || ""} onChange={(value) => onUpdateBlock(slideIndex, blockIndex, "label", value)} />
+              <Field label="Value" value={block.value || ""} onChange={(value) => onUpdateBlock(slideIndex, blockIndex, "value", value)} />
+            </div>
+            <button type="button" className="w-fit rounded-full border border-red-200 px-4 py-2 text-xs font-black text-red-700" onClick={() => {
+              onRemoveBlock(slideIndex, blockIndex);
+              notifyAdminToast("Hero block deleted. Save changes to apply.");
+            }}>
+              Delete Block
+            </button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function StringListEditor({ title, items, onUpdate, maxItems = Infinity, addLabel = "Add", placeholder = "" }) {
   const [openItems, setOpenItems] = useState({});
   const canAdd = (items || []).length < maxItems;
@@ -920,6 +1011,11 @@ function HomeEditor({ data, updateData, save }) {
         title: "New hero slide title",
         copy: "Add the slide description from the admin panel.",
         image: "",
+        blocks: [
+          { icon: "scale", label: "Block 1", value: "Block 1 description", enabled: true },
+          { icon: "filing", label: "Block 2", value: "Block 2 description", enabled: true },
+          { icon: "building", label: "Block 3", value: "Block 3 description", enabled: true }
+        ],
         primaryLabel: "Explore Services",
         primaryHref: "/services",
         secondaryLabel: "Contact",
@@ -933,6 +1029,48 @@ function HomeEditor({ data, updateData, save }) {
     updateData(
       "heroSlides",
       heroSlides.filter((_, slideIndex) => slideIndex !== index)
+    );
+  }
+
+  function updateHeroSlideBlock(slideIndex, blockIndex, field, value) {
+    updateData(
+      "heroSlides",
+      heroSlides.map((slide, currentSlideIndex) => {
+        if (currentSlideIndex !== slideIndex) return slide;
+        const blocks = (slide.blocks || []).map((block, currentBlockIndex) =>
+          currentBlockIndex === blockIndex ? { ...block, [field]: value } : block
+        );
+        return { ...slide, blocks };
+      })
+    );
+  }
+
+  function addHeroSlideBlock(slideIndex) {
+    updateData(
+      "heroSlides",
+      heroSlides.map((slide, currentSlideIndex) => {
+        if (currentSlideIndex !== slideIndex) return slide;
+        return {
+          ...slide,
+          blocks: [
+            ...(slide.blocks || []),
+            { icon: "scale", label: "New Block", value: "Block description", enabled: true }
+          ]
+        };
+      })
+    );
+  }
+
+  function removeHeroSlideBlock(slideIndex, blockIndex) {
+    updateData(
+      "heroSlides",
+      heroSlides.map((slide, currentSlideIndex) => {
+        if (currentSlideIndex !== slideIndex) return slide;
+        return {
+          ...slide,
+          blocks: (slide.blocks || []).filter((_, currentBlockIndex) => currentBlockIndex !== blockIndex)
+        };
+      })
     );
   }
 
@@ -1125,14 +1263,14 @@ function HomeEditor({ data, updateData, save }) {
 
   return (
     <Editor title="Home Page Sections" onSave={() => save()}>
-      <EditableList
-        title="Hero Slider"
-        items={heroSlides}
-        fields={["eyebrow", "title", "copy", "image", "primaryLabel", "primaryHref", "secondaryLabel", "secondaryHref", "enabled"]}
-        multilineFields={["copy"]}
+      <HeroSlidesEditor
+        slides={heroSlides}
         onUpdate={updateHeroSlide}
         onAdd={addHeroSlide}
         onRemove={removeHeroSlide}
+        onUpdateBlock={updateHeroSlideBlock}
+        onAddBlock={addHeroSlideBlock}
+        onRemoveBlock={removeHeroSlideBlock}
       />
       <div className="my-7 border-t border-primary/10" />
       <EditableList

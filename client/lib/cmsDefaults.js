@@ -57,6 +57,11 @@ export const defaultHeroSlides = [
     copy:
       "Start registrations, filings, licensing, intellectual property, and regulatory work with a team focused on clear documents and timely follow-up.",
     image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1800&q=85",
+    blocks: [
+      { icon: "tax", label: "Tax Filing", value: "NTN, FBR, and income tax filing services" },
+      { icon: "building", label: "Business Registration", value: "Company, partnership, and sole proprietorship setup" },
+      { icon: "filing", label: "Compliance", value: "Licensing, permits, and regulatory compliance" }
+    ],
     primaryLabel: "Explore Services",
     primaryHref: "/services",
     secondaryLabel: "Book Appointment",
@@ -69,6 +74,11 @@ export const defaultHeroSlides = [
     copy:
       "Move from consultation to document checklist, portal submission, and authority follow-up without losing track of the next step.",
     image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=85",
+    blocks: [
+      { icon: "scale", label: "Expert Guidance", value: "Dedicated legal and tax experts for your needs" },
+      { icon: "filing", label: "Fast Processing", value: "Expedited service delivery and follow-up" },
+      { icon: "handshake", label: "Support", value: "End-to-end guidance and customer support" }
+    ],
     primaryLabel: "View Practice Areas",
     primaryHref: "/service-areas",
     secondaryLabel: "Contact Team",
@@ -81,6 +91,11 @@ export const defaultHeroSlides = [
     copy:
       "Use the website to understand requirements, then continue through the client portal for account-based service submission.",
     image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1800&q=85",
+    blocks: [
+      { icon: "registration", label: "Account Setup", value: "Easy online account creation in minutes" },
+      { icon: "lock", label: "Secure Portal", value: "Protected document upload and tracking" },
+      { icon: "certificate", label: "Digital Status", value: "Real-time service status updates" }
+    ],
     primaryLabel: "Create Account",
     primaryHref: "https://app.zumarlawfirm.com/signup",
     secondaryLabel: "Read FAQs",
@@ -495,7 +510,7 @@ export const defaultPageContent = {
         image: "/images/Asif.webp",
         bio: "Coordinates corporate compliance documentation, company matters, and regulatory follow-up from the Lahore branch."
       },
-   
+
       {
         name: "Ms. Aqsa Ahmad",
         designation: "IP Compliance Officer",
@@ -504,7 +519,7 @@ export const defaultPageContent = {
         image: "/images/aqssa%20ahmed.webp",
         bio: "Handles intellectual property compliance coordination, document review, and client follow-up."
       },
-         {
+      {
         name: "Ms. Hifza Tabasam",
         designation: "Tax Compliance Officer",
         role: "Tax Compliance Officer",
