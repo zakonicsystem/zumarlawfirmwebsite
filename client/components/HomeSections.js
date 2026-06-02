@@ -27,13 +27,13 @@ export function HomeFeaturedSection({ section, services }) {
 
   return (
     <section className="my-10 py-5 sm:py-10" aria-label="Featured service carousel" data-reveal="up">
-      <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
-        <div className="mb-10 grid gap-6 lg:grid-cols-[0.75fr_1fr] lg:items-end">
+      <div className="mx-auto w-[min(1180px,calc(100%-24px))] sm:w-[min(1180px,calc(100%-32px))]">
+        <div className="mb-7 grid gap-4 sm:mb-10 sm:gap-6 lg:grid-cols-[0.75fr_1fr] lg:items-end">
           <div data-reveal="left">
             <p className="mb-3 text-sm font-black uppercase text-primary">{section?.eyebrow}</p>
-            <h2 className="text-4xl font-black leading-tight text-primary sm:text-6xl">{section?.title}</h2>
+            <h2 className="text-3xl font-black leading-tight text-primary sm:text-6xl">{section?.title}</h2>
           </div>
-          <p className="text-base leading-8 text-muted lg:text-lg" data-reveal="right">
+          <p className="text-sm leading-7 text-muted sm:text-base sm:leading-8 lg:text-lg" data-reveal="right">
             {section?.copy}
           </p>
         </div>
@@ -55,15 +55,15 @@ export function HomeWhyChooseSection({ content }) {
 
   return (
     <section className="bg-white py-12 sm:py-16" data-reveal="up">
-      <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[0.95fr_1fr] lg:items-center">
-        <div className="relative overflow-hidden rounded-lg bg-primary p-7 text-white shadow-2xl shadow-primary/15 sm:p-10" data-reveal="left">
+      <div className="mx-auto grid w-[min(1180px,calc(100%-24px))] gap-7 sm:w-[min(1180px,calc(100%-32px))] sm:gap-8 lg:grid-cols-[0.95fr_1fr] lg:items-center">
+        <div className="relative overflow-hidden rounded-lg bg-primary p-5 text-white shadow-2xl shadow-primary/15 sm:p-10" data-reveal="left">
           <img className="absolute inset-0 h-full w-full object-cover opacity-35" src={content?.image} alt="" aria-hidden="true" loading="lazy" decoding="async" />
           <div className="absolute inset-0 bg-gradient-to-br from-primary/95 via-primary/85 to-primary/65" />
           <div className="relative z-10">
-            <h2 className="max-w-xl text-3xl font-black leading-tight sm:text-4xl">
+            <h2 className="max-w-xl text-2xl font-black leading-tight sm:text-4xl">
               {content?.panelTitle}
             </h2>
-            <div className="mt-10 grid gap-7">
+            <div className="mt-7 grid gap-5 sm:mt-10 sm:gap-7">
               {strengths.map((item, index) => (
                 <div key={`${item.label || "strength"}-${index}`}>
                   <div className="mb-3 flex items-center justify-between gap-4 text-sm font-black sm:text-base">
@@ -83,10 +83,10 @@ export function HomeWhyChooseSection({ content }) {
           <p className="mb-4 inline-flex border-b-2 border-secondary pb-2 text-sm font-black text-primary">
             {content?.eyebrow}
           </p>
-          <h2 className="max-w-2xl text-3xl font-black leading-tight text-ink sm:text-4xl">
+          <h2 className="max-w-2xl text-2xl font-black leading-tight text-ink sm:text-4xl">
             {content?.title}
           </h2>
-          <p className="mt-6 max-w-2xl text-base leading-8 text-muted">
+          <p className="mt-5 max-w-2xl text-sm leading-7 text-muted sm:mt-6 sm:text-base sm:leading-8">
             {content?.copy}
           </p>
 
@@ -126,10 +126,10 @@ export function HomeServicesSection({ section, services, categories }) {
 
   return (
     <section className="my-10 py-5 sm:py-10" id="services" data-reveal="up">
-      <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
-        <div className="mb-10 max-w-3xl" data-reveal="up">
+      <div className="mx-auto w-[min(1180px,calc(100%-24px))] sm:w-[min(1180px,calc(100%-32px))]">
+        <div className="mb-7 max-w-3xl sm:mb-10" data-reveal="up">
           <p className="mb-3 text-sm font-black uppercase text-primary">{section?.eyebrow}</p>
-          <h2 className="text-4xl font-black leading-tight text-primary sm:text-6xl">
+          <h2 className="text-3xl font-black leading-tight text-primary sm:text-6xl">
             {section?.title}
           </h2>
         </div>

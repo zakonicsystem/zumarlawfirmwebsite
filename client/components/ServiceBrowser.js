@@ -53,13 +53,13 @@ export default function ServiceBrowser({ initialCategory = "All", initialType = 
 
   return (
     <div>
-      <div className="mb-5 inline-flex rounded-full border border-primary/10 bg-white p-1 shadow-sm shadow-primary/5">
+      <div className="mb-5 grid w-full grid-cols-2 rounded-full border border-primary/10 bg-white p-1 shadow-sm shadow-primary/5 sm:inline-grid sm:w-auto">
         {[
           ["national", "National Services"],
           ["international", "International Services"]
         ].map(([value, label]) => (
           <button
-            className={`min-h-11 rounded-full px-5 text-sm font-black transition ${serviceType === value ? "bg-primary text-white shadow-lg shadow-primary/15" : "text-primary hover:bg-secondary"}`}
+            className={`min-h-11 rounded-full px-3 text-xs font-black transition sm:px-5 sm:text-sm ${serviceType === value ? "bg-primary text-white shadow-lg shadow-primary/15" : "text-primary hover:bg-secondary"}`}
             key={value}
             type="button"
             onClick={() => {
@@ -72,11 +72,11 @@ export default function ServiceBrowser({ initialCategory = "All", initialType = 
         ))}
       </div>
 
-      <div className="mb-8 grid gap-3 md:grid-cols-[minmax(220px,1fr)_260px]">
+      <div className="mb-7 grid gap-3 md:mb-8 md:grid-cols-[minmax(220px,1fr)_260px]">
         <label className="relative block">
           <FaIcon className="pointer-events-none absolute left-5 top-1/2 size-4 -translate-y-1/2 text-primary/45" name="search" />
           <input
-            className="min-h-14 w-full rounded-2xl border border-primary/10 bg-white pl-12 pr-5 text-sm font-semibold text-ink outline-none shadow-sm shadow-primary/5 transition focus:border-primary/50 focus:ring-4 focus:ring-primary/10"
+            className="min-h-13 w-full rounded-xl border border-primary/10 bg-white pl-12 pr-5 text-sm font-semibold text-ink outline-none shadow-sm shadow-primary/5 transition focus:border-primary/50 focus:ring-4 focus:ring-primary/10 sm:min-h-14 sm:rounded-2xl"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Search services"
@@ -84,7 +84,7 @@ export default function ServiceBrowser({ initialCategory = "All", initialType = 
           />
         </label>
         <select
-          className="min-h-14 rounded-2xl border border-primary/10 bg-white px-5 text-sm font-bold text-primary outline-none shadow-sm shadow-primary/5 transition focus:border-primary/50 focus:ring-4 focus:ring-primary/10"
+          className="min-h-13 rounded-xl border border-primary/10 bg-white px-5 text-sm font-bold text-primary outline-none shadow-sm shadow-primary/5 transition focus:border-primary/50 focus:ring-4 focus:ring-primary/10 sm:min-h-14 sm:rounded-2xl"
           value={category}
           onChange={(event) => setCategory(event.target.value)}
         >
@@ -97,26 +97,26 @@ export default function ServiceBrowser({ initialCategory = "All", initialType = 
         </select>
       </div>
 
-      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-4 sm:gap-5 md:grid-cols-2 xl:grid-cols-3">
         {shownServices.map((service) => (
           <Link
-            className="group flex min-h-64 flex-col justify-between overflow-hidden rounded-[1.5rem] border border-primary/10 bg-white p-6 shadow-sm shadow-primary/5 transition duration-300 hover:-translate-y-2 hover:border-primary/25 hover:shadow-2xl hover:shadow-primary/15"
+            className="group flex min-h-56 flex-col justify-between overflow-hidden rounded-lg border border-primary/10 bg-white p-4 shadow-sm shadow-primary/5 transition duration-300 hover:-translate-y-2 hover:border-primary/25 hover:shadow-2xl hover:shadow-primary/15 sm:min-h-64 sm:p-6"
             key={service.slug}
             href={`/services/${service.slug}`}
           >
             <div>
-              <div className="flex items-start justify-between gap-4">
-                <span className="grid size-14 place-items-center rounded-2xl bg-secondary/50 transition duration-300 group-hover:rotate-3 group-hover:scale-110">
-                  <FaIcon className="size-7 text-primary" name={service.icon} />
+              <div className="flex items-start justify-between gap-3 sm:gap-4">
+                <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-secondary/50 transition duration-300 group-hover:rotate-3 group-hover:scale-110 sm:size-14 sm:rounded-2xl">
+                  <FaIcon className="size-6 text-primary sm:size-7" name={service.icon} />
                 </span>
-                <span className="rounded-full bg-secondary px-3 py-1.5 text-xs font-black text-primary">
+                <span className="rounded-full bg-secondary px-3 py-1.5 text-[11px] font-black leading-tight text-primary sm:text-xs">
                   {service.category}
                 </span>
               </div>
-              <h3 className="mt-7 text-2xl font-black leading-tight text-primary">{service.title}</h3>
-              <p className="mt-3 text-sm leading-7 text-muted">{service.summary}</p>
+              <h3 className="mt-5 text-xl font-black leading-tight text-primary sm:mt-7 sm:text-2xl">{service.title}</h3>
+              <p className="mt-3 text-sm leading-6 text-muted sm:leading-7">{service.summary}</p>
             </div>
-            <div className="mt-8 flex items-center justify-between gap-3">
+            <div className="mt-6 flex items-center justify-between gap-3 sm:mt-8">
               <strong className="text-primary">{service.formattedPrice}</strong>
               <span className="rounded-full border border-primary/15 px-4 py-2 text-xs font-black text-primary transition duration-300 group-hover:bg-primary group-hover:text-white">
                 Details

@@ -66,26 +66,26 @@ export default function ServiceCarousel({ items }) {
   }
 
   return (
-    <div className="relative overflow-hidden rounded-[2rem] border border-primary/10 bg-white p-4 shadow-2xl shadow-primary/10 sm:p-6">
+    <div className="relative overflow-hidden rounded-lg border border-primary/10 bg-white p-3 shadow-xl shadow-primary/10 sm:rounded-[2rem] sm:p-6 sm:shadow-2xl">
       <div className="relative mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.22em] text-primary/55">Featured Services</p>
+          <p className="text-[11px] font-black uppercase tracking-[0.18em] text-primary/55 sm:text-xs sm:tracking-[0.22em]">Featured Services</p>
           <h3 className="mt-2 text-2xl font-black leading-tight text-primary sm:text-4xl">Browse services in motion</h3>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
-            className="grid size-11 place-items-center rounded-full border border-primary/15 bg-white font-black text-primary shadow-lg shadow-primary/5 transition hover:-translate-x-0.5 hover:bg-secondary"
+            className="grid size-10 place-items-center rounded-full border border-primary/15 bg-white font-black text-primary shadow-lg shadow-primary/5 transition hover:-translate-x-0.5 hover:bg-secondary sm:size-11"
             onClick={() => setIndex((current) => (current - 1 + featured.length) % featured.length)}
             type="button"
             aria-label="Previous service"
           >
             <FaIcon className="size-4" name="arrowLeft" />
           </button>
-          <span className="rounded-full bg-paper px-4 py-2 text-sm font-black text-primary">
+          <span className="rounded-full bg-paper px-3 py-2 text-xs font-black text-primary sm:px-4 sm:text-sm">
             {String(index + 1).padStart(2, "0")} / {String(featured.length).padStart(2, "0")}
           </span>
           <button
-            className="grid size-11 place-items-center rounded-full border border-primary/15 bg-white font-black text-primary shadow-lg shadow-primary/5 transition hover:translate-x-0.5 hover:bg-secondary"
+            className="grid size-10 place-items-center rounded-full border border-primary/15 bg-white font-black text-primary shadow-lg shadow-primary/5 transition hover:translate-x-0.5 hover:bg-secondary sm:size-11"
             onClick={() => setIndex((current) => (current + 1) % featured.length)}
             type="button"
             aria-label="Next service"
@@ -95,7 +95,7 @@ export default function ServiceCarousel({ items }) {
         </div>
       </div>
 
-      <div className="relative overflow-hidden rounded-[1.5rem] border border-primary/10 bg-white transition-[height] duration-500" style={activeHeight ? { height: activeHeight } : undefined}>
+      <div className="relative overflow-hidden rounded-lg border border-primary/10 bg-white transition-[height] duration-500 sm:rounded-[1.5rem]" style={activeHeight ? { height: activeHeight } : undefined}>
         <div ref={viewport} className="flex transition-transform duration-700 ease-[cubic-bezier(0.65,0,0.35,1)]" style={{ transform: `translate3d(-${index * 100}%,0,0)` }}>
           {featured.map((service, itemIndex) => (
             <div
@@ -105,33 +105,33 @@ export default function ServiceCarousel({ items }) {
                 slideRefs.current[itemIndex] = element;
               }}
             >
-              <Link href={`/services/${service.slug}`} className={`group block overflow-hidden bg-white rounded-[1.5rem] transition-all duration-300 ${itemIndex === index ? "ring-2 ring-secondary shadow-2xl shadow-secondary/30" : ""}`}>
-                <div className="relative flex flex-col overflow-hidden p-5 sm:p-7 lg:p-8">
-                  <div className="pointer-events-none absolute -right-20 -top-24 size-72 rounded-full bg-secondary/45 blur-3xl" />
-                  <div className="pointer-events-none absolute -bottom-28 left-1/2 size-80 rounded-full bg-primary/10 blur-3xl" />
+              <Link href={`/services/${service.slug}`} className={`group block overflow-hidden bg-white rounded-lg transition-all duration-300 sm:rounded-[1.5rem] ${itemIndex === index ? "ring-2 ring-secondary shadow-2xl shadow-secondary/30" : ""}`}>
+                <div className="relative flex flex-col overflow-hidden p-4 sm:p-7 lg:p-8">
+                  <div className="pointer-events-none absolute -right-20 -top-24 hidden size-72 rounded-full bg-secondary/45 blur-3xl sm:block" />
+                  <div className="pointer-events-none absolute -bottom-28 left-1/2 hidden size-80 rounded-full bg-primary/10 blur-3xl sm:block" />
                   <div>
-                    <div className="mb-5 flex flex-wrap items-center gap-3">
-                      <span className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-xs font-black uppercase tracking-wide text-white">
+                    <div className="mb-4 flex flex-wrap items-center gap-2 sm:mb-5 sm:gap-3">
+                      <span className="inline-flex items-center gap-2 rounded-full bg-primary px-3 py-2 text-[11px] font-black uppercase tracking-wide text-white sm:px-4 sm:text-xs">
                         <FaIcon className="size-3.5 text-secondary" name={service.icon} />
                         {service.category}
                       </span>
                       {service.serviceType ? (
-                        <span className="rounded-full bg-secondary px-4 py-2 text-xs font-black uppercase tracking-wide text-primary">
+                        <span className="rounded-full bg-secondary px-3 py-2 text-[11px] font-black uppercase tracking-wide text-primary sm:px-4 sm:text-xs">
                           {service.serviceType}
                         </span>
                       ) : null}
                     </div>
-                    <h3 className="max-w-3xl text-3xl font-black leading-tight text-primary sm:text-5xl">{service.title}</h3>
-                    <p className="mt-4 max-w-3xl text-sm leading-7 text-muted sm:text-base">{service.summary}</p>
+                    <h3 className="max-w-3xl text-2xl font-black leading-tight text-primary sm:text-5xl">{service.title}</h3>
+                    <p className="mt-3 max-w-3xl text-sm leading-6 text-muted sm:mt-4 sm:text-base sm:leading-7">{service.summary}</p>
                   </div>
 
-                  <div className="relative mt-6 grid gap-4 rounded-[1.25rem] border border-primary/10 bg-paper p-4 sm:grid-cols-[1fr_auto] sm:items-center">
+                  <div className="relative mt-5 grid gap-4 rounded-lg border border-primary/10 bg-paper p-3 sm:mt-6 sm:rounded-[1.25rem] sm:p-4 sm:grid-cols-[1fr_auto] sm:items-center">
                     <span>
                       <span className="block text-xs font-black uppercase tracking-wide text-primary/55">Starting From</span>
-                      <strong className="mt-1 block text-2xl leading-none text-primary">{service.formattedPrice}</strong>
-                      <span className="mt-2 block text-sm font-semibold text-muted">Open details for scope and document requirements.</span>
+                      <strong className="mt-1 block text-xl leading-none text-primary sm:text-2xl">{service.formattedPrice}</strong>
+                      <span className="mt-2 block text-sm font-semibold leading-5 text-muted">Open details for scope and document requirements.</span>
                     </span>
-                    <span className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-black uppercase tracking-wide text-white transition duration-300 group-hover:bg-secondary group-hover:text-primary">
+                    <span className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-primary px-5 text-xs font-black uppercase tracking-wide text-white transition duration-300 group-hover:bg-secondary group-hover:text-primary sm:min-h-12 sm:px-6 sm:text-sm">
                       View Details
                       <FaIcon className="size-3.5 transition group-hover:translate-x-1" name="arrowRight" />
                     </span>
@@ -143,12 +143,12 @@ export default function ServiceCarousel({ items }) {
         </div>
       </div>
 
-      <div className="relative mt-5 overflow-hidden rounded-[1.25rem] bg-paper p-2">
+      <div className="relative mt-4 overflow-hidden rounded-lg bg-paper p-2 sm:mt-5 sm:rounded-[1.25rem]">
         <div ref={thumbnailScroll} className="flex gap-2 overflow-x-auto pb-1 snap-x scroll-smooth hide-scrollbar">
           {featured.map((service, itemIndex) => (
             <button
               aria-label={`Show ${service.title}`}
-              className={`min-w-[150px] rounded-2xl p-3 text-left transition snap-start sm:min-w-[180px] ${itemIndex === index ? "bg-primary text-white shadow-lg shadow-primary/15" : "bg-white text-primary hover:bg-secondary/45"}`}
+              className={`min-w-[136px] rounded-lg p-3 text-left transition snap-start sm:min-w-[180px] sm:rounded-2xl ${itemIndex === index ? "bg-primary text-white shadow-lg shadow-primary/15" : "bg-white text-primary hover:bg-secondary/45"}`}
               key={service.slug}
               onClick={() => setIndex(itemIndex)}
               type="button"

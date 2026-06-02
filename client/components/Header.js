@@ -135,22 +135,28 @@ export default function Header() {
   return (
     <header className="relative z-[100] bg-white shadow-sm shadow-primary/10">
       <div className="bg-primary text-white">
-        <div className="mx-auto flex min-h-12 w-[min(1180px,calc(100%-32px))] flex-col gap-3 py-3 text-xs font-extrabold sm:flex-row sm:items-center sm:justify-between sm:py-0 sm:text-sm">
-          <p className="inline-flex items-center gap-2 leading-5">
+        <div className="mx-auto flex min-h-12 w-[min(1180px,calc(100%-24px))] items-center justify-between gap-3 py-2 text-xs font-extrabold sm:w-[min(1180px,calc(100%-32px))] sm:py-0 sm:text-sm">
+          <p className="hidden min-w-0 items-center gap-2 leading-5 sm:inline-flex">
             <FaIcon className="size-3.5 text-secondary" name="scale" />
             Trusted legal, tax, corporate, and regulatory advisory.
           </p>
 
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-2 sm:gap-x-7">
+          <p className="inline-flex min-w-0 items-center gap-2 leading-5 sm:hidden">
+            <FaIcon className="size-3.5 shrink-0 text-secondary" name="scale" />
+            <span className="truncate">Legal, tax & corporate advisory</span>
+          </p>
+
+          <div className="flex shrink-0 items-center gap-2 sm:gap-x-7">
             <button
-              className="inline-flex min-h-10 items-center gap-2 rounded-full bg-white/10 px-4 text-left font-extrabold transition hover:bg-white hover:text-primary"
+              className="inline-flex min-h-9 items-center gap-2 rounded-full bg-white/10 px-3 text-left font-extrabold transition hover:bg-white hover:text-primary sm:min-h-10 sm:px-4"
               type="button"
               onClick={() => setSearchOpen(true)}
             >
-              <span>Search Services</span>
+              <span className="hidden min-[360px]:inline">Search Services</span>
+              <span className="sm:hidden">Search</span>
               <FaIcon className="size-4" name="search" />
             </button>
-            <button className="inline-flex items-center gap-2 font-extrabold transition hover:text-secondary" type="button" aria-label="Change language">
+            <button className="hidden items-center gap-2 font-extrabold transition hover:text-secondary min-[420px]:inline-flex" type="button" aria-label="Change language">
               <span className="grid size-6 place-items-center rounded-full bg-white text-[10px] text-primary">EN</span>
               <span>English</span>
             </button>
@@ -159,38 +165,38 @@ export default function Header() {
       </div>
 
       <div className="bg-gradient-to-br from-white via-paper to-secondary/35">
-        <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-5 py-6 text-center md:grid-cols-[1fr_auto_1fr] md:items-center md:py-7 md:text-left">
-          <div className="grid gap-2 justify-items-center md:justify-items-start">
-            <p className="inline-flex items-center gap-2 text-xs font-bold text-ink/75 sm:text-base">
+        <div className="mx-auto grid w-[min(1180px,calc(100%-24px))] gap-3 py-4 text-center sm:w-[min(1180px,calc(100%-32px))] md:grid-cols-[1fr_auto_1fr] md:items-center md:py-7 md:text-left">
+          <div className="order-2 grid gap-1 justify-items-center md:order-1 md:justify-items-start">
+            <p className="inline-flex items-center gap-2 text-[11px] font-bold text-ink/75 sm:text-base">
               <FaIcon className="size-4 text-primary" name="scale" />
               Legal, Tax & Corporate Services
             </p>
-            <a className="text-xl font-black leading-none text-primary transition hover:text-primary/80 sm:text-2xl" href="tel:+923035988574">
+            <a className="text-lg font-black leading-none text-primary transition hover:text-primary/80 sm:text-2xl" href="tel:+923035988574">
               +92 303 598 8574
             </a>
           </div>
 
-          <Link className="justify-self-center rounded-full bg-white p-3 shadow-xl shadow-primary/10 ring-1 ring-primary/10" href="/" aria-label="Zumar Law Firm home">
-            <img className="h-16 w-auto object-contain sm:h-24" src="/images/zumar-logo.webp" alt="Zumar Law Firm logo" />
+          <Link className="order-1 justify-self-center rounded-full bg-white p-2 shadow-xl shadow-primary/10 ring-1 ring-primary/10 sm:p-3 md:order-2" href="/" aria-label="Zumar Law Firm home">
+            <img className="h-14 w-auto object-contain sm:h-24" src="/images/zumar-logo.webp" alt="Zumar Law Firm logo" width="258" height="160" decoding="async" />
           </Link>
 
-          <div className="grid gap-2 justify-items-center md:justify-items-end md:text-right">
-            <p className="inline-flex items-center gap-2 text-xs font-bold text-ink/75 sm:text-base">
+          <div className="order-3 grid gap-1 justify-items-center md:justify-items-end md:text-right">
+            <p className="inline-flex items-center gap-2 text-[11px] font-bold text-ink/75 sm:text-base">
               <FaIcon className="size-4 text-primary" name="globe" />
               National & International Advisory
             </p>
-            <a className="break-all text-xl font-black leading-none text-primary transition hover:text-primary/80 sm:text-2xl" href="mailto:team@zumarlawfirm.com">
+            <a className="break-all text-lg font-black leading-tight text-primary transition hover:text-primary/80 sm:text-2xl sm:leading-none" href="mailto:team@zumarlawfirm.com">
               team@zumarlawfirm.com
             </a>
           </div>
         </div>
       </div>
 
-      <div className="bg-white pb-5">
-        <div className="mx-auto w-[min(1180px,calc(100%-32px))] rounded-lg bg-primary text-white shadow-xl shadow-primary/15">
-          <div className="flex items-center justify-between gap-3 px-3 py-3 sm:px-4 sm:py-4 lg:px-6">
+      <div className="bg-white pb-3 sm:pb-5">
+        <div className="mx-auto w-[min(1180px,calc(100%-24px))] rounded-lg bg-primary text-white shadow-xl shadow-primary/15 sm:w-[min(1180px,calc(100%-32px))]">
+          <div className="flex items-center justify-between gap-2 px-2.5 py-2.5 sm:gap-3 sm:px-4 sm:py-4 lg:px-6">
             <button
-              className="inline-flex min-h-12 items-center gap-3 rounded-md border border-white/15 px-4 text-sm font-black uppercase tracking-wide transition active:scale-[0.98] hover:bg-white/10 lg:hidden"
+              className="inline-flex min-h-11 items-center gap-2 rounded-md border border-white/15 px-3 text-xs font-black uppercase tracking-wide transition active:scale-[0.98] hover:bg-white/10 sm:min-h-12 sm:gap-3 sm:px-4 sm:text-sm lg:hidden"
               type="button"
               onClick={() => setMobileOpen(true)}
               aria-label="Open menu"
@@ -238,7 +244,7 @@ export default function Header() {
               ))}
             </nav>
 
-            <Link className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-md bg-white px-4 text-xs font-black uppercase tracking-wide text-ink transition hover:bg-secondary hover:text-primary sm:px-8 sm:text-sm" href="/appointment">
+            <Link className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-md bg-white px-3 text-[11px] font-black uppercase tracking-wide text-ink transition hover:bg-secondary hover:text-primary sm:min-h-12 sm:px-8 sm:text-sm" href="/appointment">
               Free Consultation
             </Link>
           </div>
