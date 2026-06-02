@@ -25,8 +25,8 @@ export default async function HomePage() {
   const home = Object.fromEntries(cms.homeSections.map((section) => [section.id, section]));
   const services = cms.services.filter((service) => service.enabled !== false);
   const serviceSelections = cms.homeContent?.serviceSelections || {};
-  const featuredServices = selectServices(services, serviceSelections.featuredSlugs);
-  const homeGridServices = selectServices(services, serviceSelections.homeGridSlugs);
+  const featuredServices = selectServices(services, serviceSelections.featuredSlugs, 14);
+  const homeGridServices = selectServices(services, serviceSelections.homeGridSlugs, 6);
   const newsItems = cms.news.filter((item) => item.enabled !== false);
   const blogPosts = cms.blogs.filter((post) => post.enabled !== false);
 
@@ -56,9 +56,9 @@ export default async function HomePage() {
   );
 }
 
-function selectServices(services, slugs = []) {
+function selectServices(services, slugs = [], fallbackLimit = services.length) {
   if (!Array.isArray(slugs) || slugs.length === 0) {
-    return services;
+    return services.slice(0, fallbackLimit);
   }
 
   const selected = new Set(slugs);
