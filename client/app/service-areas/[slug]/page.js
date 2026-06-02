@@ -3,8 +3,6 @@ import FaIcon from "@/components/FaIcon";
 import { findBySlug, readCmsData } from "@/lib/cmsStore";
 import { notFound } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-
 export async function generateStaticParams() {
   const { serviceAreas } = await readCmsData();
   return serviceAreas.map((area) => ({ slug: area.slug }));

@@ -5,8 +5,6 @@ import Reveal from "@/components/Reveal";
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata() {
   return getPageMetadata("faqs");
 }

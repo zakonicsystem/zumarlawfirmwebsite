@@ -2,8 +2,6 @@ import PageHeader from "@/components/PageHeader";
 import TaxCalculators from "@/components/TaxCalculators";
 import { readCmsData } from "@/lib/cmsStore";
 
-export const dynamic = "force-dynamic";
-
 export const metadata = {
   title: "Salary Tax Calculator",
   description: "Estimate Pakistan salary tax with Zumar Law Firm."

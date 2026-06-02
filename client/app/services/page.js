@@ -3,16 +3,11 @@ import FaIcon from "@/components/FaIcon";
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata() {
   return getPageMetadata("services");
 }
 
-export default async function ServicesPage({ searchParams }) {
-  const resolvedSearchParams = await searchParams;
-  const initialCategory = resolvedSearchParams?.category || "All";
-  const initialType = resolvedSearchParams?.type || "national";
+export default async function ServicesPage() {
   const { services, categories, pageContent } = await readCmsData();
   const page = pageContent.services;
   const visibleServices = services.filter((service) => service.enabled !== false);
@@ -35,7 +30,7 @@ export default async function ServicesPage({ searchParams }) {
       </section>
       <section className="py-16 sm:py-20">
         <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
-          <ServiceBrowser initialCategory={initialCategory} initialType={initialType} services={visibleServices} categories={categories} />
+          <ServiceBrowser services={visibleServices} categories={categories} />
         </div>
       </section>
     </>

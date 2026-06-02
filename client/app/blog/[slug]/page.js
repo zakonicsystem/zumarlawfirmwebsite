@@ -4,8 +4,6 @@ import { findBySlug, readCmsData } from "@/lib/cmsStore";
 import { getRecordMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 
-export const dynamic = "force-dynamic";
-
 export async function generateStaticParams() {
   const { blogs } = await readCmsData();
   return blogs.map((post) => ({ slug: post.slug }));

@@ -4,8 +4,6 @@ import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata() {
   return getPageMetadata("serviceAreas");
 }

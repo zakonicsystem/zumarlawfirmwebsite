@@ -3,8 +3,6 @@ import TeamMemberCard from "@/components/TeamMemberCard";
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata() {
   return getPageMetadata("team");
 }

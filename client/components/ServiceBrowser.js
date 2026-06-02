@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { categories as defaultCategories, services as defaultServices } from "@/lib/services";
 import FaIcon from "@/components/FaIcon";
@@ -9,6 +9,20 @@ export default function ServiceBrowser({ initialCategory = "All", initialType = 
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState(initialCategory);
   const [serviceType, setServiceType] = useState(initialType === "international" ? "international" : "national");
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const categoryParam = params.get("category");
+    const typeParam = params.get("type");
+
+    if (categoryParam) {
+      setCategory(categoryParam);
+    }
+
+    if (typeParam === "international" || typeParam === "national") {
+      setServiceType(typeParam);
+    }
+  }, []);
 
   const scopedCategories = useMemo(() => {
     return categories.filter((item) =>

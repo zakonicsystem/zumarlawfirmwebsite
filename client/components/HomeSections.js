@@ -57,7 +57,7 @@ export function HomeWhyChooseSection({ content }) {
     <section className="bg-white py-12 sm:py-16" data-reveal="up">
       <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[0.95fr_1fr] lg:items-center">
         <div className="relative overflow-hidden rounded-lg bg-primary p-7 text-white shadow-2xl shadow-primary/15 sm:p-10" data-reveal="left">
-          <img className="absolute inset-0 h-full w-full object-cover opacity-35" src={content?.image} alt="" aria-hidden="true" />
+          <img className="absolute inset-0 h-full w-full object-cover opacity-35" src={content?.image} alt="" aria-hidden="true" loading="lazy" decoding="async" />
           <div className="absolute inset-0 bg-gradient-to-br from-primary/95 via-primary/85 to-primary/65" />
           <div className="relative z-10">
             <h2 className="max-w-xl text-3xl font-black leading-tight sm:text-4xl">
@@ -159,7 +159,7 @@ export function HomeServiceAreasSection({ content, serviceAreas = [] }) {
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {serviceAreas.filter((area) => area.enabled !== false).slice(0, Number(content?.limit || 4)).map((area) => (
             <Link className="group overflow-hidden rounded-[2rem] border border-primary/10 bg-white shadow-xl shadow-primary/5 transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/15" href={`/service-areas/${area.slug}`} key={area.slug}>
-              <img className="h-44 w-full object-cover transition duration-500 group-hover:scale-105" src={area.image} alt={area.title} />
+              <img className="h-44 w-full object-cover transition duration-500 group-hover:scale-105" src={area.image} alt={area.title} loading="lazy" decoding="async" />
               <div className="p-5">
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <FaIcon className="size-7 text-primary" name={area.icon || "landmark"} />
@@ -250,7 +250,7 @@ export function HomeBranchesSection({ content, branches = [] }) {
           {branches.filter((branch) => branch.enabled !== false).slice(0, Number(content?.limit || 2)).map((branch) => (
             <article className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 shadow-xl shadow-black/10 transition hover:-translate-y-1" key={branch.slug}>
               <Link className="block" href={`/branches/${branch.slug}`}>
-                <img className="h-56 w-full object-cover" src={branch.image} alt={`${branch.name} branch`} />
+                <img className="h-56 w-full object-cover" src={branch.image} alt={`${branch.name} branch`} loading="lazy" decoding="async" />
               </Link>
               <div className="p-6">
                 <Link className="inline-flex items-center gap-3 text-xl font-black transition hover:text-secondary" href={`/branches/${branch.slug}`}>
@@ -315,7 +315,7 @@ function ArticlePreviewColumn({ eyebrow, title, linkText, linkHref, items, baseP
       <div className="grid gap-4">
         {items.slice(0, 2).map((item) => (
           <Link className="grid gap-4 rounded-[1.5rem] border border-primary/10 bg-white p-4 shadow-lg shadow-primary/5 transition hover:-translate-y-1 sm:grid-cols-[150px_1fr]" href={`${basePath}/${item.slug}`} key={item.slug}>
-            <img className="h-36 w-full rounded-2xl object-cover" src={item.image} alt={item.title} />
+            <img className="h-36 w-full rounded-2xl object-cover" src={item.image} alt={item.title} loading="lazy" decoding="async" />
             <div>
               <p className="text-xs font-black uppercase text-primary/60">{item.date}</p>
               <h3 className="mt-2 text-xl font-black text-primary">{item.title}</h3>

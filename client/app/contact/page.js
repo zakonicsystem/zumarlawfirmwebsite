@@ -5,8 +5,6 @@ import { getPageMetadata } from "@/lib/seo";
 
 const contactImage = "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1000&q=85";
 
-export const dynamic = "force-dynamic";
-
 export async function generateMetadata() {
   return getPageMetadata("contact");
 }

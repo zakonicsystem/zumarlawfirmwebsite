@@ -5,8 +5,6 @@ import AppointmentForm from "@/components/AppointmentForm";
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
-
 const appointmentImage = "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1000&q=85";
 
 export async function generateMetadata() {

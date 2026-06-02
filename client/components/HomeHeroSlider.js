@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import FaIcon from "@/components/FaIcon";
 
@@ -36,14 +37,14 @@ export default function HomeHeroSlider({ slides = [] }) {
   return (
     <section className="relative min-h-[500px] overflow-hidden bg-primary text-white sm:min-h-[500px]" data-page-load>
       {current.image ? (
-        <img
+        <Image
           className="absolute inset-0 h-full w-full object-cover transition duration-[1400ms]"
           src={current.image}
           alt=""
           aria-hidden="true"
-          fetchPriority="high"
-          loading="eager"
-          decoding="async"
+          fill
+          priority
+          sizes="100vw"
           key={`${current.title}-${active}`}
         />
       ) : null}

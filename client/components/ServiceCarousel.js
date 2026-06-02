@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import gsap from "gsap";
 import { services } from "@/lib/services";
 import FaIcon from "@/components/FaIcon";
 
@@ -25,18 +24,6 @@ export default function ServiceCarousel({ items }) {
 
     return () => window.clearInterval(timer);
   }, [featured.length]);
-
-  useEffect(() => {
-    if (!viewport.current) {
-      return;
-    }
-
-    gsap.to(viewport.current, {
-      x: `-${index * 100}%`,
-      duration: 0.75,
-      ease: "power3.inOut"
-    });
-  }, [index]);
 
   useEffect(() => {
     function updateHeight() {
@@ -109,7 +96,7 @@ export default function ServiceCarousel({ items }) {
       </div>
 
       <div className="relative overflow-hidden rounded-[1.5rem] border border-primary/10 bg-white transition-[height] duration-500" style={activeHeight ? { height: activeHeight } : undefined}>
-        <div ref={viewport} className="flex">
+        <div ref={viewport} className="flex transition-transform duration-700 ease-[cubic-bezier(0.65,0,0.35,1)]" style={{ transform: `translate3d(-${index * 100}%,0,0)` }}>
           {featured.map((service, itemIndex) => (
             <div
               className={`min-w-full transition-all duration-300 ${itemIndex === index ? "scale-100 opacity-100" : "scale-95 opacity-70"}`}

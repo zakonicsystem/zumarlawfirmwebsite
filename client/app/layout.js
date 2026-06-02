@@ -8,6 +8,8 @@ import StickyWhatsappButton from "@/components/StickyWhatsappButton";
 import { readCmsData } from "@/lib/cmsStore";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
+export const revalidate = 60;
+
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-jakarta",

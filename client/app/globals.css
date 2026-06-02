@@ -23,6 +23,45 @@ body {
   overflow-x: hidden;
 }
 
+[data-page-load],
+[data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 32px, 0);
+  transition:
+    opacity 700ms ease,
+    transform 700ms ease,
+    filter 700ms ease;
+  transition-delay: var(--reveal-delay, 0ms);
+  filter: blur(8px);
+}
+
+[data-reveal="left"] {
+  transform: translate3d(-32px, 0, 0);
+}
+
+[data-reveal="right"] {
+  transform: translate3d(32px, 0, 0);
+}
+
+[data-reveal="zoom"] {
+  transform: translate3d(0, 18px, 0) scale(0.96);
+}
+
+[data-page-load].is-visible,
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0);
+}
+
+.animate-route-progress {
+  animation: routeProgress 480ms ease both;
+}
+
+.animate-route-shell {
+  animation: routeShell 280ms ease both;
+}
+
 @keyframes heroFade {
   from {
     opacity: 0;
@@ -31,6 +70,32 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes routeProgress {
+  0% {
+    opacity: 1;
+    transform: scaleX(0);
+  }
+  75% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes routeShell {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
   }
 }
 
