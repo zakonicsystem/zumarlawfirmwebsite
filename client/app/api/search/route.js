@@ -9,11 +9,12 @@ const staticPages = [
   { title: "Business Tax Calculator", href: "/calculators/business-tax", type: "Calculator", summary: "Estimate individual or AOP business income tax." },
   { title: "Service Areas", href: "/service-areas", type: "Page", summary: "Focused tax, corporate, licensing, and compliance areas." },
   { title: "Branches", href: "/branches", type: "Page", summary: "Office locations and branch contact details." },
-  { title: "Appointment", href: "/appointment", type: "Page", summary: "Book a consultation request." },
+  { title: "Appointment", href: "/contact", type: "Page", summary: "Send a consultation inquiry." },
   { title: "Contact", href: "/contact", type: "Page", summary: "Contact Zumar Law Firm." },
   { title: "CEO & History", href: "/ceo", type: "Page", summary: "Leadership and history of Zumar Law Firm." },
   { title: "Careers", href: "/careers", type: "Page", summary: "Careers and professional opportunities at Zumar Law Firm." },
-  { title: "FAQs", href: "/faqs", type: "Page", summary: "Common questions about services and process." }
+  { title: "Blog", href: "/blog", type: "Page", summary: "Case notes and service guides from Zumar Law Firm." },
+  { title: "Contact", href: "/contact", type: "Page", summary: "Send your inquiry to the team." }
 ];
 
 export async function GET(request) {

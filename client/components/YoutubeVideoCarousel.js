@@ -2,6 +2,7 @@
 
 import { useMemo, useRef } from "react";
 import FaIcon from "@/components/FaIcon";
+import RichContent from "@/components/RichContent";
 
 export default function YoutubeVideoCarousel({ videos = [] }) {
   const trackRef = useRef(null);
@@ -52,7 +53,7 @@ export default function YoutubeVideoCarousel({ videos = [] }) {
                 allowFullScreen
               />
             </div>
-            {video.title ? <h3 className="p-4 text-base font-black text-primary">{video.title}</h3> : null}
+            {video.title ? <h3 className="p-4 text-base font-black text-primary">{video.title && <RichContent content={video.title} />}</h3> : null}
           </article>
         ))}
       </div>

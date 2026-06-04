@@ -1,10 +1,7 @@
 import FaIcon from "@/components/FaIcon";
+import RichContent from "@/components/RichContent";
 
 export default function CeoHistory({ page }) {
-  const bioParagraphs = String(page.ceoBio || "")
-    .split(/\n{2,}/)
-    .map((paragraph) => paragraph.trim())
-    .filter(Boolean);
 
   return (
     <>
@@ -20,10 +17,8 @@ export default function CeoHistory({ page }) {
               <FaIcon className="size-4" name="landmark" />
               {page.ceoRole}
             </p>
-            <div className="mt-6 grid gap-5 text-lg leading-8 text-muted">
-              {bioParagraphs.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
-              ))}
+            <div className="mt-6 text-lg leading-8 text-muted">
+              {page.ceoBio && <RichContent content={page.ceoBio} />}
             </div>
           </div>
         </div>
@@ -34,14 +29,18 @@ export default function CeoHistory({ page }) {
           <div className="max-w-3xl">
             <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-primary">{page.historyEyebrow}</p>
             <h2 className="text-4xl font-black leading-tight text-primary sm:text-5xl">{page.historyTitle}</h2>
-            <p className="mt-5 text-lg leading-8 text-muted">{page.historyCopy}</p>
+            <div className="mt-5 text-lg leading-8 text-muted">
+              {page.historyCopy && <RichContent content={page.historyCopy} />}
+            </div>
           </div>
           <div className="grid gap-5 md:grid-cols-3">
             {(page.history || []).map((item) => (
               <article className="rounded-lg border border-primary/10 bg-white p-6 shadow-xl shadow-primary/5" key={`${item.year}-${item.title}`}>
                 <p className="text-sm font-black uppercase text-primary/60">{item.year}</p>
                 <h3 className="mt-3 text-2xl font-black text-primary">{item.title}</h3>
-                <p className="mt-3 leading-7 text-muted">{item.copy}</p>
+                <div className="mt-3 leading-7 text-muted">
+                  {item.copy && <RichContent content={item.copy} />}
+                </div>
               </article>
             ))}
           </div>

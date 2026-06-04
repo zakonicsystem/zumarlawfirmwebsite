@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import FaIcon from "@/components/FaIcon";
+import RichTextEditor from "@/components/RichTextEditor";
 import { makeSlug } from "@/lib/cmsDefaults";
 import { defaultPageContent } from "@/lib/cmsDefaults";
 import { defaultSeoPages } from "@/lib/seoDefaults";
@@ -82,16 +83,12 @@ const navItems = [
   ["Services", "/admin/services", "scale"],
   ["New Service", "/admin/services/new", "registration"],
   ["Blogs", "/admin/blogs", "certificate"],
-  ["New Blog", "/admin/blogs/new", "registration"],
-  ["News", "/admin/news", "filing"],
-  ["New News", "/admin/news/new", "registration"],
-  ["Appointments", "/admin/appointments", "appointment"]
+  ["New Blog", "/admin/blogs/new", "registration"]
 ];
 
 const pageSidebarItems = [
   ["Home", "/admin/home", "building"],
   ["About", "/admin/about", "landmark"],
-  ["Team", "/admin/pages?page=team", "headset"],
   ["CEO & History", "/admin/pages?page=team", "landmark"],
   ["Services", "/admin/pages?page=services", "scale"],
   ["Calculators", "/admin/pages?page=calculators", "tax"],
@@ -100,11 +97,8 @@ const pageSidebarItems = [
   ["Branches", "/admin/pages?page=branches", "landmark"],
   ["Branch Detail", "/admin/pages?page=branchDetail", "landmark"],
   ["Blog", "/admin/pages?page=blog", "certificate"],
-  ["News", "/admin/pages?page=news", "filing"],
-  ["Appointment", "/admin/pages?page=appointment", "appointment"],
   ["Contact", "/admin/pages?page=contact", "headset"],
   ["Careers", "/admin/pages?page=careers", "business"],
-  ["FAQs", "/admin/pages?page=faqs", "faq"],
   ["Service Detail", "/admin/pages?page=serviceDetail", "filing"],
   ["Privacy Policy", "/admin/pages?page=privacyPolicy", "lock"],
   ["Refund Policy", "/admin/pages?page=refundPolicy", "registration"],
@@ -345,20 +339,20 @@ function PageContentEditor({ data, updateData, save, initialPage }) {
         ))}
       </div>
       <div className="grid gap-4">
-        {"eyebrow" in page ? <Field label="Eyebrow" value={page.eyebrow} onChange={(value) => updatePage("eyebrow", value)} /> : null}
-        {"title" in page ? <Field label="Page Title" value={page.title} onChange={(value) => updatePage("title", value)} /> : null}
-        {"copy" in page ? <Textarea label="Page Copy" value={page.copy} onChange={(value) => updatePage("copy", value)} /> : null}
+        {"eyebrow" in page ? <RichEditor label="Eyebrow" value={page.eyebrow} onChange={(value) => updatePage("eyebrow", value)} /> : null}
+        {"title" in page ? <RichEditor label="Page Title" value={page.title} onChange={(value) => updatePage("title", value)} /> : null}
+        {"copy" in page ? <RichEditor label="Page Copy" value={page.copy} onChange={(value) => updatePage("copy", value)} /> : null}
 
         {active === "appointment" ? (
           <>
             <ImageField label="Image URL" value={page.image} onChange={(value) => updatePage("image", value)} />
-            <Field label="Side Title" value={page.sideTitle} onChange={(value) => updatePage("sideTitle", value)} />
+            <RichEditor label="Side Title" value={page.sideTitle} onChange={(value) => updatePage("sideTitle", value)} />
             <Textarea label="Checklist (one per line)" value={lines(page.checklist)} onChange={(value) => updatePage("checklist", splitLines(value))} />
             <Field label="Start Online Label" value={page.startOnlineLabel} onChange={(value) => updatePage("startOnlineLabel", value)} />
             <Field label="Start Online URL" value={page.startOnlineHref} onChange={(value) => updatePage("startOnlineHref", value)} />
             <Field label="Contact Label" value={page.contactLabel} onChange={(value) => updatePage("contactLabel", value)} />
             <Field label="Contact URL" value={page.contactHref} onChange={(value) => updatePage("contactHref", value)} />
-            <Field label="Form Title" value={page.formTitle} onChange={(value) => updatePage("formTitle", value)} />
+            <RichEditor label="Form Title" value={page.formTitle} onChange={(value) => updatePage("formTitle", value)} />
             <Field label="Submit Label" value={page.submitLabel} onChange={(value) => updatePage("submitLabel", value)} />
             <Field label="Success Text" value={page.successText} onChange={(value) => updatePage("successText", value)} />
             <Field label="Error Text" value={page.errorText} onChange={(value) => updatePage("errorText", value)} />
@@ -368,8 +362,8 @@ function PageContentEditor({ data, updateData, save, initialPage }) {
         {active === "contact" ? (
           <>
             <ImageField label="Image URL" value={page.image} onChange={(value) => updatePage("image", value)} />
-            <Field label="Form Title" value={page.formTitle} onChange={(value) => updatePage("formTitle", value)} />
-            <Textarea label="Form Copy" value={page.formCopy} onChange={(value) => updatePage("formCopy", value)} />
+            <RichEditor label="Form Title" value={page.formTitle} onChange={(value) => updatePage("formTitle", value)} />
+            <RichEditor label="Form Copy" value={page.formCopy} onChange={(value) => updatePage("formCopy", value)} />
             <EditableList
               title="Contact Links"
               items={page.links || []}
@@ -383,14 +377,14 @@ function PageContentEditor({ data, updateData, save, initialPage }) {
 
         {active === "team" ? (
           <>
-            <Field label="CEO Eyebrow" value={page.ceoEyebrow} onChange={(value) => updatePage("ceoEyebrow", value)} />
-            <Field label="CEO Name" value={page.ceoName} onChange={(value) => updatePage("ceoName", value)} />
-            <Field label="CEO Role" value={page.ceoRole} onChange={(value) => updatePage("ceoRole", value)} />
+            <RichEditor label="CEO Eyebrow" value={page.ceoEyebrow} onChange={(value) => updatePage("ceoEyebrow", value)} />
+            <RichEditor label="CEO Name" value={page.ceoName} onChange={(value) => updatePage("ceoName", value)} />
+            <RichEditor label="CEO Role" value={page.ceoRole} onChange={(value) => updatePage("ceoRole", value)} />
             <ImageField label="CEO Image URL" value={page.ceoImage} onChange={(value) => updatePage("ceoImage", value)} />
-            <Textarea label="CEO Bio" value={page.ceoBio} onChange={(value) => updatePage("ceoBio", value)} />
-            <Field label="History Eyebrow" value={page.historyEyebrow} onChange={(value) => updatePage("historyEyebrow", value)} />
-            <Field label="History Title" value={page.historyTitle} onChange={(value) => updatePage("historyTitle", value)} />
-            <Textarea label="History Copy" value={page.historyCopy} onChange={(value) => updatePage("historyCopy", value)} />
+            <RichEditor label="CEO Bio" value={page.ceoBio} onChange={(value) => updatePage("ceoBio", value)} />
+            <RichEditor label="History Eyebrow" value={page.historyEyebrow} onChange={(value) => updatePage("historyEyebrow", value)} />
+            <RichEditor label="History Title" value={page.historyTitle} onChange={(value) => updatePage("historyTitle", value)} />
+            <RichEditor label="History Copy" value={page.historyCopy} onChange={(value) => updatePage("historyCopy", value)} />
             <EditableList
               title="History Timeline"
               items={page.history || []}
@@ -414,16 +408,16 @@ function PageContentEditor({ data, updateData, save, initialPage }) {
         {active === "careers" ? (
           <>
             <ImageField label="Image URL" value={page.image} onChange={(value) => updatePage("image", value)} />
-            <Field label="Intro Eyebrow" value={page.introEyebrow} onChange={(value) => updatePage("introEyebrow", value)} />
-            <Field label="Intro Title" value={page.introTitle} onChange={(value) => updatePage("introTitle", value)} />
-            <Textarea label="Intro Copy" value={page.introCopy} onChange={(value) => updatePage("introCopy", value)} />
-            <Field label="Openings Eyebrow" value={page.openingsEyebrow} onChange={(value) => updatePage("openingsEyebrow", value)} />
-            <Field label="Openings Title" value={page.openingsTitle} onChange={(value) => updatePage("openingsTitle", value)} />
-            <Field label="Openings Button Text" value={page.openingsButtonText} onChange={(value) => updatePage("openingsButtonText", value)} />
-            <Field label="Openings Button URL" value={page.openingsButtonHref} onChange={(value) => updatePage("openingsButtonHref", value)} />
-            <Field label="Process Eyebrow" value={page.processEyebrow} onChange={(value) => updatePage("processEyebrow", value)} />
-            <Field label="Process Title" value={page.processTitle} onChange={(value) => updatePage("processTitle", value)} />
-            <Textarea label="Process Copy" value={page.processCopy} onChange={(value) => updatePage("processCopy", value)} />
+            <RichEditor label="Intro Eyebrow" value={page.introEyebrow} onChange={(value) => updatePage("introEyebrow", value)} />
+            <RichEditor label="Intro Title" value={page.introTitle} onChange={(value) => updatePage("introTitle", value)} />
+            <RichEditor label="Intro Copy" value={page.introCopy} onChange={(value) => updatePage("introCopy", value)} />
+            <RichEditor label="Openings Eyebrow" value={page.openingsEyebrow} onChange={(value) => updatePage("openingsEyebrow", value)} />
+            <RichEditor label="Openings Title" value={page.openingsTitle} onChange={(value) => updatePage("openingsTitle", value)} />
+            <RichEditor label="Openings Button Text" value={page.openingsButtonText} onChange={(value) => updatePage("openingsButtonText", value)} />
+            <RichEditor label="Openings Button URL" value={page.openingsButtonHref} onChange={(value) => updatePage("openingsButtonHref", value)} />
+            <RichEditor label="Process Eyebrow" value={page.processEyebrow} onChange={(value) => updatePage("processEyebrow", value)} />
+            <RichEditor label="Process Title" value={page.processTitle} onChange={(value) => updatePage("processTitle", value)} />
+            <RichEditor label="Process Copy" value={page.processCopy} onChange={(value) => updatePage("processCopy", value)} />
             <EditableList
               title="Career Values"
               items={page.values || []}
@@ -452,16 +446,16 @@ function PageContentEditor({ data, updateData, save, initialPage }) {
 
         {active === "serviceDetail" ? (
           <>
-            <Field label="Fallback Eyebrow" value={page.eyebrowFallback} onChange={(value) => updatePage("eyebrowFallback", value)} />
-            <Field label="Overview Title" value={page.overviewTitle} onChange={(value) => updatePage("overviewTitle", value)} />
-            <Textarea label="Overview Copy" value={page.overviewCopy} onChange={(value) => updatePage("overviewCopy", value)} />
-            <Field label="Process Title" value={page.processTitle} onChange={(value) => updatePage("processTitle", value)} />
+            <RichEditor label="Fallback Eyebrow" value={page.eyebrowFallback} onChange={(value) => updatePage("eyebrowFallback", value)} />
+            <RichEditor label="Overview Title" value={page.overviewTitle} onChange={(value) => updatePage("overviewTitle", value)} />
+            <RichEditor label="Overview Copy" value={page.overviewCopy} onChange={(value) => updatePage("overviewCopy", value)} />
+            <RichEditor label="Process Title" value={page.processTitle} onChange={(value) => updatePage("processTitle", value)} />
             <StringListEditor title="Process Steps" items={page.processSteps || []} onUpdate={(items) => updatePage("processSteps", items)} />
-            <Field label="Requirements Title" value={page.requirementsTitle} onChange={(value) => updatePage("requirementsTitle", value)} />
-            <Textarea label="Empty Requirements Text" value={page.emptyRequirementsText} onChange={(value) => updatePage("emptyRequirementsText", value)} />
+            <RichEditor label="Requirements Title" value={page.requirementsTitle} onChange={(value) => updatePage("requirementsTitle", value)} />
+            <RichEditor label="Empty Requirements Text" value={page.emptyRequirementsText} onChange={(value) => updatePage("emptyRequirementsText", value)} />
             <Field label="Fee Label" value={page.feeLabel} onChange={(value) => updatePage("feeLabel", value)} />
             <Field label="Timeline Label" value={page.timelineLabel} onChange={(value) => updatePage("timelineLabel", value)} />
-            <Textarea label="Fee Note" value={page.feeNote} onChange={(value) => updatePage("feeNote", value)} />
+            <RichEditor label="Fee Note" value={page.feeNote} onChange={(value) => updatePage("feeNote", value)} />
             <Field label="Start Online Label" value={page.startOnlineLabel} onChange={(value) => updatePage("startOnlineLabel", value)} />
             <Field label="Start Online URL" value={page.startOnlineHref} onChange={(value) => updatePage("startOnlineHref", value)} />
             <Field label="Appointment Label" value={page.appointmentLabel} onChange={(value) => updatePage("appointmentLabel", value)} />
@@ -470,19 +464,19 @@ function PageContentEditor({ data, updateData, save, initialPage }) {
             <Field label="Call URL" value={page.callHref} onChange={(value) => updatePage("callHref", value)} />
             <Field label="WhatsApp Label" value={page.whatsappLabel} onChange={(value) => updatePage("whatsappLabel", value)} />
             <Field label="WhatsApp Phone" value={page.whatsappPhone} onChange={(value) => updatePage("whatsappPhone", value)} />
-            <Field label="Related Eyebrow" value={page.relatedEyebrow} onChange={(value) => updatePage("relatedEyebrow", value)} />
-            <Field label="Related Title" value={page.relatedTitle} onChange={(value) => updatePage("relatedTitle", value)} />
+            <RichEditor label="Related Eyebrow" value={page.relatedEyebrow} onChange={(value) => updatePage("relatedEyebrow", value)} />
+            <RichEditor label="Related Title" value={page.relatedTitle} onChange={(value) => updatePage("relatedTitle", value)} />
             <Field label="All Services Label" value={page.allServicesLabel} onChange={(value) => updatePage("allServicesLabel", value)} />
           </>
         ) : null}
 
         {active === "calculators" ? (
           <>
-            <Textarea label="Disclaimer" value={page.disclaimer} onChange={(value) => updatePage("disclaimer", value)} />
-            <Field label="Salary Title" value={page.salaryTitle} onChange={(value) => updatePage("salaryTitle", value)} />
-            <Textarea label="Salary Copy" value={page.salaryCopy} onChange={(value) => updatePage("salaryCopy", value)} />
-            <Field label="Business Title" value={page.businessTitle} onChange={(value) => updatePage("businessTitle", value)} />
-            <Textarea label="Business Copy" value={page.businessCopy} onChange={(value) => updatePage("businessCopy", value)} />
+            <RichEditor label="Disclaimer" value={page.disclaimer} onChange={(value) => updatePage("disclaimer", value)} />
+            <RichEditor label="Salary Title" value={page.salaryTitle} onChange={(value) => updatePage("salaryTitle", value)} />
+            <RichEditor label="Salary Copy" value={page.salaryCopy} onChange={(value) => updatePage("salaryCopy", value)} />
+            <RichEditor label="Business Title" value={page.businessTitle} onChange={(value) => updatePage("businessTitle", value)} />
+            <RichEditor label="Business Copy" value={page.businessCopy} onChange={(value) => updatePage("businessCopy", value)} />
             <Field label="Consultation Button Label" value={page.consultationLabel} onChange={(value) => updatePage("consultationLabel", value)} />
             <Field label="Consultation Button URL" value={page.consultationHref} onChange={(value) => updatePage("consultationHref", value)} />
           </>
@@ -490,8 +484,8 @@ function PageContentEditor({ data, updateData, save, initialPage }) {
 
         {active === "faqs" ? (
           <>
-            <Field label="Sidebar Title" value={page.sideTitle} onChange={(value) => updatePage("sideTitle", value)} />
-            <Textarea label="Sidebar Copy" value={page.sideCopy} onChange={(value) => updatePage("sideCopy", value)} />
+            <RichEditor label="Sidebar Title" value={page.sideTitle} onChange={(value) => updatePage("sideTitle", value)} />
+            <RichEditor label="Sidebar Copy" value={page.sideCopy} onChange={(value) => updatePage("sideCopy", value)} />
             <Field label="Sidebar Phone" value={page.sidePhone} onChange={(value) => updatePage("sidePhone", value)} />
             <Field label="Sidebar Email" value={page.sideEmail} onChange={(value) => updatePage("sideEmail", value)} />
             <EditableList
@@ -508,11 +502,11 @@ function PageContentEditor({ data, updateData, save, initialPage }) {
 
         {active === "branchDetail" ? (
           <>
-            <Field label="Details Eyebrow" value={page.detailsEyebrow} onChange={(value) => updatePage("detailsEyebrow", value)} />
-            <Field label="Details Title" value={page.detailsTitle} onChange={(value) => updatePage("detailsTitle", value)} />
-            <Textarea label="Details Copy" value={page.detailsCopy} onChange={(value) => updatePage("detailsCopy", value)} />
-            <Field label="Support Title" value={page.supportTitle} onChange={(value) => updatePage("supportTitle", value)} />
-            <Textarea label="Support Copy" value={page.supportCopy} onChange={(value) => updatePage("supportCopy", value)} />
+            <RichEditor label="Details Eyebrow" value={page.detailsEyebrow} onChange={(value) => updatePage("detailsEyebrow", value)} />
+            <RichEditor label="Details Title" value={page.detailsTitle} onChange={(value) => updatePage("detailsTitle", value)} />
+            <RichEditor label="Details Copy" value={page.detailsCopy} onChange={(value) => updatePage("detailsCopy", value)} />
+            <RichEditor label="Support Title" value={page.supportTitle} onChange={(value) => updatePage("supportTitle", value)} />
+            <RichEditor label="Support Copy" value={page.supportCopy} onChange={(value) => updatePage("supportCopy", value)} />
             <Field label="Appointment Label" value={page.appointmentLabel} onChange={(value) => updatePage("appointmentLabel", value)} />
             <Field label="Consultation Label" value={page.consultationLabel} onChange={(value) => updatePage("consultationLabel", value)} />
             <Field label="Map Label" value={page.mapLabel} onChange={(value) => updatePage("mapLabel", value)} />
@@ -522,7 +516,7 @@ function PageContentEditor({ data, updateData, save, initialPage }) {
         {active === "serviceAreaDetail" ? (
           <>
             <Field label="Coverage Title" value={page.coverageTitle} onChange={(value) => updatePage("coverageTitle", value)} />
-            <Textarea label="Coverage Fallback" value={page.coverageFallback} onChange={(value) => updatePage("coverageFallback", value)} />
+            <RichEditor label="Coverage Fallback" value={page.coverageFallback} onChange={(value) => updatePage("coverageFallback", value)} />
             <Field label="Related Title" value={page.relatedTitle} onChange={(value) => updatePage("relatedTitle", value)} />
             <Field label="Appointment Label" value={page.appointmentLabel} onChange={(value) => updatePage("appointmentLabel", value)} />
             <Field label="Appointment URL" value={page.appointmentHref} onChange={(value) => updatePage("appointmentHref", value)} />
@@ -682,9 +676,9 @@ function HeroSlidesEditor({ slides, onUpdate, onAdd, onRemove, onUpdateBlock, on
             {openItems[index] ? (
               <div className="mt-3 grid gap-4">
                 <Toggle label="Enabled" checked={slide.enabled !== false} onChange={(value) => onUpdate(index, "enabled", value)} />
-                <Field label="Eyebrow" value={slide.eyebrow || ""} onChange={(value) => onUpdate(index, "eyebrow", value)} />
-                <Field label="Title" value={slide.title || ""} onChange={(value) => onUpdate(index, "title", value)} />
-                <Textarea label="Copy" value={slide.copy || ""} onChange={(value) => onUpdate(index, "copy", value)} />
+                <RichEditor label="Eyebrow" value={slide.eyebrow || ""} onChange={(value) => onUpdate(index, "eyebrow", value)} />
+                <RichEditor label="Title" value={slide.title || ""} onChange={(value) => onUpdate(index, "title", value)} />
+                <RichEditor label="Copy" value={slide.copy || ""} onChange={(value) => onUpdate(index, "copy", value)} />
                 <ImageField label="Image URL" value={slide.image || ""} onChange={(value) => onUpdate(index, "image", value)} />
                 <div className="grid gap-3 md:grid-cols-2">
                   <Field label="Primary Button Label" value={slide.primaryLabel || ""} onChange={(value) => onUpdate(index, "primaryLabel", value)} />
@@ -1409,9 +1403,9 @@ function HomeEditor({ data, updateData, save }) {
       {section ? (
         <div className="grid gap-4">
           <Field label="Tab Label" value={section.tab} onChange={(value) => updateSection("tab", value)} />
-          <Field label="Eyebrow" value={section.eyebrow} onChange={(value) => updateSection("eyebrow", value)} />
-          <Field label="Title" value={section.title} onChange={(value) => updateSection("title", value)} />
-          <Textarea label="Content" value={section.copy} onChange={(value) => updateSection("copy", value)} />
+          <RichEditor label="Eyebrow" value={section.eyebrow} onChange={(value) => updateSection("eyebrow", value)} />
+          <RichEditor label="Title" value={section.title} onChange={(value) => updateSection("title", value)} />
+          <RichEditor label="Content" value={section.copy} onChange={(value) => updateSection("copy", value)} />
           <Field label="Image URL" value={section.image || ""} onChange={(value) => updateSection("image", value)} />
           <Toggle label="Visible" checked={section.enabled !== false} onChange={(value) => updateSection("enabled", value)} />
         </div>
@@ -1518,14 +1512,14 @@ function AboutEditor({ data, updateData, save }) {
   return (
     <Editor title="About Page Content" onSave={() => save()}>
       <div className="grid gap-4">
-        <Field label="Eyebrow" value={about.eyebrow} onChange={(value) => updateAbout("eyebrow", value)} />
-        <Field label="Title" value={about.title} onChange={(value) => updateAbout("title", value)} />
-        <Textarea label="Header Copy" value={about.copy} onChange={(value) => updateAbout("copy", value)} />
+        <RichEditor label="Eyebrow" value={about.eyebrow} onChange={(value) => updateAbout("eyebrow", value)} />
+        <RichEditor label="Title" value={about.title} onChange={(value) => updateAbout("title", value)} />
+        <RichEditor label="Header Copy" value={about.copy} onChange={(value) => updateAbout("copy", value)} />
         <ImageField label="Image URL" value={about.image} onChange={(value) => updateAbout("image", value)} />
-        <Field label="Intro Eyebrow" value={about.introEyebrow} onChange={(value) => updateAbout("introEyebrow", value)} />
-        <Field label="Intro Title" value={about.introTitle} onChange={(value) => updateAbout("introTitle", value)} />
-        <Textarea label="Intro Copy" value={about.introCopy} onChange={(value) => updateAbout("introCopy", value)} />
-        <Textarea label="Intro Second Copy" value={about.introSecondCopy} onChange={(value) => updateAbout("introSecondCopy", value)} />
+        <RichEditor label="Intro Eyebrow" value={about.introEyebrow} onChange={(value) => updateAbout("introEyebrow", value)} />
+        <RichEditor label="Intro Title" value={about.introTitle} onChange={(value) => updateAbout("introTitle", value)} />
+        <RichEditor label="Intro Copy" value={about.introCopy} onChange={(value) => updateAbout("introCopy", value)} />
+        <RichEditor label="Intro Second Copy" value={about.introSecondCopy} onChange={(value) => updateAbout("introSecondCopy", value)} />
         <EditableList
           title="Stats"
           items={about.stats || []}
@@ -1549,9 +1543,9 @@ function AboutEditor({ data, updateData, save }) {
         <div className="rounded-2xl border border-primary/10 p-4">
           <h2 className="mb-4 text-2xl font-black text-primary">Team Preview Block</h2>
           <div className="grid gap-4">
-            <Field label="Eyebrow" value={about.teamPreview?.eyebrow} onChange={(value) => updateTeamPreview("eyebrow", value)} />
-            <Field label="Title" value={about.teamPreview?.title} onChange={(value) => updateTeamPreview("title", value)} />
-            <Textarea label="Copy" value={about.teamPreview?.copy} onChange={(value) => updateTeamPreview("copy", value)} />
+            <RichEditor label="Eyebrow" value={about.teamPreview?.eyebrow} onChange={(value) => updateTeamPreview("eyebrow", value)} />
+            <RichEditor label="Title" value={about.teamPreview?.title} onChange={(value) => updateTeamPreview("title", value)} />
+            <RichEditor label="Copy" value={about.teamPreview?.copy} onChange={(value) => updateTeamPreview("copy", value)} />
             <Field label="Button Text" value={about.teamPreview?.buttonText} onChange={(value) => updateTeamPreview("buttonText", value)} />
             <Field label="Button URL" value={about.teamPreview?.buttonHref} onChange={(value) => updateTeamPreview("buttonHref", value)} />
           </div>
@@ -1587,19 +1581,20 @@ function ServiceForm({ data, id, save }) {
   );
 }
 
-function ArticleList({ type, data, save }) {
+function ArticleList({ data, save }) {
+  const type = "blogs";
   const rows = data[type];
-  const base = type === "blogs" ? "/admin/blogs/new" : "/admin/news/new";
-  const publicBase = type === "blogs" ? "/blog" : "/news";
+  const base = "/admin/blogs/new";
+  const publicBase = "/blog";
 
   function remove(id) {
-    save({ ...data, [type]: rows.filter((item) => item.id !== id && item.slug !== id) }, `${type === "blogs" ? "Blog" : "News"} deleted.`);
+    save({ ...data, [type]: rows.filter((item) => item.id !== id && item.slug !== id) }, "Blog deleted.");
   }
 
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-4xl font-black text-primary">All {type === "blogs" ? "Blogs" : "News"}</h1>
+        <h1 className="text-4xl font-black text-primary">All Blogs</h1>
         <Link className="rounded-full bg-primary px-5 py-3 text-sm font-black text-white" href={base}>Create New</Link>
       </div>
       <div className="mt-6 grid gap-3">
@@ -1624,25 +1619,25 @@ function ArticleList({ type, data, save }) {
   );
 }
 
-function ArticleForm({ type, data, id, save }) {
+function ArticleForm({ data, id, save }) {
   const router = useRouter();
+  const type = "blogs";
   const current = data[type].find((item) => item.id === id || item.slug === id);
   const [form, setForm] = useState(current || emptyArticle);
-  const isNews = type === "news";
-  const label = isNews ? "News" : "Blog";
+  const label = "Blog";
   const isEditing = Boolean(current);
 
   function submit(event) {
     event.preventDefault();
     const slug = uniqueSlug(makeSlug(form.slug || form.title), data[type], current?.id || form.id);
-    const record = { ...form, id: slug, slug, type: isNews ? "news" : "blog" };
+    const record = { ...form, id: slug, slug, type: "blog" };
     const next = upsertRecord(data[type], record, current, id);
-    save({ ...data, [type]: next }, `${label} ${isEditing ? "updated" : "created"}.`, true).then(() => router.push(isNews ? "/admin/news" : "/admin/blogs"));
+    save({ ...data, [type]: next }, `${label} ${isEditing ? "updated" : "created"}.`, true).then(() => router.push("/admin/blogs"));
   }
 
   return (
-    <FormShell title={current ? `Edit ${isNews ? "News" : "Blog"}` : `Create ${isNews ? "News" : "Blog"}`} onSubmit={submit}>
-      <ArticleFields form={form} setForm={setForm} isNews={isNews} />
+    <FormShell title={current ? `Edit ${label}` : `Create ${label}`} onSubmit={submit}>
+      <ArticleFields form={form} setForm={setForm} isNews={false} />
     </FormShell>
   );
 }
@@ -1706,7 +1701,7 @@ function labelFromKey(value) {
 function ServiceFields({ data, form, setForm }) {
   return (
     <>
-      <Field label="Title" value={form.title} onChange={(value) => setForm(updateTitleAndMaybeSlug(form, value))} />
+      <RichEditor label="Title" value={form.title} onChange={(value) => setForm(updateTitleAndMaybeSlug(form, value))} />
       <SlugField label="Slug" value={form.slug} prefix="/services/" onChange={(value) => setForm({ ...form, slug: makeSlug(value) })} onGenerate={() => setForm({ ...form, slug: makeSlug(form.title) })} />
       <Select label="Category" value={form.category} onChange={(value) => setForm({ ...form, category: value })} options={data.categories} />
       <IconField label="Icon" value={form.icon} onChange={(value) => setForm({ ...form, icon: value })} />
@@ -1714,7 +1709,7 @@ function ServiceFields({ data, form, setForm }) {
       <Field label="Service Type" value={form.serviceType} onChange={(value) => setForm({ ...form, serviceType: value })} />
       <Field label="Price" value={String(form.price || "")} onChange={(value) => setForm({ ...form, price: value })} />
       <Field label="Timeline" value={form.timeline || ""} onChange={(value) => setForm({ ...form, timeline: value })} />
-      <Textarea label="Summary" value={form.summary} onChange={(value) => setForm({ ...form, summary: value })} />
+      <RichEditor label="Summary" value={form.summary} onChange={(value) => setForm({ ...form, summary: value })} />
       <Field label="Meta Title" value={form.metaTitle} onChange={(value) => setForm({ ...form, metaTitle: value })} />
       <Textarea label="Meta Description" value={form.metaDescription} onChange={(value) => setForm({ ...form, metaDescription: value })} />
       <Textarea label="Requirements (one per line)" value={lines(form.requirements)} onChange={(value) => setForm({ ...form, requirements: value })} />
@@ -1726,15 +1721,15 @@ function ServiceFields({ data, form, setForm }) {
 function ArticleFields({ form, setForm, isNews }) {
   return (
     <>
-      <Field label="Title" value={form.title} onChange={(value) => setForm(updateTitleAndMaybeSlug(form, value))} />
+      <RichEditor label="Title" value={form.title} onChange={(value) => setForm(updateTitleAndMaybeSlug(form, value))} />
       <SlugField label="Slug" value={form.slug} prefix={isNews ? "/news/" : "/blog/"} onChange={(value) => setForm({ ...form, slug: makeSlug(value) })} onGenerate={() => setForm({ ...form, slug: makeSlug(form.title) })} />
       <Field label="Date" value={form.date} onChange={(value) => setForm({ ...form, date: value })} />
       <ImageField label="Image URL" value={form.image} onChange={(value) => setForm({ ...form, image: value })} />
       <Field label={isNews ? "Authority" : "Service"} value={isNews ? form.authority : form.service} onChange={(value) => setForm({ ...form, [isNews ? "authority" : "service"]: value })} />
-      <Textarea label="Summary" value={form.summary} onChange={(value) => setForm({ ...form, summary: value })} />
+      <RichEditor label="Summary" value={form.summary} onChange={(value) => setForm({ ...form, summary: value })} />
       <Field label="Meta Title" value={form.metaTitle} onChange={(value) => setForm({ ...form, metaTitle: value })} />
       <Textarea label="Meta Description" value={form.metaDescription} onChange={(value) => setForm({ ...form, metaDescription: value })} />
-      <Textarea label="Body" value={form.body} onChange={(value) => setForm({ ...form, body: value })} />
+      <RichEditor label="Body" value={form.body} onChange={(value) => setForm({ ...form, body: value })} />
       <Toggle label="Visible" checked={form.enabled !== false} onChange={(value) => setForm({ ...form, enabled: value })} />
     </>
   );
@@ -1864,6 +1859,17 @@ function Textarea({ label, value, onChange, placeholder = "" }) {
     <label className="grid gap-2 text-sm font-black text-primary">
       {label}
       <textarea className="min-h-28 rounded-2xl border border-primary/10 px-4 py-3 font-semibold text-ink outline-none placeholder:text-muted/60 focus:ring-4 focus:ring-primary/10" value={value || ""} placeholder={placeholder} onChange={(event) => onChange(event.target.value)} />
+    </label>
+  );
+}
+
+function RichEditor({ label, value, onChange, placeholder = "" }) {
+  return (
+    <label className="grid gap-2 text-sm font-black text-primary">
+      {label}
+      <div className="rounded-2xl border border-primary/10 overflow-hidden">
+        <RichTextEditor value={value || ""} onChange={onChange} placeholder={placeholder} />
+      </div>
     </label>
   );
 }

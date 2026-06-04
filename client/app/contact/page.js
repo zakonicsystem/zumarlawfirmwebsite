@@ -1,7 +1,10 @@
 import PageHeader from "@/components/PageHeader";
 import FaIcon from "@/components/FaIcon";
+import RichContent from "@/components/RichContent";
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
+import JsonLd from "@/components/JsonLd";
+import { generateContactPageSchema } from "@/lib/schema";
 
 const contactImage = "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1000&q=85";
 
@@ -15,6 +18,7 @@ export default async function ContactPage() {
 
   return (
     <>
+      <JsonLd schema={generateContactPageSchema()} />
       <PageHeader eyebrow={page.eyebrow} title={page.title} copy={page.copy} />
       <section className="py-16 sm:py-20">
         <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[0.9fr_1.1fr]">
@@ -45,9 +49,9 @@ export default async function ContactPage() {
               <FaIcon className="size-6" name="headset" />
               {page.formTitle}
             </h2>
-            <p className="mt-4 leading-8 text-muted">
-              {page.formCopy}
-            </p>
+            <div className="mt-4 leading-8 text-muted">
+              {page.formCopy && <RichContent content={page.formCopy} />}
+            </div>
             <div className="mt-6 grid gap-3">
               <input className="min-h-14 rounded-2xl border border-primary/10 bg-paper px-5 outline-none transition focus:border-primary/50 focus:ring-4 focus:ring-primary/10" name="name" placeholder="Full name" />
               <input className="min-h-14 rounded-2xl border border-primary/10 bg-paper px-5 outline-none transition focus:border-primary/50 focus:ring-4 focus:ring-primary/10" name="email" placeholder="Email address" type="email" />

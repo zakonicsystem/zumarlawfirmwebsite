@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import FaIcon from "@/components/FaIcon";
+import RichContent from "@/components/RichContent";
 
 export default function TestimonialCarousel({ items = [] }) {
   const testimonials = useMemo(() => items.filter((item) => item.enabled !== false), [items]);
@@ -100,11 +101,11 @@ function TestimonialCard({ item }) {
           </div>
         </div>
         <div className="mt-7 min-h-0 flex-1 overflow-y-auto pr-1 [scrollbar-width:thin]">
-          <p className="text-lg font-semibold leading-8 text-white/82">"{item.quote}"</p>
+          <div className="text-lg font-semibold leading-8 text-white/82">"{item.quote && <RichContent content={item.quote} />}"</div>
         </div>
         <div className="mt-7 shrink-0 border-t border-white/10 pt-5">
-          <h3 className="text-xl font-black">{item.name}</h3>
-          <p className="mt-1 text-sm font-bold text-secondary/90">{item.role}</p>
+          <h3 className="text-xl font-black">{item.name && <RichContent content={item.name} />}</h3>
+          <div className="mt-1 text-sm font-bold text-secondary/90">{item.role && <RichContent content={item.role} />}</div>
         </div>
       </div>
     </article>

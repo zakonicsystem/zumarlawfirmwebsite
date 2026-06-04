@@ -1,4 +1,5 @@
 import FaIcon from "@/components/FaIcon";
+import RichContent from "@/components/RichContent";
 
 export default function PageHeader({ eyebrow, title, copy }) {
   return (
@@ -9,7 +10,7 @@ export default function PageHeader({ eyebrow, title, copy }) {
           {eyebrow}
         </p>
         <h1 className="max-w-4xl text-5xl font-black leading-tight text-primary sm:text-5xl">{title}</h1>
-        {copy ? <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">{copy}</p> : null}
+        {copy ? <div className="mt-5 max-w-3xl text-lg leading-8 text-muted"><RichContent content={copy} /></div> : null}
       </div>
     </section>
   );

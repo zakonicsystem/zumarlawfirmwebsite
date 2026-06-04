@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import FaIcon from "@/components/FaIcon";
+import RichContent from "@/components/RichContent";
 
 export default function HomeHeroSlider({ slides = [] }) {
   const visibleSlides = useMemo(() => slides.filter((slide) => slide.enabled !== false), [slides]);
@@ -56,10 +57,10 @@ export default function HomeHeroSlider({ slides = [] }) {
         <div className="max-w-3xl" key={active}>
           <p className="mb-4 inline-flex max-w-full items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-secondary backdrop-blur animate-[heroFade_0.75s_ease-out_both] sm:mb-5 sm:gap-3 sm:px-4 sm:text-xs sm:tracking-[0.2em]">
             <FaIcon className="size-3.5" name="scale" />
-            <span className="truncate">{current.eyebrow}</span>
+            <span className="truncate">{current.eyebrow && <RichContent content={current.eyebrow} />}</span>
           </p>
           <h1 className="text-3xl font-black leading-tight text-white animate-[heroRise_0.85s_ease-out_both] sm:text-4xl sm:leading-[0.95] lg:text-4xl">
-            {current.title}
+            {current.title && <RichContent content={current.title} />}
           </h1>
 
           {blocks.length > 0 && (
@@ -69,16 +70,16 @@ export default function HomeHeroSlider({ slides = [] }) {
                   {block.icon && (
                     <FaIcon className="mb-1.5 size-4 text-secondary sm:mb-2 sm:size-5" name={block.icon} />
                   )}
-                  <h3 className="text-[10px] font-black uppercase tracking-wide text-secondary sm:text-xs">{block.label}</h3>
-                  <p className="mt-1 line-clamp-2 text-[11px] font-semibold leading-4 text-white/80 sm:text-xs sm:leading-5">{block.value}</p>
+                  <h3 className="text-[10px] font-black uppercase tracking-wide text-secondary sm:text-xs">{block.label && <RichContent content={block.label} />}</h3>
+                  <p className="mt-1 line-clamp-2 text-[11px] font-semibold leading-4 text-white/80 sm:text-xs sm:leading-5">{block.value && <RichContent content={block.value} />}</p>
                 </div>
               ))}
             </div>
           )}
 
-          <p className="mt-5 max-w-2xl text-base font-semibold leading-7 text-white/80 animate-[heroRise_0.95s_ease-out_both] sm:mt-7 sm:text-xl sm:leading-8">
-            {current.copy}
-          </p>
+          <div className="mt-5 max-w-2xl text-base font-semibold leading-7 text-white/80 animate-[heroRise_0.95s_ease-out_both] sm:mt-7 sm:text-xl sm:leading-8">
+            {current.copy && <RichContent content={current.copy} />}
+          </div>
 
           <div className="mt-7 grid gap-3 animate-[heroRise_1.05s_ease-out_both] min-[420px]:flex min-[420px]:flex-wrap sm:mt-9">
             {current.primaryLabel ? (

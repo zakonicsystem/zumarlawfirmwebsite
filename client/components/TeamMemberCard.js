@@ -1,4 +1,5 @@
 import FaIcon from "@/components/FaIcon";
+import RichContent from "@/components/RichContent";
 
 export default function TeamMemberCard({ member, headingLevel = "h2" }) {
   const Heading = headingLevel;
@@ -20,8 +21,8 @@ export default function TeamMemberCard({ member, headingLevel = "h2" }) {
         )}
       </div>
       <div className="px-4 pb-4 pt-2">
-        <Heading className="text-3xl font-black leading-tight text-primary">{member.name}</Heading>
-        <p className="mt-5 text-xl font-semibold leading-7 text-primary/55">{member.designation || member.role}</p>
+        <Heading className="text-3xl font-black leading-tight text-primary">{member.name && <RichContent content={member.name} />}</Heading>
+        <div className="mt-5 text-xl font-semibold leading-7 text-primary/55">{(member.designation || member.role) && <RichContent content={member.designation || member.role} />}</div>
         {member.branch ? <p className="mt-2 text-sm font-bold uppercase tracking-wide text-primary/40">{member.branch}</p> : null}
       </div>
     </article>

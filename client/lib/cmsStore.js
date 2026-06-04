@@ -176,9 +176,7 @@ export function normalizeCmsData(data) {
     branches: normalizeBranches(Array.isArray(merged.branches) ? merged.branches : defaults.branches),
     serviceAreas: Array.isArray(merged.serviceAreas) ? merged.serviceAreas : defaults.serviceAreas,
     services: mergeServices(defaults.services, merged.services).map(enrichService),
-    blogs: Array.isArray(merged.blogs) ? merged.blogs : defaults.blogs,
-    news: Array.isArray(merged.news) ? merged.news : defaults.news,
-    appointments: Array.isArray(merged.appointments) ? merged.appointments : []
+    blogs: Array.isArray(merged.blogs) ? merged.blogs : defaults.blogs
   };
 }
 

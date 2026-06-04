@@ -2,6 +2,8 @@ import CeoHistory from "@/components/CeoHistory";
 import PageHeader from "@/components/PageHeader";
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
+import JsonLd from "@/components/JsonLd";
+import { generateOrganizationSchema } from "@/lib/schema";
 
 export async function generateMetadata() {
   return getPageMetadata("ceo");
@@ -14,6 +16,7 @@ export default async function CeoPage() {
 
   return (
     <>
+      <JsonLd schema={generateOrganizationSchema()} />
       <PageHeader eyebrow={page.ceoEyebrow} title={page.ceoName} copy={intro} />
       <CeoHistory page={page} />
     </>

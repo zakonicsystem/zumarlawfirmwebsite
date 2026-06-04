@@ -12,12 +12,6 @@ export const defaultSeoPages = {
     metaTitle: "About",
     metaDescription: "About Zumar Law Firm and its tax, corporate, and regulatory services."
   },
-  team: {
-    label: "Team",
-    path: "/team",
-    metaTitle: "Team",
-    metaDescription: "Meet the Zumar Law Firm team handling tax, corporate, licensing, and regulatory work."
-  },
   ceo: {
     label: "CEO",
     path: "/ceo",
@@ -54,15 +48,9 @@ export const defaultSeoPages = {
     metaTitle: "Blog",
     metaDescription: "Completed case notes from Zumar Law Firm."
   },
-  news: {
-    label: "News",
-    path: "/news",
-    metaTitle: "News",
-    metaDescription: "Daily Pakistan legal authority updates from Zumar Law Firm."
-  },
   appointment: {
     label: "Appointment",
-    path: "/appointment",
+    path: "/contact",
     metaTitle: "Appointment",
     metaDescription: "Book a consultation with Zumar Law Firm."
   },
@@ -77,12 +65,6 @@ export const defaultSeoPages = {
     path: "/careers",
     metaTitle: "Careers",
     metaDescription: "Careers and professional opportunities at Zumar Law Firm."
-  },
-  faqs: {
-    label: "FAQs",
-    path: "/faqs",
-    metaTitle: "FAQs",
-    metaDescription: "Common questions about Zumar Law Firm services."
   },
   privacyPolicy: {
     label: "Privacy Policy",

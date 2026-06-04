@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
 import FaIcon from "@/components/FaIcon";
 
 const taxYears = ["2026", "2025", "2024", "2023", "2022"];
@@ -48,201 +47,210 @@ const taxTables = {
       [2500000, 90000, 0.15, 1800000],
       [3500000, 195000, 0.175, 2500000],
       [5000000, 370000, 0.2, 3500000],
-      [8000000, 670000, 0.225, 5000000],
-      [12000000, 1345000, 0.25, 8000000],
-      [30000000, 2345000, 0.275, 12000000],
-      [50000000, 7295000, 0.3, 30000000],
-      [75000000, 13295000, 0.325, 50000000],
-      [Infinity, 21420000, 0.35, 75000000]
+      [Infinity, 570000, 0.25, 5000000]
     ]
   },
   business: {
     2026: [
-      [600000, 0, 0, 0],
-      [1200000, 0, 0.15, 600000],
-      [1600000, 90000, 0.2, 1200000],
-      [3200000, 170000, 0.3, 1600000],
-      [5600000, 650000, 0.4, 3200000],
-      [Infinity, 1610000, 0.45, 5600000]
+      [5000000, 0, 0, 0],
+      [10000000, 0, 0.05, 5000000],
+      [15000000, 250000, 0.1, 10000000],
+      [25000000, 750000, 0.15, 15000000],
+      [Infinity, 2250000, 0.2, 25000000]
     ],
     2025: [
-      [600000, 0, 0, 0],
-      [1200000, 0, 0.15, 600000],
-      [1600000, 90000, 0.2, 1200000],
-      [3200000, 170000, 0.3, 1600000],
-      [5600000, 650000, 0.4, 3200000],
-      [Infinity, 1610000, 0.45, 5600000]
+      [5000000, 0, 0, 0],
+      [10000000, 0, 0.04, 5000000],
+      [15000000, 200000, 0.08, 10000000],
+      [25000000, 600000, 0.12, 15000000],
+      [Infinity, 1800000, 0.18, 25000000]
     ],
     2024: [
-      [600000, 0, 0, 0],
-      [800000, 0, 0.075, 600000],
-      [1200000, 15000, 0.15, 800000],
-      [2400000, 75000, 0.2, 1200000],
-      [3000000, 315000, 0.25, 2400000],
-      [4000000, 465000, 0.3, 3000000],
-      [Infinity, 765000, 0.35, 4000000]
+      [5000000, 0, 0, 0],
+      [10000000, 0, 0.03, 5000000],
+      [15000000, 150000, 0.07, 10000000],
+      [25000000, 500000, 0.11, 15000000],
+      [Infinity, 1600000, 0.15, 25000000]
     ],
     2023: [
-      [600000, 0, 0, 0],
-      [800000, 0, 0.05, 600000],
-      [1200000, 10000, 0.125, 800000],
-      [2400000, 60000, 0.175, 1200000],
-      [3000000, 270000, 0.225, 2400000],
-      [4000000, 405000, 0.275, 3000000],
-      [6000000, 680000, 0.325, 4000000],
-      [Infinity, 1330000, 0.35, 6000000]
+      [5000000, 0, 0, 0],
+      [10000000, 0, 0.03, 5000000],
+      [15000000, 150000, 0.07, 10000000],
+      [25000000, 500000, 0.11, 15000000],
+      [Infinity, 1600000, 0.15, 25000000]
     ],
     2022: [
-      [400000, 0, 0, 0],
-      [600000, 0, 0.05, 400000],
-      [1200000, 10000, 0.1, 600000],
-      [2400000, 70000, 0.15, 1200000],
-      [3000000, 250000, 0.2, 2400000],
-      [4000000, 370000, 0.25, 3000000],
-      [6000000, 620000, 0.3, 4000000],
-      [Infinity, 1220000, 0.35, 6000000]
+      [5000000, 0, 0, 0],
+      [10000000, 0, 0.02, 5000000],
+      [15000000, 100000, 0.06, 10000000],
+      [25000000, 400000, 0.1, 15000000],
+      [Infinity, 1400000, 0.15, 25000000]
     ]
   }
 };
 
-export default function TaxCalculators({ page, mode = "all" }) {
+export default function TaxCalculators({ page = {} }) {
+  const [calculatorType, setCalculatorType] = useState("salary");
+  const [year, setYear] = useState("2026");
+  const [income, setIncome] = useState("");
+
+  const taxResult = useMemo(() => {
+    if (!income || isNaN(income)) return null;
+    const amount = Number(income);
+    const table = taxTables[calculatorType]?.[year] || [];
+
+    for (const [limit, baseTax, rate, threshold] of table) {
+      if (amount < limit) {
+        const tax = baseTax + (amount - threshold) * rate;
+        return {
+          tax: Math.round(tax),
+          netIncome: Math.round(amount - tax),
+          rate: (rate * 100).toFixed(2)
+        };
+      }
+    }
+
+    return null;
+  }, [income, calculatorType, year]);
+
   return (
-    <section className="bg-[#fffdfb] py-14 sm:py-20">
-      <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8">
-        {mode === "all" ? (
-          <div className="grid gap-5 md:grid-cols-2">
-            <CalculatorCard href="/calculators/salary-tax" icon="tax" title={page.salaryTitle} copy={page.salaryCopy} />
-            <CalculatorCard href="/calculators/business-tax" icon="business" title={page.businessTitle} copy={page.businessCopy} />
+    <section className="py-16 sm:py-20">
+      <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-2">
+        {/* Calculator Panel */}
+        <div className="grid gap-6">
+          <div className="rounded-[2rem] border border-primary/10 bg-white p-7 shadow-xl shadow-primary/5 sm:p-9">
+            <h2 className="inline-flex items-center gap-3 text-2xl font-black text-primary sm:text-3xl">
+              <FaIcon className="size-6" name={calculatorType === "salary" ? "id" : "business"} />
+              {calculatorType === "salary" ? "Salary" : "Business"} Tax Calculator
+            </h2>
+
+            <div className="mt-8 grid gap-6">
+              {/* Calculator Type Selection */}
+              <div className="grid gap-3 sm:grid-cols-2">
+                <button
+                  onClick={() => setCalculatorType("salary")}
+                  className={`flex items-center gap-2 rounded-2xl px-4 py-3 font-black transition ${calculatorType === "salary"
+                      ? "bg-primary text-white"
+                      : "border border-primary/10 bg-paper text-primary hover:bg-white"
+                    }`}
+                >
+                  <FaIcon className="size-4" name="id" />
+                  Salary Tax
+                </button>
+                <button
+                  onClick={() => setCalculatorType("business")}
+                  className={`flex items-center gap-2 rounded-2xl px-4 py-3 font-black transition ${calculatorType === "business"
+                      ? "bg-primary text-white"
+                      : "border border-primary/10 bg-paper text-primary hover:bg-white"
+                    }`}
+                >
+                  <FaIcon className="size-4" name="business" />
+                  Business Tax
+                </button>
+              </div>
+
+              {/* Year Selection */}
+              <label className="grid gap-2 text-sm font-black text-primary">
+                Tax Year
+                <select
+                  value={year}
+                  onChange={(e) => setYear(e.target.value)}
+                  className="min-h-12 rounded-2xl border border-primary/10 px-4 font-semibold outline-none focus:ring-4 focus:ring-primary/10"
+                >
+                  {taxYears.map((y) => (
+                    <option key={y}>{y}</option>
+                  ))}
+                </select>
+              </label>
+
+              {/* Income Input */}
+              <label className="grid gap-2 text-sm font-black text-primary">
+                Annual Income (PKR)
+                <input
+                  type="number"
+                  value={income}
+                  onChange={(e) => setIncome(e.target.value)}
+                  placeholder="Enter your annual income"
+                  className="min-h-12 rounded-2xl border border-primary/10 px-4 font-semibold outline-none focus:ring-4 focus:ring-primary/10"
+                />
+              </label>
+            </div>
           </div>
-        ) : null}
 
-        {(mode === "all" || mode === "salary") ? (
-          <TaxCalculator
-            title={page.salaryTitle}
-            copy={page.salaryCopy}
-            defaultMonthlyIncome={0}
-            incomeLabel="Monthly Salary"
-            helperText="Enter gross monthly salary in PKR."
-            tableKey="salary"
-          />
-        ) : null}
+          {/* Tax Bracket Info */}
+          <div className="rounded-[2rem] border border-primary/10 bg-paper p-6 sm:p-7">
+            <p className="text-sm font-black uppercase tracking-wide text-primary/60">Tax Information</p>
+            <p className="mt-2 text-sm text-muted">
+              {calculatorType === "salary"
+                ? "Salary tax is calculated based on progressive tax brackets for salaried individuals."
+                : "Business income tax applies to self-employed individuals and business owners."}
+            </p>
+            <p className="mt-3 text-xs text-muted">
+              <strong>Year:</strong> {year} | <strong>Type:</strong> {calculatorType === "salary" ? "Salaried" : "Business Income"}
+            </p>
+          </div>
+        </div>
 
-        {(mode === "all" || mode === "business") ? (
-          <TaxCalculator
-            title={page.businessTitle}
-            copy={page.businessCopy}
-            defaultMonthlyIncome={0}
-            incomeLabel="Monthly Business Income"
-            helperText="Enter estimated monthly taxable business income in PKR."
-            tableKey="business"
-          />
-        ) : null}
+        {/* Results Panel */}
+        <div className="grid gap-6">
+          {taxResult ? (
+            <>
+              <div className="rounded-[2rem] border border-secondary/30 bg-gradient-to-br from-secondary/10 to-secondary/5 p-7 shadow-xl shadow-secondary/10 sm:p-9">
+                <p className="text-sm font-black uppercase tracking-wide text-secondary">Tax Estimate</p>
+                <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <span className="block text-xs font-black uppercase text-primary/60">Annual Tax</span>
+                    <span className="mt-1 block text-3xl font-black text-primary">
+                      PKR {taxResult.tax.toLocaleString()}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="block text-xs font-black uppercase text-primary/60">Tax Rate</span>
+                    <span className="mt-1 block text-3xl font-black text-primary">
+                      {taxResult.rate}%
+                    </span>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <span className="block text-xs font-black uppercase text-primary/60">Net Income</span>
+                    <span className="mt-1 block text-3xl font-black text-primary">
+                      PKR {taxResult.netIncome.toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+              </div>
 
-        <div className="grid gap-5 rounded-lg border border-primary/10 bg-paper p-6 md:grid-cols-[1fr_auto] md:items-center">
-          <p className="text-sm font-semibold leading-7 text-muted">{page.disclaimer}</p>
-          <Link className="inline-flex min-h-12 items-center justify-center rounded-md bg-primary px-6 text-sm font-black text-white transition hover:-translate-y-1" href={page.consultationHref || "/appointment"}>
-            {page.consultationLabel || "Review With Tax Team"}
-          </Link>
+              <div className="rounded-[2rem] border border-primary/10 bg-white p-6 sm:p-7">
+                <p className="text-sm font-black uppercase tracking-wide text-primary/60">Monthly Breakdown</p>
+                <div className="mt-4 grid gap-3">
+                  <div className="flex items-center justify-between rounded-xl bg-paper px-4 py-2.5">
+                    <span className="text-sm font-bold text-muted">Monthly Income:</span>
+                    <strong className="text-primary">PKR {Math.round(Number(income) / 12).toLocaleString()}</strong>
+                  </div>
+                  <div className="flex items-center justify-between rounded-xl bg-paper px-4 py-2.5">
+                    <span className="text-sm font-bold text-muted">Monthly Tax:</span>
+                    <strong className="text-primary">PKR {Math.round(taxResult.tax / 12).toLocaleString()}</strong>
+                  </div>
+                  <div className="flex items-center justify-between rounded-xl bg-secondary/10 px-4 py-2.5">
+                    <span className="text-sm font-bold text-primary">Monthly Net Income:</span>
+                    <strong className="text-primary">PKR {Math.round(taxResult.netIncome / 12).toLocaleString()}</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-[2rem] border border-primary/10 bg-paper p-6 sm:p-7">
+                <p className="text-xs leading-6 text-muted">
+                  <strong className="text-primary">Disclaimer:</strong> This calculator provides estimates based on current tax brackets. For accurate tax calculations, consult with a professional tax advisor. Actual tax liability may vary based on deductions, exemptions, and other factors.
+                </p>
+              </div>
+            </>
+          ) : (
+            <div className="rounded-[2rem] border border-primary/10 bg-paper p-9 text-center">
+              <FaIcon className="mx-auto size-12 text-primary/40" name="calculator" />
+              <p className="mt-4 font-black text-primary/60">Enter your income to calculate tax</p>
+            </div>
+          )}
         </div>
       </div>
     </section>
   );
-}
-
-function CalculatorCard({ href, icon, title, copy }) {
-  return (
-    <Link className="group rounded-lg border border-primary/10 bg-white p-6 shadow-xl shadow-primary/5 transition hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/10" href={href}>
-      <span className="grid size-14 place-items-center rounded-md bg-secondary text-primary">
-        <FaIcon className="size-6" name={icon} />
-      </span>
-      <h2 className="mt-5 text-2xl font-black text-primary">{title}</h2>
-      <p className="mt-3 leading-7 text-muted">{copy}</p>
-      <span className="mt-5 inline-flex font-black text-primary transition group-hover:text-primary/75">Open Calculator</span>
-    </Link>
-  );
-}
-
-function TaxCalculator({ title, copy, defaultMonthlyIncome, tableKey, incomeLabel, helperText }) {
-  const [year, setYear] = useState("2026");
-  const [monthlyIncome, setMonthlyIncome] = useState(defaultMonthlyIncome);
-  const [deductions, setDeductions] = useState(0);
-  const slabs = taxTables[tableKey][year].map(([upto, base, rate, over]) => ({ upto, base, rate, over }));
-
-  const result = useMemo(() => {
-    const annualIncome = Math.max(0, Number(monthlyIncome || 0) * 12);
-    const annualDeductions = Math.max(0, Number(deductions || 0));
-    const taxableIncome = Math.max(0, annualIncome - annualDeductions);
-    const tax = calculateTax(taxableIncome, slabs);
-    return {
-      annualDeductions,
-      taxableIncome,
-      annualTax: tax,
-      monthlyTax: tax / 12,
-      takeHomeMonthly: Math.max(0, Number(monthlyIncome || 0) - tax / 12),
-      effectiveRate: taxableIncome ? (tax / taxableIncome) * 100 : 0
-    };
-  }, [monthlyIncome, deductions, slabs]);
-
-  return (
-    <div className="grid gap-6 rounded-lg border border-primary/10 bg-white p-6 shadow-2xl shadow-primary/10 lg:grid-cols-[0.9fr_1.1fr] lg:p-8">
-      <div>
-        <p className="mb-3 inline-flex items-center gap-2 text-sm font-black uppercase text-primary">
-          <FaIcon className="size-4" name="tax" />
-          Tax Year {year}
-        </p>
-        <h2 className="text-3xl font-black text-primary">{title}</h2>
-        <p className="mt-3 leading-7 text-muted">{copy}</p>
-
-        <div className="mt-7 grid gap-4">
-          <label className="grid gap-2 text-sm font-black text-primary">
-            Tax Year
-            <select className="min-h-14 rounded-md border border-primary/10 bg-paper px-4 text-lg font-black text-ink outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/10" value={year} onChange={(event) => setYear(event.target.value)}>
-              {taxYears.map((item) => <option key={item} value={item}>Tax Year {item}</option>)}
-            </select>
-          </label>
-          <label className="grid gap-2 text-sm font-black text-primary">
-            {incomeLabel}
-            <input className="min-h-14 rounded-md border border-primary/10 bg-paper px-4 text-lg font-black text-ink outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/10" min="0" type="number" value={monthlyIncome} onChange={(event) => setMonthlyIncome(event.target.value)} />
-            <span className="text-xs font-semibold text-muted">{helperText}</span>
-          </label>
-          <label className="grid gap-2 text-sm font-black text-primary">
-            Annual Deductions / Adjustments
-            <input className="min-h-14 rounded-md border border-primary/10 bg-paper px-4 text-lg font-black text-ink outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/10" min="0" type="number" value={deductions} onChange={(event) => setDeductions(event.target.value)} />
-          </label>
-        </div>
-      </div>
-
-      <div className="grid gap-4 rounded-lg bg-primary p-5 text-white sm:grid-cols-2">
-        <Result label="Tax Year" value={year} />
-        <Result label="Annual Taxable Income" value={formatCurrency(result.taxableIncome)} />
-        <Result label="Estimated Annual Tax" value={formatCurrency(result.annualTax)} />
-        <Result label="Estimated Monthly Tax" value={formatCurrency(result.monthlyTax)} />
-        <Result label="Estimated Monthly Take Home" value={formatCurrency(result.takeHomeMonthly)} />
-        <Result label="Effective Rate" value={`${result.effectiveRate.toFixed(2)}%`} />
-        <Result label="Annual Adjustments" value={formatCurrency(result.annualDeductions)} />
-      </div>
-    </div>
-  );
-}
-
-function Result({ label, value }) {
-  return (
-    <div className="rounded-md border border-white/10 bg-white/10 p-4">
-      <p className="text-xs font-black uppercase text-secondary">{label}</p>
-      <p className="mt-2 text-2xl font-black">{value}</p>
-    </div>
-  );
-}
-
-function calculateTax(income, slabs) {
-  const slab = slabs.find((item) => income <= item.upto) || slabs[slabs.length - 1];
-  return Math.max(0, slab.base + Math.max(0, income - slab.over) * slab.rate);
-}
-
-function formatCurrency(value) {
-  return new Intl.NumberFormat("en-PK", {
-    maximumFractionDigits: 0,
-    style: "currency",
-    currency: "PKR"
-  }).format(Number(value || 0));
 }

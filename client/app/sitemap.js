@@ -5,22 +5,16 @@ const siteUrl = "https://zumarlawfirm.com";
 const staticRoutes = [
   "/",
   "/about",
-  "/appointment",
   "/blog",
   "/branches",
   "/calculators",
-  "/calculators/business-tax",
-  "/calculators/salary-tax",
   "/careers",
   "/ceo",
   "/contact",
-  "/faqs",
-  "/news",
   "/privacy-policy",
   "/refund-policy",
   "/service-areas",
   "/services",
-  "/team",
   "/terms-and-conditions"
 ];
 
@@ -47,7 +41,6 @@ export default async function sitemap() {
     ...staticRoutes.map((route) => entry(route, updatedAt)),
     ...enabled(data.services).map((service) => entry(`/services/${service.slug}`, updatedAt)),
     ...enabled(data.blogs).map((post) => entry(`/blog/${post.slug}`, post.updatedAt || post.date || updatedAt)),
-    ...enabled(data.news).map((post) => entry(`/news/${post.slug}`, post.updatedAt || post.date || updatedAt)),
     ...enabled(data.branches).map((branch) => entry(`/branches/${branch.slug}`, updatedAt)),
     ...enabled(data.serviceAreas).map((area) => entry(`/service-areas/${area.slug}`, updatedAt))
   ];

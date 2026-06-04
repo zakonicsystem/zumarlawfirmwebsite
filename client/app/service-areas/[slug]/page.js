@@ -1,7 +1,10 @@
 import Link from "next/link";
 import FaIcon from "@/components/FaIcon";
+import RichContent from "@/components/RichContent";
 import { findBySlug, readCmsData } from "@/lib/cmsStore";
 import { notFound } from "next/navigation";
+import JsonLd from "@/components/JsonLd";
+import { generateServiceAreaSchema } from "@/lib/schema";
 
 export async function generateStaticParams() {
   const { serviceAreas } = await readCmsData();
@@ -49,6 +52,7 @@ export default async function ServiceAreaDetailPage({ params }) {
 
   return (
     <>
+      <JsonLd schema={generateServiceAreaSchema(area)} />
       <section className="border-b border-primary/10 bg-gradient-to-br from-paper via-white to-secondary/60 py-14 sm:py-20">
         <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[1fr_420px] lg:items-center">
           <div className="min-w-0">
@@ -58,9 +62,11 @@ export default async function ServiceAreaDetailPage({ params }) {
             </p>
             <h1 className="text-4xl font-black leading-tight text-primary sm:text-5xl">{area.title}</h1>
             {area.province ? <p className="mt-3 inline-flex rounded-full bg-white px-4 py-2 text-sm font-black text-primary shadow-lg shadow-primary/5">{area.province}</p> : null}
-            <p className="mt-5 text-lg leading-8 text-muted">{area.summary}</p>
+            <div className="mt-5 text-lg leading-8 text-muted">
+              {area.summary && <RichContent content={area.summary} />}
+            </div>
             <div className="mt-7 flex flex-wrap gap-3">
-              <Link className="inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-black text-white" href={page.appointmentHref || "/appointment"}>
+              <Link className="inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-black text-white" href={page.appointmentHref || "/contact"}>
                 <FaIcon className="mr-2 size-4" name="appointment" />
                 {page.appointmentLabel || "Book Appointment"}
               </Link>

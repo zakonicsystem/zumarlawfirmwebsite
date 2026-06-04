@@ -12,57 +12,36 @@ const navGroups = [
     icon: "scale"
   },
   {
-    label: "Services",
+    label: "All Services",
     href: "/services",
-    icon: "filing",
-    items: [
-      { label: "All Services", href: "/services", icon: "filing", copy: "Prices, categories, and document requirements." },
-      { label: "Service Areas", href: "/service-areas", icon: "globe", copy: "City-by-city coverage across Pakistan." },
-      { label: "Tax Calculators", href: "/calculators", icon: "tax", copy: "Salary and business tax estimators." },
-      { label: "Book Appointment", href: "/appointment", icon: "appointment", copy: "Request a consultation with our team." }
-    ]
+    icon: "filing"
   },
   {
-    label: "Calculators",
+    label: "Service Areas",
+    href: "/service-areas",
+    icon: "globe"
+  },
+  {
+    label: "Tax Calculator",
     href: "/calculators",
-    icon: "tax",
-    items: [
-      { label: "All Calculators", href: "/calculators", icon: "tax", copy: "Estimate salary and business income tax." },
-      { label: "Salary Tax", href: "/calculators/salary-tax", icon: "receipt", copy: "Salary tax calculator from 2022 to 2026." },
-      { label: "Business Tax", href: "/calculators/business-tax", icon: "business", copy: "Business tax calculator from 2022 to 2026." }
-    ]
+    icon: "tax"
   },
   {
-    label: "Company",
+    label: "About",
     href: "/about",
-    icon: "building",
-    items: [
-      { label: "About Us", href: "/about", icon: "building", copy: "Learn about Zumar Law Firm." },
-      { label: "Team", href: "/team", icon: "labour", copy: "Meet the people behind the work." },
-      { label: "CEO & History", href: "/ceo", icon: "landmark", copy: "Leadership and firm history." },
-      { label: "Careers", href: "/careers", icon: "business", copy: "Join our legal and tax service team." }
-    ]
+    icon: "building"
   },
   {
-    label: "Resources",
+    label: "Blog",
     href: "/blog",
-    icon: "faq",
-    items: [
-      { label: "FAQs", href: "/faqs", icon: "faq", copy: "Common service and process questions." },
-      { label: "News", href: "/news", icon: "globe", copy: "Legal authority updates and notices." },
-      { label: "Blog", href: "/blog", icon: "receipt", copy: "Completed matters and service notes." }
-    ]
+    icon: "receipt"
   },
   {
-    label: "Contact",
-    href: "/contact",
-    icon: "phone",
-    items: [
-      { label: "Contact Us", href: "/contact", icon: "phone", copy: "Send your inquiry to the team." },
-      { label: "Offices", href: "/branches", icon: "landmark", copy: "Visit Lahore and Rawalpindi/Islamabad branches." },
-      { label: "Client Portal", href: "https://app.zumarlawfirm.com/login", icon: "lock", copy: "Access your online account." }
-    ]
-  }
+    label: "CEO",
+    href: "/ceo",
+    icon: "user"
+  },
+  
 ];
 
 export default function Header() {
@@ -244,8 +223,8 @@ export default function Header() {
               ))}
             </nav>
 
-            <Link className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-md bg-white px-3 text-[11px] font-black uppercase tracking-wide text-ink transition hover:bg-secondary hover:text-primary sm:min-h-12 sm:px-8 sm:text-sm" href="/appointment">
-              Free Consultation
+            <Link className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-md bg-white px-3 text-[11px] font-black uppercase tracking-wide text-ink transition hover:bg-secondary hover:text-primary sm:min-h-12 sm:px-8 sm:text-sm" href="/contact">
+              Contact Us
             </Link>
           </div>
         </div>
@@ -326,8 +305,8 @@ export default function Header() {
             </div>
 
             <div className="border-t border-primary/10 bg-white p-3 sm:p-4">
-              <Link className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-primary px-5 text-sm font-black uppercase tracking-wide text-white transition active:scale-[0.98]" href="/appointment" onClick={closeMobileMenu}>
-                Free Consultation
+              <Link className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-primary px-5 text-sm font-black uppercase tracking-wide text-white transition active:scale-[0.98]" href="/contact" onClick={closeMobileMenu}>
+                Contact Us
               </Link>
             </div>
           </div>

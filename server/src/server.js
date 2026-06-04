@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 import { login, requireAdmin } from "./lib/auth.js";
 import { createCorsHeaders, methodNotAllowed, notFound, parsePath, readBuffer, readJson, sendJson, sendNoContent } from "./lib/http.js";
 import { createStore, resolveDataFile } from "./lib/store.js";
-import { collectionKey, normalizeAppointment, normalizeRecord, publicCmsData } from "./lib/validation.js";
+import { collectionKey, normalizeRecord, publicCmsData } from "./lib/validation.js";
 
 loadEnvFile();
 
@@ -87,18 +87,6 @@ async function route(request, response, headers) {
     return;
   }
 
-  if (parts[1] === "appointments" && request.method === "POST") {
-    const payload = await readJson(request);
-    const saved = await store.update(async (data) => {
-      const appointment = normalizeAppointment(payload);
-      data.appointments = [appointment, ...(data.appointments || [])];
-      return data;
-    });
-
-    sendJson(response, 201, { ok: true, appointment: saved.appointments[0] }, { ...headers, ...privateNoStoreHeaders });
-    return;
-  }
-
   if (parts[1] === "admin") {
     requireAdmin(request, config);
     await routeAdmin(request, response, headers, parts);
@@ -135,41 +123,7 @@ async function routeAdmin(request, response, headers, parts) {
     return;
   }
 
-  if (parts[2] === "appointments") {
-    await routeAdminAppointments(request, response, headers, parts[3]);
-    return;
-  }
-
   await routeAdminCollection(request, response, headers, parts);
-}
-
-async function routeAdminAppointments(request, response, headers, id) {
-  if (request.method === "GET" && !id) {
-    const data = await store.read();
-    sendJson(response, 200, data.appointments || [], { ...headers, ...privateNoStoreHeaders });
-    return;
-  }
-
-  if (request.method === "PATCH" && id) {
-    const payload = await readJson(request);
-    const saved = await store.update(async (data) => {
-      data.appointments = (data.appointments || []).map((item) => (item.id === id ? { ...item, ...payload, id: item.id, createdAt: item.createdAt } : item));
-      return data;
-    });
-    sendJson(response, 200, saved.appointments.find((item) => item.id === id) || null, { ...headers, ...privateNoStoreHeaders });
-    return;
-  }
-
-  if (request.method === "DELETE" && id) {
-    await store.update(async (data) => {
-      data.appointments = (data.appointments || []).filter((item) => item.id !== id);
-      return data;
-    });
-    sendNoContent(response, headers);
-    return;
-  }
-
-  methodNotAllowed(response, headers);
 }
 
 async function routePublicCollection(request, response, headers, parts) {

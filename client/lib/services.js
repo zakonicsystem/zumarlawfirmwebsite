@@ -513,15 +513,13 @@ export function groupedServices() {
 
 export const quickLinks = [
   { title: "About Zumar Law Firm", href: "/about" },
-  { title: "Team", href: "/team" },
+  { title: "CEO", href: "/ceo" },
   { title: "Service Areas", href: "/service-areas" },
-  { title: "News", href: "/news" },
   { title: "Blog", href: "/blog" },
+  { title: "Tax Calculator", href: "/calculators" },
   { title: "Careers", href: "/careers" },
   { title: "Branches", href: "/branches" },
-  { title: "Book Appointment", href: "/appointment" },
   { title: "Contact", href: "/contact" },
-  { title: "FAQs", href: "/faqs" },
   { title: "Client Portal", href: "https://app.zumarlawfirm.com/login" },
   { title: "Create Account", href: "https://app.zumarlawfirm.com/signup" }
 ];
@@ -646,45 +644,7 @@ export function getServiceAreaBySlug(slug) {
   return serviceAreas.find((area) => normalizeSlug(area.slug) === normalizedSlug);
 }
 
-export const newsItems = [
-  {
-    title: "FBR compliance updates businesses should watch today",
-    slug: "fbr-compliance-updates-businesses-should-watch",
-    date: "May 10, 2026",
-    image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1100&q=85",
-    authority: "FBR",
-    summary: "Daily tracking note for Federal Board of Revenue registration, return filing, notices, and taxpayer compliance changes."
-  },
-  {
-    title: "DTS and licensing reminders for regulated businesses",
-    slug: "dts-licensing-reminders-regulated-businesses",
-    date: "May 10, 2026",
-    image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1100&q=85",
-    authority: "DTS",
-    summary: "A practical daily bulletin for DTS license holders and applicants preparing regulatory documents."
-  },
-  {
-    title: "SECP company filing watch for directors and founders",
-    slug: "secp-company-filing-watch-directors-founders",
-    date: "May 10, 2026",
-    image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=1100&q=85",
-    authority: "SECP",
-    summary: "Daily company compliance focus for incorporation, annual filing, director records, and corporate changes."
-  },
-  {
-    title: "Provincial revenue authority reminders for sales tax filers",
-    slug: "provincial-revenue-authority-reminders-sales-tax-filers",
-    date: "May 10, 2026",
-    image: "https://images.unsplash.com/photo-1554224154-26032ffc0d07?auto=format&fit=crop&w=1100&q=85",
-    authority: "PRA / SRB / KPRA / BRA",
-    summary: "Daily legal authority notes for provincial sales tax registration, filing, and services compliance."
-  }
-];
 
-export function getNewsBySlug(slug) {
-  const normalizedSlug = normalizeSlug(slug);
-  return newsItems.find((item) => normalizeSlug(item.slug) === normalizedSlug);
-}
 
 export const blogPosts = [
   {

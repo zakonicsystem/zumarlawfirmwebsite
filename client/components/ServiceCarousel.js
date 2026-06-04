@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { services } from "@/lib/services";
 import FaIcon from "@/components/FaIcon";
+import RichContent from "@/components/RichContent";
 
 export default function ServiceCarousel({ items }) {
   const [index, setIndex] = useState(0);
@@ -121,20 +122,26 @@ export default function ServiceCarousel({ items }) {
                         </span>
                       ) : null}
                     </div>
-                    <h3 className="max-w-3xl text-2xl font-black leading-tight text-primary sm:text-5xl">{service.title}</h3>
-                    <p className="mt-3 max-w-3xl text-sm leading-6 text-muted sm:mt-4 sm:text-base sm:leading-7">{service.summary}</p>
+                    <h3 className="max-w-3xl text-2xl font-black leading-tight text-primary sm:text-5xl">{service.title && <RichContent content={service.title} />}</h3>
+                    <div className="mt-3 max-w-3xl text-sm leading-6 text-muted sm:mt-4 sm:text-base sm:leading-7">{service.summary && <RichContent content={service.summary} />}</div>
                   </div>
 
-                  <div className="relative mt-5 grid gap-4 rounded-lg border border-primary/10 bg-paper p-3 sm:mt-6 sm:rounded-[1.25rem] sm:p-4 sm:grid-cols-[1fr_auto] sm:items-center">
+                  <div className="relative mt-5 grid gap-4 rounded-lg border border-primary/10 bg-paper p-3 sm:mt-6 sm:rounded-[1.25rem] sm:p-4">
                     <span>
                       <span className="block text-xs font-black uppercase tracking-wide text-primary/55">Starting From</span>
                       <strong className="mt-1 block text-xl leading-none text-primary sm:text-2xl">{service.formattedPrice}</strong>
                       <span className="mt-2 block text-sm font-semibold leading-5 text-muted">Open details for scope and document requirements.</span>
                     </span>
-                    <span className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-primary px-5 text-xs font-black uppercase tracking-wide text-white transition duration-300 group-hover:bg-secondary group-hover:text-primary sm:min-h-12 sm:px-6 sm:text-sm">
-                      View Details
-                      <FaIcon className="size-3.5 transition group-hover:translate-x-1" name="arrowRight" />
-                    </span>
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                      <span className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-primary px-5 text-xs font-black uppercase tracking-wide text-white transition duration-300 group-hover:bg-secondary group-hover:text-primary sm:min-h-12 sm:px-6 sm:text-sm">
+                        View Details
+                        <FaIcon className="size-3.5 transition group-hover:translate-x-1" name="arrowRight" />
+                      </span>
+                      <a href="https://app.zumarlawfirm.com/signup" target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-secondary px-5 text-xs font-black uppercase tracking-wide text-primary transition duration-300 hover:bg-secondary/90 sm:min-h-12 sm:px-6 sm:text-sm">
+                        <FaIcon className="size-3.5" name="registration" />
+                        Start Online
+                      </a>
+                    </div>
                   </div>
                 </div>
               </Link>

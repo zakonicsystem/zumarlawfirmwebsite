@@ -7,6 +7,8 @@ import PageTransition from "@/components/PageTransition";
 import StickyWhatsappButton from "@/components/StickyWhatsappButton";
 import { readCmsData } from "@/lib/cmsStore";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import JsonLd from "@/components/JsonLd";
+import { generateOrganizationSchema, generateWebsiteSchema } from "@/lib/schema";
 
 export const revalidate = 60;
 
@@ -54,10 +56,13 @@ function extractGoogleSiteVerification(value) {
   return text.match(/content=["']([^"']+)["']/i)?.[1]?.trim() || text;
 }
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  await readCmsData();
   return (
     <html lang="en" className={jakarta.variable}>
       <body className="font-sans text-ink antialiased">
+        <JsonLd schema={generateOrganizationSchema()} />
+        <JsonLd schema={generateWebsiteSchema()} />
         <MouseEffect />
         <Header />
         <main>

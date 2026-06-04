@@ -1,7 +1,11 @@
 import Link from "next/link";
 import FaIcon from "@/components/FaIcon";
+import RichContent from "@/components/RichContent";
+import FaqAccordion from "@/components/FaqAccordion";
+import JsonLd from "@/components/JsonLd";
 import { findBySlug, readCmsData } from "@/lib/cmsStore";
 import { getRecordMetadata } from "@/lib/seo";
+import { generateServiceSchema, generateFAQSchema } from "@/lib/schema";
 import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
@@ -42,6 +46,10 @@ export default async function ServiceDetailPage({ params }) {
 
   return (
     <>
+      <JsonLd schema={generateServiceSchema(service)} />
+      {(detailContent.faqItems || []).length > 0 && (
+        <JsonLd schema={generateFAQSchema(detailContent.faqItems)} />
+      )}
       <section className="border-b border-primary/10 bg-gradient-to-br from-paper via-white to-secondary/60 py-16 sm:py-20">
         <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
@@ -52,7 +60,9 @@ export default async function ServiceDetailPage({ params }) {
               </span>
               <h1 className="text-5xl font-black leading-tight text-primary sm:text-5xl">{service.title}</h1>
             </div>
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">{service.summary}</p>
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
+              {service.summary && <RichContent content={service.summary} />}
+            </p>
           </div>
           <div className="grid min-w-64 gap-4 rounded-[2rem] bg-white p-6 shadow-2xl shadow-primary/10 ring-1 ring-primary/10">
             <div>
@@ -72,9 +82,9 @@ export default async function ServiceDetailPage({ params }) {
         <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[1fr_380px] lg:items-start">
           <div className="rounded-[2rem] border border-primary/10 bg-white p-7 shadow-xl shadow-primary/5 sm:p-9">
             <h2 className="text-3xl font-black text-primary">{detailContent.overviewTitle}</h2>
-            <p className="mt-5 text-lg leading-8 text-muted">
-              {detailContent.overviewCopy}
-            </p>
+            <div className="mt-5 text-lg leading-8 text-muted">
+              {detailContent.overviewCopy && <RichContent content={detailContent.overviewCopy} />}
+            </div>
 
             <h3 className="mt-10 text-2xl font-black text-primary">{detailContent.processTitle}</h3>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -98,7 +108,7 @@ export default async function ServiceDetailPage({ params }) {
               </ul>
             ) : (
               <p className="mt-5 text-lg leading-8 text-muted">
-                {detailContent.emptyRequirementsText}
+                {detailContent.emptyRequirementsText && <RichContent content={detailContent.emptyRequirementsText} />}
               </p>
             )}
           </div>
@@ -110,9 +120,9 @@ export default async function ServiceDetailPage({ params }) {
                 <FaIcon className="mr-2 size-4" name="registration" />
                 {detailContent.startOnlineLabel}
               </a>
-              <Link className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 px-5 text-sm font-black text-white transition hover:-translate-y-1 hover:bg-white/10" href={detailContent.appointmentHref || "/appointment"}>
-                <FaIcon className="mr-2 size-4" name="appointment" />
-                {detailContent.appointmentLabel}
+              <Link className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 px-5 text-sm font-black text-white transition hover:-translate-y-1 hover:bg-white/10" href={detailContent.contactHref || "/contact"}>
+                <FaIcon className="mr-2 size-4" name="phone" />
+                {detailContent.contactLabel || "Send Inquiry"}
               </Link>
               <a className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 px-5 text-sm font-black text-white transition hover:-translate-y-1 hover:bg-white/10" href={detailContent.callHref}>
                 <FaIcon className="mr-2 size-4" name="phone" />
@@ -131,6 +141,34 @@ export default async function ServiceDetailPage({ params }) {
           </aside>
         </div>
       </section>
+
+      {(detailContent.faqItems || []).length > 0 ? (
+        <section className="bg-[#fffdfb] py-16 sm:py-20">
+          <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
+            <div className="mb-10">
+              <p className="mb-3 text-sm font-black uppercase text-primary">{detailContent.faqEyebrow || "FAQ"}</p>
+              <h2 className="text-4xl font-black leading-tight text-primary sm:text-5xl">{detailContent.faqTitle || "Frequently Asked Questions"}</h2>
+              <p className="mt-4 max-w-3xl text-lg leading-8 text-muted">
+                {detailContent.faqCopy && <RichContent content={detailContent.faqCopy} />}
+              </p>
+            </div>
+            <FaqAccordion items={detailContent.faqItems} />
+          </div>
+        </section>
+      ) : null}
+
+      {detailContent.longDescription ? (
+        <section className="py-16 sm:py-20">
+          <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
+            <div className="rounded-[2rem] border border-primary/10 bg-white p-7 shadow-xl shadow-primary/5 sm:p-9">
+              <h2 className="text-3xl font-black text-primary">{detailContent.longDescriptionTitle || "Detailed Information"}</h2>
+              <div className="prose prose-primary mt-6 max-w-none text-lg leading-8 text-muted">
+                {detailContent.longDescription}
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {relatedServices.length ? (
         <section className="bg-paper py-16 sm:py-20">

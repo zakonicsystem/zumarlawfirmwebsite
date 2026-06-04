@@ -15,9 +15,18 @@ import {
 } from "@/components/HomeSections";
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
+import JsonLd from "@/components/JsonLd";
+import { generateWebsiteSchema } from "@/lib/schema";
 
 export async function generateMetadata() {
-  return getPageMetadata("home");
+  const metadata = await getPageMetadata("home");
+  return {
+    ...metadata,
+    canonical: "https://zumarlawfirm.com",
+    alternates: {
+      canonical: "https://zumarlawfirm.com"
+    }
+  };
 }
 
 export default async function HomePage() {
@@ -32,6 +41,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <JsonLd schema={generateWebsiteSchema()} />
       <Reveal />
       <HomeHeroSlider slides={cms.heroSlides} />
       <HomeStatsSection stats={cms.homeStats} />

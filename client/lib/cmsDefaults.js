@@ -1,4 +1,4 @@
-import { blogPosts, categories, internationalServices, newsItems, services, slugify } from "./services";
+import { blogPosts, categories, internationalServices, services, slugify } from "./services";
 import { branches, serviceAreas } from "./services";
 import { defaultSeoPages } from "./seoDefaults";
 
@@ -28,7 +28,7 @@ export const defaultHomeSections = [
     eyebrow: "How it works",
     title: "Structured support from first call to final filing.",
     copy:
-      "The public website explains each service clearly. The admin panel controls service, blog, news, appointment, and core page content.",
+      "The public website explains each service clearly. The admin panel controls service, blog, and core page content.",
     image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1200&q=85",
     enabled: true
   },
@@ -43,9 +43,9 @@ export const defaultHomeSections = [
   {
     id: "updates",
     tab: "Updates",
-    eyebrow: "News and blog",
-    title: "Authority updates and completed cases.",
-    copy: "Latest legal authority notes and case-style blog posts from Zumar Law Firm.",
+    eyebrow: "Blog posts",
+    title: "Completed cases and service guides.",
+    copy: "Latest case-style blog posts from Zumar Law Firm.",
     enabled: true
   }
 ];
@@ -64,8 +64,8 @@ export const defaultHeroSlides = [
     ],
     primaryLabel: "Explore Services",
     primaryHref: "/services",
-    secondaryLabel: "Book Appointment",
-    secondaryHref: "/appointment",
+    secondaryLabel: "Contact Us",
+    secondaryHref: "/contact",
     enabled: true
   },
   {
@@ -98,8 +98,8 @@ export const defaultHeroSlides = [
     ],
     primaryLabel: "Create Account",
     primaryHref: "https://app.zumarlawfirm.com/signup",
-    secondaryLabel: "Read FAQs",
-    secondaryHref: "/faqs",
+    secondaryLabel: "Contact Support",
+    secondaryHref: "/contact",
     enabled: true
   }
 ];
@@ -211,7 +211,7 @@ export const defaultHomeContent = {
     image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=85",
     panelTitle: "Tax, corporate, registration, and compliance work with a structured process.",
     primaryLabel: "Book Consultation",
-    primaryHref: "/appointment",
+    primaryHref: "/contact",
     secondaryLabel: "View Services",
     secondaryHref: "/services",
     strengths: [
@@ -255,10 +255,6 @@ export const defaultHomeContent = {
   },
   updates: {
     enabled: true,
-    newsEyebrow: "News",
-    newsTitle: "Authority updates.",
-    newsButtonText: "All News",
-    newsButtonHref: "/news",
     blogEyebrow: "Blog",
     blogTitle: "Completed matters.",
     blogButtonText: "All Blogs",
@@ -336,7 +332,7 @@ export const defaultAboutContent = {
     title: "Main members of the team behind your filings.",
     copy: "Meet the people who coordinate client intake, document review, tax and corporate filings, regulatory follow-up, and service progress across the firm.",
     buttonText: "Meet the Team",
-    buttonHref: "/team"
+    buttonHref: "/about"
   },
   sections: [
     {
@@ -390,8 +386,8 @@ export const defaultPageContent = {
     feeNote: "Final government fees, challans, and case-specific expenses may vary where applicable.",
     startOnlineLabel: "Start Online",
     startOnlineHref: "https://app.zumarlawfirm.com/signup",
-    appointmentLabel: "Appointment",
-    appointmentHref: "/appointment",
+    appointmentLabel: "Contact Us",
+    appointmentHref: "/contact",
     callLabel: "Call +92 303 598 8574",
     callHref: "tel:+923035988574",
     whatsappLabel: "WhatsApp",
@@ -412,8 +408,8 @@ export const defaultPageContent = {
     coverageTitle: "How we support this city",
     coverageFallback: "Our team supports this city through online consultation, document review, filing preparation, and follow-up with relevant tax, corporate, licensing, and regulatory authorities.",
     relatedTitle: "Popular services in this city",
-    appointmentLabel: "Book Appointment",
-    appointmentHref: "/appointment",
+    appointmentLabel: "Book Consultation",
+    appointmentHref: "/contact",
     allAreasLabel: "All Service Areas"
   },
   branches: {
@@ -555,7 +551,7 @@ export const defaultPageContent = {
     links: [
       { icon: "lock", title: "Client Portal", href: "https://app.zumarlawfirm.com/login", text: "app.zumarlawfirm.com/login" },
       { icon: "registration", title: "Create Account", href: "https://app.zumarlawfirm.com/signup", text: "app.zumarlawfirm.com/signup" },
-      { icon: "appointment", title: "Appointment", href: "/appointment", text: "Book a consultation request" }
+      { icon: "phone", title: "Contact", href: "/contact", text: "Send a consultation inquiry" }
     ]
   },
   calculators: {
@@ -570,7 +566,7 @@ export const defaultPageContent = {
     businessTitle: "Business Tax Calculator",
     businessCopy: "Estimate individual or AOP business income tax from tax year 2022 to 2026.",
     consultationLabel: "Review With Tax Team",
-    consultationHref: "/appointment"
+    consultationHref: "/contact"
   },
   careers: {
     label: "Careers",
@@ -869,7 +865,7 @@ export function makeCmsDefaults() {
     serviceAreas,
     services: [...services.map((service) => ({ ...service, serviceType: "national" })), ...internationalServices].map(normalizeService),
     blogs: blogPosts.map((item) => normalizeArticle(item, "blog")),
-    news: newsItems.map((item) => normalizeArticle(item, "news")),
+    news: [],
     appointments: []
   };
 }

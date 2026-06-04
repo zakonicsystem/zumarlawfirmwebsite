@@ -1,5 +1,6 @@
 import Link from "next/link";
 import FaIcon from "@/components/FaIcon";
+import RichContent from "@/components/RichContent";
 import ProcessSection from "@/components/ProcessSection";
 import ServiceCarousel from "@/components/ServiceCarousel";
 import ServiceBrowser from "@/components/ServiceBrowser";
@@ -34,7 +35,7 @@ export function HomeFeaturedSection({ section, services }) {
             <h2 className="text-3xl font-black leading-tight text-primary sm:text-6xl">{section?.title}</h2>
           </div>
           <p className="text-sm leading-7 text-muted sm:text-base sm:leading-8 lg:text-lg" data-reveal="right">
-            {section?.copy}
+            {section?.copy && <RichContent content={section?.copy} />}
           </p>
         </div>
         <div data-reveal="zoom">
@@ -86,9 +87,9 @@ export function HomeWhyChooseSection({ content }) {
           <h2 className="max-w-2xl text-2xl font-black leading-tight text-ink sm:text-4xl">
             {content?.title}
           </h2>
-          <p className="mt-5 max-w-2xl text-sm leading-7 text-muted sm:mt-6 sm:text-base sm:leading-8">
-            {content?.copy}
-          </p>
+          <div className="mt-5 max-w-2xl text-sm leading-7 text-muted sm:mt-6 sm:text-base sm:leading-8">
+            {content?.copy && <RichContent content={content?.copy} />}
+          </div>
 
           <div className="mt-7 grid gap-x-8 gap-y-4 sm:grid-cols-2">
             {benefits.map((item, index) => (
@@ -102,7 +103,7 @@ export function HomeWhyChooseSection({ content }) {
           </div>
 
           <div className="mt-9 flex flex-wrap gap-3">
-            <SmartLink className="inline-flex min-h-12 items-center justify-center rounded-md bg-primary px-6 text-sm font-black text-white transition hover:-translate-y-1 hover:bg-primary/90" href={content?.primaryHref || "/appointment"}>
+            <SmartLink className="inline-flex min-h-12 items-center justify-center rounded-md bg-primary px-6 text-sm font-black text-white transition hover:-translate-y-1 hover:bg-primary/90" href={content?.primaryHref || "/contact"}>
               {content?.primaryLabel}
             </SmartLink>
             <SmartLink className="inline-flex min-h-12 items-center justify-center rounded-md border border-primary/15 bg-white px-6 text-sm font-black text-primary transition hover:-translate-y-1 hover:bg-secondary" href={content?.secondaryHref || "/services"}>
@@ -191,7 +192,9 @@ export function HomeTestimonialsSection({ content }) {
         <div className="mx-auto mb-10 max-w-3xl text-center" data-reveal="up">
           <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-secondary">{content?.eyebrow}</p>
           <h2 className="text-4xl font-black leading-tight sm:text-6xl">{content?.title}</h2>
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/72">{content?.copy}</p>
+          <div className="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/72">
+            {content?.copy && <RichContent content={content?.copy} className="prose-invert" />}
+          </div>
         </div>
 
         <TestimonialCarousel items={testimonials} />
@@ -207,15 +210,7 @@ export function HomeUpdatesSection({ content, newsItems = [], blogPosts = [] }) 
 
   return (
     <section className="my-10 py-5 sm:py-10" data-reveal="up">
-      <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-12 lg:grid-cols-2">
-        <ArticlePreviewColumn
-          eyebrow={content?.newsEyebrow}
-          title={content?.newsTitle}
-          linkText={content?.newsButtonText}
-          linkHref={content?.newsButtonHref || "/news"}
-          items={newsItems}
-          basePath="/news"
-        />
+      <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
         <ArticlePreviewColumn
           eyebrow={content?.blogEyebrow}
           title={content?.blogTitle}
@@ -287,10 +282,12 @@ export function HomeYoutubeSection({ content }) {
     <section className="bg-primary py-0 text-white" data-reveal="up">
       <div className="mx-auto w-[min(1180px,calc(100%-32px))] py-12 sm:py-16">
         <div className="mb-7 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-          <div className="max-w-3xl">
+          <div>
             <p className="mb-3 text-sm font-black uppercase text-secondary">{content?.eyebrow}</p>
             <h2 className="text-4xl font-black leading-tight sm:text-6xl">{content?.title}</h2>
-            <p className="mt-5 text-base leading-8 text-white/70 sm:text-lg">{content?.copy}</p>
+            <div className="mt-5 text-base leading-8 text-white/70 sm:text-lg">
+              {content?.copy && <RichContent content={content?.copy} />}
+            </div>
           </div>
           <SmartLink className="inline-flex min-h-12 items-center justify-center rounded-full bg-secondary px-6 text-sm font-black text-primary transition hover:-translate-y-1 hover:bg-white" href={content?.channelHref || "https://www.youtube.com/@zumarlawfirm"}>
             {content?.channelLabel || "Visit Channel"}
@@ -312,11 +309,11 @@ function ArticlePreviewColumn({ eyebrow, title, linkText, linkHref, items, baseP
         </div>
         <SmartLink className="font-black text-primary" href={linkHref}>{linkText}</SmartLink>
       </div>
-      <div className="grid gap-4">
-        {items.slice(0, 2).map((item) => (
-          <Link className="grid gap-4 rounded-[1.5rem] border border-primary/10 bg-white p-4 shadow-lg shadow-primary/5 transition hover:-translate-y-1 sm:grid-cols-[150px_1fr]" href={`${basePath}/${item.slug}`} key={item.slug}>
-            <img className="h-36 w-full rounded-2xl object-cover" src={item.image} alt={item.title} loading="lazy" decoding="async" />
-            <div>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {items.slice(0, 3).map((item) => (
+          <Link className="overflow-hidden rounded-[1.5rem] border border-primary/10 bg-white shadow-lg shadow-primary/5 transition hover:-translate-y-1" href={`${basePath}/${item.slug}`} key={item.slug}>
+            <img className="h-56 w-full object-cover" src={item.image} alt={item.title} loading="lazy" decoding="async" />
+            <div className="p-4">
               <p className="text-xs font-black uppercase text-primary/60">{item.date}</p>
               <h3 className="mt-2 text-xl font-black text-primary">{item.title}</h3>
               <p className="mt-2 text-sm leading-6 text-muted">{item.summary}</p>

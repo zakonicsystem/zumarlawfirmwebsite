@@ -2,6 +2,8 @@ import ServiceBrowser from "@/components/ServiceBrowser";
 import FaIcon from "@/components/FaIcon";
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
+import JsonLd from "@/components/JsonLd";
+import { generateOrganizationSchema } from "@/lib/schema";
 
 export async function generateMetadata() {
   return getPageMetadata("services");
@@ -14,6 +16,7 @@ export default async function ServicesPage() {
 
   return (
     <>
+      <JsonLd schema={generateOrganizationSchema()} />
       <section className="border-b border-primary/10 bg-gradient-to-br from-paper via-white to-secondary/60 py-10 sm:py-20">
         <div className="mx-auto w-[min(1180px,calc(100%-24px))] sm:w-[min(1180px,calc(100%-32px))]">
           <div>

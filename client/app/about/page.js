@@ -1,11 +1,13 @@
-import Link from "next/link";
 import PageHeader from "@/components/PageHeader";
 import FaIcon from "@/components/FaIcon";
+import RichContent from "@/components/RichContent";
 import ProcessSection from "@/components/ProcessSection";
 import Reveal from "@/components/Reveal";
 import TeamMemberCard from "@/components/TeamMemberCard";
+import JsonLd from "@/components/JsonLd";
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
+import { generateAboutPageSchema, generateOrganizationSchema } from "@/lib/schema";
 
 export async function generateMetadata() {
   return getPageMetadata("about");
@@ -13,11 +15,13 @@ export async function generateMetadata() {
 
 export default async function AboutPage() {
   const { about, pageContent } = await readCmsData();
-  const teamMembers = (pageContent.team?.members || []).slice(0, 3);
+  const teamMembers = (pageContent.team?.members || []);
   const sharedProcess = about.sharedProcess || {};
 
   return (
     <>
+      <JsonLd schema={generateAboutPageSchema()} />
+      <JsonLd schema={generateOrganizationSchema()} />
       <Reveal />
       <PageHeader eyebrow={about.eyebrow} title={about.title} copy={about.copy} />
 
@@ -36,12 +40,12 @@ export default async function AboutPage() {
               <h2 className="text-3xl font-black leading-tight text-primary sm:text-4xl">
                 {about.introTitle}
               </h2>
-              <p className="mt-6 text-lg leading-8 text-muted">
-                {about.introCopy}
-              </p>
-              <p className="mt-4 text-lg leading-8 text-muted">
-                {about.introSecondCopy}
-              </p>
+              <div className="mt-6 text-lg leading-8 text-muted">
+                {about.introCopy && <RichContent content={about.introCopy} />}
+              </div>
+              <div className="mt-4 text-lg leading-8 text-muted">
+                {about.introSecondCopy && <RichContent content={about.introSecondCopy} />}
+              </div>
 
               {(about.stats || []).length ? (
                 <div className="mt-8 grid gap-3 sm:grid-cols-3">
@@ -63,7 +67,9 @@ export default async function AboutPage() {
                   <FaIcon className="size-7" name={item.icon} />
                 </span>
                 <h2 className="mt-6 text-3xl font-black text-primary">{item.title}</h2>
-                <p className="mt-3 text-lg leading-8 text-ink/75">{item.copy}</p>
+                <div className="mt-3 text-lg leading-8 text-ink/75">
+                  {item.copy && <RichContent content={item.copy} />}
+                </div>
               </article>
             ))}
           </div>
@@ -76,19 +82,16 @@ export default async function AboutPage() {
                 <div>
                   <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-primary">{about.teamPreview?.eyebrow || "Team"}</p>
                   <h2 className="max-w-3xl text-3xl font-black leading-tight text-primary sm:text-4xl">
-                    {about.teamPreview?.title || "Meet the people behind the work."}
+                    {about.teamPreview?.title || "Meet our professional team."}
                   </h2>
-                  <p className="mt-4 max-w-3xl text-lg leading-8 text-muted">
-                    {about.teamPreview?.copy}
-                  </p>
+                  <div className="mt-4 max-w-3xl text-lg leading-8 text-muted">
+                    {about.teamPreview?.copy && <RichContent content={about.teamPreview?.copy} />}
+                  </div>
                 </div>
-                <Link className="inline-flex min-h-12 shrink-0 items-center justify-center rounded-full bg-primary px-6 text-sm font-black text-white transition hover:-translate-y-1 hover:bg-primary/90" href={about.teamPreview?.buttonHref || "/team"}>
-                  {about.teamPreview?.buttonText || "Meet the Team"}
-                </Link>
               </div>
 
               <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-                {teamMembers.map((member) => (
+                {teamMembers.filter((member) => member.enabled !== false).map((member) => (
                   <TeamMemberCard member={member} headingLevel="h3" key={member.name} />
                 ))}
               </div>

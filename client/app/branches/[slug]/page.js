@@ -47,9 +47,9 @@ export default async function BranchDetailPage({ params }) {
                 <FaIcon className="mr-2 size-4" name="phone" />
                 Call Branch
               </a>
-              <Link className="inline-flex min-h-12 items-center justify-center rounded-full border border-primary/10 bg-white px-6 text-sm font-black text-primary shadow-xl shadow-primary/5 transition hover:-translate-y-1" href="/appointment">
-                <FaIcon className="mr-2 size-4" name="appointment" />
-                {page.appointmentLabel || "Book Appointment"}
+              <Link className="inline-flex min-h-12 items-center justify-center rounded-full border border-primary/10 bg-white px-6 text-sm font-black text-primary shadow-xl shadow-primary/5 transition hover:-translate-y-1" href="/contact">
+                <FaIcon className="mr-2 size-4" name="email" />
+                {page.appointmentLabel || "Send Inquiry"}
               </Link>
             </div>
           </div>
@@ -100,7 +100,7 @@ export default async function BranchDetailPage({ params }) {
             <p className="mt-3 leading-7 text-white/75">
               {page.supportCopy}
             </p>
-            <Link className="mt-6 inline-flex min-h-12 items-center justify-center rounded-full bg-secondary px-6 text-sm font-black text-primary" href="/appointment">
+            <Link className="mt-6 inline-flex min-h-12 items-center justify-center rounded-full bg-secondary px-6 text-sm font-black text-primary" href="/contact">
               {page.consultationLabel || "Request Consultation"}
             </Link>
           </aside>

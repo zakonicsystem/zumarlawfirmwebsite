@@ -3,6 +3,8 @@ import PageHeader from "@/components/PageHeader";
 import FaIcon from "@/components/FaIcon";
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
+import JsonLd from "@/components/JsonLd";
+import { generateOrganizationSchema } from "@/lib/schema";
 
 export async function generateMetadata() {
   return getPageMetadata("careers");
@@ -14,6 +16,7 @@ export default async function CareersPage() {
 
   return (
     <>
+      <JsonLd schema={generateOrganizationSchema()} />
       <PageHeader eyebrow={page.eyebrow} title={page.title} copy={page.copy} />
 
       <section className="relative isolate overflow-hidden bg-gradient-to-br from-paper via-white to-secondary/45 py-16 sm:py-20">

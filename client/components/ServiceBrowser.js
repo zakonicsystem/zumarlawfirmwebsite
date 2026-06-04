@@ -116,11 +116,22 @@ export default function ServiceBrowser({ initialCategory = "All", initialType = 
               <h3 className="mt-5 text-xl font-black leading-tight text-primary sm:mt-7 sm:text-2xl">{service.title}</h3>
               <p className="mt-3 text-sm leading-6 text-muted sm:leading-7">{service.summary}</p>
             </div>
-            <div className="mt-6 flex items-center justify-between gap-3 sm:mt-8">
+            <div className="mt-6 flex flex-col gap-3 sm:mt-8">
               <strong className="text-primary">{service.formattedPrice}</strong>
-              <span className="rounded-full border border-primary/15 px-4 py-2 text-xs font-black text-primary transition duration-300 group-hover:bg-primary group-hover:text-white">
-                Details
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="flex-1 rounded-full border border-primary/15 px-3 py-2 text-center text-xs font-black text-primary transition duration-300 group-hover:bg-primary group-hover:text-white">
+                  Details
+                </span>
+                <a
+                  href="https://app.zumarlawfirm.com/signup"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 rounded-full bg-secondary px-3 py-2 text-center text-xs font-black text-primary transition duration-300 hover:bg-secondary/80 hover:shadow-lg"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Start Online
+                </a>
+              </div>
             </div>
           </Link>
         ))}
