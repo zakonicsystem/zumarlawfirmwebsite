@@ -59,8 +59,8 @@ function extractGoogleSiteVerification(value) {
 export default async function RootLayout({ children }) {
   await readCmsData();
   return (
-    <html lang="en" className={jakarta.variable}>
-      <body className="font-sans text-ink antialiased">
+    <html lang="en" className={jakarta.variable} suppressHydrationWarning>
+      <body className="font-sans text-ink antialiased" suppressHydrationWarning>
         <JsonLd schema={generateOrganizationSchema()} />
         <JsonLd schema={generateWebsiteSchema()} />
         <MouseEffect />

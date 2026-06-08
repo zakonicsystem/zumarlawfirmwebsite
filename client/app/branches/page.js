@@ -5,6 +5,7 @@ import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
 import JsonLd from "@/components/JsonLd";
 import { generateOrganizationSchema } from "@/lib/schema";
+import { plainText } from "@/lib/text";
 
 export async function generateMetadata() {
   return getPageMetadata("branches");
@@ -23,7 +24,7 @@ export default async function BranchesPage() {
           {branches.map((branch) => (
             <article className="group overflow-hidden rounded-[2rem] border border-primary/10 bg-white shadow-xl shadow-primary/5 transition duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/15" key={branch.slug}>
               <Link className="block overflow-hidden" href={`/branches/${branch.slug}`}>
-                <img className="h-56 w-full object-cover transition duration-500 group-hover:scale-105" src={branch.image} alt={`${branch.name} branch`} />
+                <img className="h-56 w-full object-cover transition duration-500 group-hover:scale-105" src={branch.image} alt={`${plainText(branch.name, "Zumar Law Firm")} branch office`} />
               </Link>
               <div className="p-6">
                 <h2 className="text-2xl font-black leading-tight text-primary">{branch.name}</h2>

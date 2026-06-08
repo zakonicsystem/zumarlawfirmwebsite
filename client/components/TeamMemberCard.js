@@ -1,5 +1,6 @@
 import FaIcon from "@/components/FaIcon";
 import RichContent from "@/components/RichContent";
+import { plainText } from "@/lib/text";
 
 export default function TeamMemberCard({ member, headingLevel = "h2" }) {
   const Heading = headingLevel;
@@ -12,7 +13,7 @@ export default function TeamMemberCard({ member, headingLevel = "h2" }) {
         <div className="absolute bottom-10 left-1/2 h-[17rem] w-[15.5rem] -translate-x-1/2 skew-x-[-17deg] rounded-[2rem] bg-white/10 mix-blend-screen" />
         {hasImage ? (
           <div className="relative z-10 mb-24 grid h-36 w-36 place-items-center overflow-hidden rounded-full border border-primary/10 bg-white shadow-2xl shadow-primary/15">
-            <img className="h-full w-full object-cover object-top transition duration-300 group-hover:scale-[1.04]" src={member.image} alt={member.name} />
+            <img className="h-full w-full object-cover object-top transition duration-300 group-hover:scale-[1.04]" src={member.image} alt={`${plainText(member.name, "Team member")} profile photo`} />
           </div>
         ) : (
           <div className="relative z-10 mb-24 grid h-36 w-36 place-items-center rounded-full border border-primary/10 bg-white shadow-2xl shadow-primary/15">

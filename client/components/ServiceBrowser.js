@@ -122,15 +122,17 @@ export default function ServiceBrowser({ initialCategory = "All", initialType = 
                 <span className="flex-1 rounded-full border border-primary/15 px-3 py-2 text-center text-xs font-black text-primary transition duration-300 group-hover:bg-primary group-hover:text-white">
                   Details
                 </span>
-                <a
-                  href="https://app.zumarlawfirm.com/signup"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 rounded-full bg-secondary px-3 py-2 text-center text-xs font-black text-primary transition duration-300 hover:bg-secondary/80 hover:shadow-lg"
-                  onClick={(e) => e.stopPropagation()}
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.open("https://app.zumarlawfirm.com/signup", "_blank");
+                  }}
+                  className="flex-1 rounded-full bg-secondary px-3 py-2 text-center text-xs font-black text-primary transition duration-300 hover:bg-secondary/80 hover:shadow-lg cursor-pointer"
+                  type="button"
                 >
                   Start Online
-                </a>
+                </button>
               </div>
             </div>
           </Link>

@@ -1,4 +1,5 @@
 import RichContent from "@/components/RichContent";
+import { plainText } from "@/lib/text";
 
 export default function ProcessSection({ section, steps = [], className = "my-5" }) {
   if (section?.enabled === false) {
@@ -16,7 +17,7 @@ export default function ProcessSection({ section, steps = [], className = "my-5"
           </div>
           {section?.image ? (
             <div className="mt-8 overflow-hidden rounded-[2rem] border border-white/10">
-              <img className="h-64 w-full object-cover opacity-90" src={section.image} alt={section?.title || "Business documents"} />
+              <img className="h-64 w-full object-cover opacity-90" src={section.image} alt={`${plainText(section?.title, "Business documents")} process image`} />
             </div>
           ) : null}
         </div>

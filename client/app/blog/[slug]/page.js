@@ -6,6 +6,7 @@ import { getRecordMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import JsonLd from "@/components/JsonLd";
 import { generateArticleSchema } from "@/lib/schema";
+import { plainText } from "@/lib/text";
 
 export async function generateStaticParams() {
   const { blogs } = await readCmsData();
@@ -43,7 +44,7 @@ export default async function BlogDetailPage({ params }) {
               {post.summary && <RichContent content={post.summary} />}
             </div>
           </div>
-          <img className="h-80 w-full rounded-[2rem] object-cover shadow-2xl shadow-primary/10" src={post.image} alt={post.title} />
+          <img className="h-80 w-full rounded-[2rem] object-cover shadow-2xl shadow-primary/10" src={post.image} alt={plainText(post.title, "Zumar Law Firm blog post")} />
         </div>
       </section>
       <section className="py-16 sm:py-20">

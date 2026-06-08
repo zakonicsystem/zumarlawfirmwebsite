@@ -57,6 +57,9 @@ const emptyService = {
   timeline: "",
   summary: "",
   requirements: [],
+  benefits: [],
+  eligibility: [],
+  faqItems: [],
   metaTitle: "",
   metaDescription: "",
   enabled: true
@@ -184,7 +187,18 @@ export default function AdminClient({ view, editId }) {
         Authorization: `Bearer ${localStorage.getItem("zumar-admin-token") || ""}`
       }
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            localStorage.removeItem("zumar-admin-auth");
+            localStorage.removeItem("zumar-admin-token");
+            router.push("/admin/login");
+            return Promise.reject("Unauthorized");
+          }
+          throw new Error(`API error: ${response.status}`);
+        }
+        return response.json();
+      })
       .then((payload) => {
         setData(payload);
         setStatus("");
@@ -241,24 +255,25 @@ export default function AdminClient({ view, editId }) {
       localStorage.removeItem("zumar-admin-token");
       router.push("/admin/login");
     }}>
-      {view === "dashboard" ? <Dashboard data={data} /> : null}
-      {view === "settings" ? <SettingsEditor data={data} updateData={updateData} save={save} /> : null}
-      {view === "home" ? <HomeEditor data={data} updateData={updateData} save={save} /> : null}
-      {view === "about" ? <AboutEditor data={data} updateData={updateData} save={save} /> : null}
-      {view === "pages" ? <PageContentEditor data={data} updateData={updateData} save={save} initialPage={id} /> : null}
-      {view === "seo" ? <SeoEditor data={data} updateData={updateData} save={save} /> : null}
-      {view === "services" ? <ServiceList data={data} save={save} /> : null}
-      {view === "serviceForm" ? <ServiceForm data={data} id={id} save={save} /> : null}
-      {view === "blogs" ? <ArticleList type="blogs" data={data} save={save} /> : null}
-      {view === "blogForm" ? <ArticleForm type="blogs" data={data} id={id} save={save} /> : null}
-      {view === "news" ? <ArticleList type="news" data={data} save={save} /> : null}
-      {view === "newsForm" ? <ArticleForm type="news" data={data} id={id} save={save} /> : null}
-      {view === "appointments" ? <Appointments data={data} save={save} /> : null}
+      {view === "dashboard" && data ? <Dashboard data={data} /> : null}
+      {view === "settings" && data ? <SettingsEditor data={data} updateData={updateData} save={save} /> : null}
+      {view === "home" && data ? <HomeEditor data={data} updateData={updateData} save={save} /> : null}
+      {view === "about" && data ? <AboutEditor data={data} updateData={updateData} save={save} /> : null}
+      {view === "pages" && data ? <PageContentEditor data={data} updateData={updateData} save={save} initialPage={id} /> : null}
+      {view === "seo" && data ? <SeoEditor data={data} updateData={updateData} save={save} /> : null}
+      {view === "services" && data ? <ServiceList data={data} save={save} /> : null}
+      {view === "serviceForm" && data ? <ServiceForm data={data} id={id} save={save} /> : null}
+      {view === "blogs" && data ? <ArticleList type="blogs" data={data} save={save} /> : null}
+      {view === "blogForm" && data ? <ArticleForm type="blogs" data={data} id={id} save={save} /> : null}
+      {view === "news" && data ? <ArticleList type="news" data={data} save={save} /> : null}
+      {view === "newsForm" && data ? <ArticleForm type="news" data={data} id={id} save={save} /> : null}
+      {view === "appointments" && data ? <Appointments data={data} save={save} /> : null}
     </AdminFrame>
   );
 }
 
 function PageContentEditor({ data, updateData, save, initialPage }) {
+  if (!data) return null;
   const pages = { ...defaultPageContent, ...(data.pageContent || {}) };
   const pageKeys = Object.keys(pages);
   const pageKeySignature = pageKeys.join("|");
@@ -453,6 +468,22 @@ function PageContentEditor({ data, updateData, save, initialPage }) {
             <StringListEditor title="Process Steps" items={page.processSteps || []} onUpdate={(items) => updatePage("processSteps", items)} />
             <RichEditor label="Requirements Title" value={page.requirementsTitle} onChange={(value) => updatePage("requirementsTitle", value)} />
             <RichEditor label="Empty Requirements Text" value={page.emptyRequirementsText} onChange={(value) => updatePage("emptyRequirementsText", value)} />
+            <div className="rounded-2xl border border-primary/10 p-4">
+              <h3 className="mb-4 text-lg font-bold text-primary">Benefits Section</h3>
+              <div className="grid gap-4">
+                <Field label="Benefits Eyebrow" value={page.benefitsEyebrow} onChange={(value) => updatePage("benefitsEyebrow", value)} />
+                <RichEditor label="Benefits Title" value={page.benefitsTitle} onChange={(value) => updatePage("benefitsTitle", value)} />
+                <RichEditor label="Benefits Copy" value={page.benefitsCopy} onChange={(value) => updatePage("benefitsCopy", value)} />
+              </div>
+            </div>
+            <div className="rounded-2xl border border-primary/10 p-4">
+              <h3 className="mb-4 text-lg font-bold text-primary">Eligibility Section</h3>
+              <div className="grid gap-4">
+                <Field label="Eligibility Eyebrow" value={page.eligibilityEyebrow} onChange={(value) => updatePage("eligibilityEyebrow", value)} />
+                <RichEditor label="Eligibility Title" value={page.eligibilityTitle} onChange={(value) => updatePage("eligibilityTitle", value)} />
+                <RichEditor label="Eligibility Copy" value={page.eligibilityCopy} onChange={(value) => updatePage("eligibilityCopy", value)} />
+              </div>
+            </div>
             <Field label="Fee Label" value={page.feeLabel} onChange={(value) => updatePage("feeLabel", value)} />
             <Field label="Timeline Label" value={page.timelineLabel} onChange={(value) => updatePage("timelineLabel", value)} />
             <RichEditor label="Fee Note" value={page.feeNote} onChange={(value) => updatePage("feeNote", value)} />
@@ -479,6 +510,22 @@ function PageContentEditor({ data, updateData, save, initialPage }) {
             <RichEditor label="Business Copy" value={page.businessCopy} onChange={(value) => updatePage("businessCopy", value)} />
             <Field label="Consultation Button Label" value={page.consultationLabel} onChange={(value) => updatePage("consultationLabel", value)} />
             <Field label="Consultation Button URL" value={page.consultationHref} onChange={(value) => updatePage("consultationHref", value)} />
+            <div className="rounded-2xl border border-primary/10 p-4">
+              <h3 className="mb-4 text-lg font-bold text-primary">FAQ Section</h3>
+              <div className="grid gap-4">
+                <Field label="FAQ Eyebrow" value={page.faqEyebrow} onChange={(value) => updatePage("faqEyebrow", value)} />
+                <RichEditor label="FAQ Title" value={page.faqTitle} onChange={(value) => updatePage("faqTitle", value)} />
+                <EditableList
+                  title="FAQ Items"
+                  items={page.faqItems || []}
+                  fields={["icon", "question", "answer", "enabled"]}
+                  multilineFields={["answer"]}
+                  onUpdate={(index, field, value) => updatePageList("faqItems", index, field, value)}
+                  onAdd={() => addPageListItem("faqItems", { icon: "faq", question: "New question", answer: "New answer", enabled: true })}
+                  onRemove={(index) => removePageListItem("faqItems", index)}
+                />
+              </div>
+            </div>
           </>
         ) : null}
 
@@ -565,6 +612,7 @@ function PageContentEditor({ data, updateData, save, initialPage }) {
 }
 
 function SeoEditor({ data, updateData, save }) {
+  if (!data) return null;
   const seoPages = { ...defaultSeoPages, ...(data.seoPages || {}) };
   const [active, setActive] = useState(Object.keys(seoPages)[0]);
   const page = seoPages[active] || defaultSeoPages.home;
@@ -783,6 +831,7 @@ function StringListEditor({ title, items, onUpdate, maxItems = Infinity, addLabe
 }
 
 function ServiceList({ data, save }) {
+  if (!data || !data.services) return null;
   function remove(id) {
     save({ ...data, services: data.services.filter((item) => item.id !== id && item.slug !== id) }, "Service deleted.");
   }
@@ -827,7 +876,7 @@ function AdminFrame({ children, status, toast, onLogout }) {
       <div className="mx-auto grid w-[min(1280px,calc(100%-32px))] gap-6 lg:grid-cols-[260px_1fr]">
         <aside className="h-fit rounded-lg border border-primary/10 bg-white p-4 shadow-xl shadow-primary/5 lg:sticky lg:top-6">
           <Link className="mb-4 flex flex-col items-center gap-3 rounded-2xl bg-paper p-3 font-black text-primary" href="/admin">
-            <img className="" src="/images/zumar-logo.webp" alt="Zumar Law Firm" />
+            <img className="" src="/images/zumar-law-firm-logo.webp" alt="Zumar Law Firm" />
             Admin Panel
           </Link>
           <nav className="grid gap-1 text-sm font-black text-ink/75">
@@ -870,6 +919,10 @@ function AdminFrame({ children, status, toast, onLogout }) {
 }
 
 function Dashboard({ data }) {
+  if (!data || !data.services) {
+    return null;
+  }
+
   const stats = [
     ["Services", data.services.length],
     ["Blogs", data.blogs.length],
@@ -919,6 +972,7 @@ function Dashboard({ data }) {
 }
 
 function SettingsEditor({ data, updateData, save }) {
+  if (!data) return null;
   const settings = data.settings || {};
   const socialLinks = settings.socialLinks || [];
   const googleSiteVerifications = normalizeStringList(settings.googleSiteVerifications).slice(0, 3);
@@ -977,6 +1031,7 @@ function SettingsEditor({ data, updateData, save }) {
 }
 
 function HomeEditor({ data, updateData, save }) {
+  if (!data || !data.homeSections || data.homeSections.length === 0) return null;
   const [active, setActive] = useState(data.homeSections[0]?.id);
   const section = data.homeSections.find((item) => item.id === active) || data.homeSections[0];
   const heroSlides = data.heroSlides || [];
@@ -1205,6 +1260,47 @@ function HomeEditor({ data, updateData, save }) {
     });
   }
 
+  function updateHomeFaqItem(index, field, value) {
+    const faq = homeContent.faq || {};
+    updateData("homeContent", {
+      ...homeContent,
+      faq: {
+        ...faq,
+        items: (faq.items || []).map((item, itemIndex) => (itemIndex === index ? { ...item, [field]: value } : item))
+      }
+    });
+  }
+
+  function addHomeFaqItem() {
+    const faq = homeContent.faq || {};
+    updateData("homeContent", {
+      ...homeContent,
+      faq: {
+        ...faq,
+        items: [
+          ...(faq.items || []),
+          {
+            icon: "faq",
+            question: "New homepage FAQ question",
+            answer: "Add a clear answer for Zumar Law Firm clients.",
+            enabled: true
+          }
+        ]
+      }
+    });
+  }
+
+  function removeHomeFaqItem(index) {
+    const faq = homeContent.faq || {};
+    updateData("homeContent", {
+      ...homeContent,
+      faq: {
+        ...faq,
+        items: (faq.items || []).filter((_, itemIndex) => itemIndex !== index)
+      }
+    });
+  }
+
   function updateYoutubeVideo(index, field, value) {
     const youtubeVideos = homeContent.youtubeVideos || {};
     updateData("homeContent", {
@@ -1376,6 +1472,25 @@ function HomeEditor({ data, updateData, save }) {
       />
       <div className="my-7 border-t border-primary/10" />
       <HomeBlockEditor
+        title="Homepage FAQ Section"
+        block={homeContent.faq || {}}
+        fields={["eyebrow", "title", "copy", "enabled"]}
+        multilineFields={["copy"]}
+        onUpdate={(field, value) => updateHomeBlock("faq", field, value)}
+      />
+      <div className="mt-4">
+        <EditableList
+          title="Homepage FAQ Items"
+          items={homeContent.faq?.items || []}
+          fields={["icon", "question", "answer", "enabled"]}
+          multilineFields={["answer"]}
+          onUpdate={updateHomeFaqItem}
+          onAdd={addHomeFaqItem}
+          onRemove={removeHomeFaqItem}
+        />
+      </div>
+      <div className="my-7 border-t border-primary/10" />
+      <HomeBlockEditor
         title="YouTube Video Carousel"
         block={homeContent.youtubeVideos || {}}
         fields={["eyebrow", "title", "copy", "channelLabel", "channelHref", "enabled"]}
@@ -1481,6 +1596,7 @@ function ServiceSelectionEditor({ title, description, services, selectedSlugs, o
 }
 
 function AboutEditor({ data, updateData, save }) {
+  if (!data || !data.about) return null;
   const about = data.about;
 
   function updateAbout(field, value) {
@@ -1509,6 +1625,34 @@ function AboutEditor({ data, updateData, save }) {
     updateAbout("teamPreview", { ...(about.teamPreview || {}), [field]: value });
   }
 
+  function updateCertifications(field, value) {
+    updateAbout("certifications", { ...(about.certifications || {}), [field]: value });
+  }
+
+  function updateCertificationItem(index, field, value) {
+    const items = about.certifications?.items || [];
+    updateCertifications(
+      "items",
+      items.map((item, itemIndex) => (itemIndex === index ? { ...item, [field]: value } : item))
+    );
+  }
+
+  function addCertificationItem() {
+    const items = about.certifications?.items || [];
+    updateCertifications("items", [
+      ...items,
+      { icon: "certificate", title: "New Certificate", number: "Available on request", issuer: "Authority", image: "", enabled: true }
+    ]);
+  }
+
+  function removeCertificationItem(index) {
+    const items = about.certifications?.items || [];
+    updateCertifications(
+      "items",
+      items.filter((_, itemIndex) => itemIndex !== index)
+    );
+  }
+
   return (
     <Editor title="About Page Content" onSave={() => save()}>
       <div className="grid gap-4">
@@ -1516,10 +1660,125 @@ function AboutEditor({ data, updateData, save }) {
         <RichEditor label="Title" value={about.title} onChange={(value) => updateAbout("title", value)} />
         <RichEditor label="Header Copy" value={about.copy} onChange={(value) => updateAbout("copy", value)} />
         <ImageField label="Image URL" value={about.image} onChange={(value) => updateAbout("image", value)} />
-        <RichEditor label="Intro Eyebrow" value={about.introEyebrow} onChange={(value) => updateAbout("introEyebrow", value)} />
-        <RichEditor label="Intro Title" value={about.introTitle} onChange={(value) => updateAbout("introTitle", value)} />
-        <RichEditor label="Intro Copy" value={about.introCopy} onChange={(value) => updateAbout("introCopy", value)} />
-        <RichEditor label="Intro Second Copy" value={about.introSecondCopy} onChange={(value) => updateAbout("introSecondCopy", value)} />
+
+        <div className="rounded-2xl border border-primary/10 p-4">
+          <h2 className="mb-4 text-2xl font-black text-primary">Introduction Section</h2>
+          <div className="grid gap-4">
+            <RichEditor label="Intro Eyebrow" value={about.introEyebrow} onChange={(value) => updateAbout("introEyebrow", value)} />
+            <RichEditor label="Intro Title" value={about.introTitle} onChange={(value) => updateAbout("introTitle", value)} />
+            <RichEditor label="Intro Copy" value={about.introCopy} onChange={(value) => updateAbout("introCopy", value)} />
+            <RichEditor label="Intro Second Copy" value={about.introSecondCopy} onChange={(value) => updateAbout("introSecondCopy", value)} />
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-primary/10 p-4">
+          <h2 className="mb-4 text-2xl font-black text-primary">Company Overview</h2>
+          <div className="grid gap-4">
+            <Field label="Overview Eyebrow" value={about.overviewEyebrow} onChange={(value) => updateAbout("overviewEyebrow", value)} />
+            <RichEditor label="Overview Title" value={about.overviewTitle} onChange={(value) => updateAbout("overviewTitle", value)} />
+            <RichEditor label="Overview Copy" value={about.overviewCopy} onChange={(value) => updateAbout("overviewCopy", value)} />
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-primary/10 p-4">
+          <h2 className="mb-4 text-2xl font-black text-primary">Company History</h2>
+          <div className="grid gap-4">
+            <Field label="History Eyebrow" value={about.historyEyebrow} onChange={(value) => updateAbout("historyEyebrow", value)} />
+            <RichEditor label="History Title" value={about.historyTitle} onChange={(value) => updateAbout("historyTitle", value)} />
+            <Field label="Establishment Year" value={about.establishmentYear} onChange={(value) => updateAbout("establishmentYear", value)} />
+            <RichEditor label="History Copy" value={about.historyCopy} onChange={(value) => updateAbout("historyCopy", value)} />
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-primary/10 p-4">
+          <h2 className="mb-4 text-2xl font-black text-primary">Milestones</h2>
+          <EditableList
+            title="Major Milestones"
+            items={about.milestones || []}
+            fields={["year", "title", "copy", "enabled"]}
+            multilineFields={["copy"]}
+            onUpdate={(index, field, value) => updateList("milestones", index, field, value)}
+            onAdd={() => addListItem("milestones", { year: "Year", title: "Milestone", copy: "Milestone description", enabled: true })}
+            onRemove={(index) => removeListItem("milestones", index)}
+          />
+        </div>
+
+        <div className="rounded-2xl border border-primary/10 p-4">
+          <h2 className="mb-4 text-2xl font-black text-primary">Mission & Vision</h2>
+          <div className="grid gap-4">
+            <RichEditor label="Mission Title" value={about.missionTitle} onChange={(value) => updateAbout("missionTitle", value)} />
+            <RichEditor label="Mission Copy" value={about.missionCopy} onChange={(value) => updateAbout("missionCopy", value)} />
+            <RichEditor label="Vision Title" value={about.visionTitle} onChange={(value) => updateAbout("visionTitle", value)} />
+            <RichEditor label="Vision Copy" value={about.visionCopy} onChange={(value) => updateAbout("visionCopy", value)} />
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-primary/10 p-4">
+          <h2 className="mb-4 text-2xl font-black text-primary">Core Values</h2>
+          <EditableList
+            title="Core Values"
+            items={about.coreValues || []}
+            fields={["icon", "title", "copy", "enabled"]}
+            multilineFields={["copy"]}
+            onUpdate={(index, field, value) => updateList("coreValues", index, field, value)}
+            onAdd={() => addListItem("coreValues", { icon: "shield", title: "New Value", copy: "Value description", enabled: true })}
+            onRemove={(index) => removeListItem("coreValues", index)}
+          />
+        </div>
+
+        <div className="rounded-2xl border border-primary/10 p-4">
+          <h2 className="mb-4 text-2xl font-black text-primary">Registrations & Certifications</h2>
+          <div className="grid gap-4">
+            <label className="flex items-center gap-3">
+              <input type="checkbox" checked={about.certifications?.enabled !== false} onChange={(e) => updateCertifications("enabled", e.target.checked)} className="size-5 rounded border-primary" />
+              <span className="font-bold text-primary">Enable Certifications Section</span>
+            </label>
+            <Field label="Certifications Eyebrow" value={about.certifications?.eyebrow} onChange={(value) => updateCertifications("eyebrow", value)} />
+            <RichEditor label="Certifications Title" value={about.certifications?.title} onChange={(value) => updateCertifications("title", value)} />
+            <RichEditor label="Certifications Copy" value={about.certifications?.copy} onChange={(value) => updateCertifications("copy", value)} />
+
+            <div className="border-t border-primary/10 pt-4">
+              <h3 className="mb-3 text-lg font-bold text-primary">Certificate Items</h3>
+              {(about.certifications?.items || []).map((item, index) => (
+                <div key={index} className="mb-4 rounded-lg border border-primary/5 bg-paper p-4">
+                  <div className="mb-3 flex items-center justify-between">
+                    <span className="font-bold text-primary">Certificate {index + 1}</span>
+                    <button
+                      type="button"
+                      className="rounded-full border border-red-200 px-3 py-1 text-xs font-black text-red-700"
+                      onClick={() => removeCertificationItem(index)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                  <div className="grid gap-3">
+                    <IconField
+                      label="Icon"
+                      value={item.icon}
+                      onChange={(value) => updateCertificationItem(index, "icon", value)}
+                    />
+                    <Field label="Certificate Title" value={item.title} onChange={(value) => updateCertificationItem(index, "title", value)} />
+                    <Field label="Certificate Number" value={item.number} onChange={(value) => updateCertificationItem(index, "number", value)} />
+                    <Field label="Issuing Authority" value={item.issuer} onChange={(value) => updateCertificationItem(index, "issuer", value)} />
+                    <ImageField label="Certificate Image URL" value={item.image} onChange={(value) => updateCertificationItem(index, "image", value)} />
+                    <label className="flex items-center gap-3">
+                      <input type="checkbox" checked={item.enabled !== false} onChange={(e) => updateCertificationItem(index, "enabled", e.target.checked)} className="size-5 rounded border-primary" />
+                      <span className="font-bold text-primary">Show this certificate</span>
+                    </label>
+                  </div>
+                </div>
+              ))}
+              <button
+                type="button"
+                className="w-full rounded-lg border border-primary/20 bg-primary/5 px-4 py-2 text-sm font-bold text-primary"
+                onClick={addCertificationItem}
+              >
+                + Add Certificate
+              </button>
+            </div>
+          </div>
+        </div>
+
         <EditableList
           title="Stats"
           items={about.stats || []}
@@ -1556,6 +1815,7 @@ function AboutEditor({ data, updateData, save }) {
 }
 
 function ServiceForm({ data, id, save }) {
+  if (!data || !data.services) return null;
   const router = useRouter();
   const current = data.services.find((item) => item.id === id || item.slug === id);
   const [form, setForm] = useState(current || emptyService);
@@ -1568,7 +1828,9 @@ function ServiceForm({ data, id, save }) {
       ...form,
       id: slug,
       slug,
-      requirements: splitLines(form.requirements)
+      requirements: splitLines(form.requirements),
+      benefits: splitLines(form.benefits),
+      eligibility: splitLines(form.eligibility)
     };
     const next = upsertRecord(data.services, record, current, id);
     save({ ...data, services: next }, isEditing ? "Service updated." : "Service created.", true).then(() => router.push("/admin/services"));
@@ -1582,6 +1844,7 @@ function ServiceForm({ data, id, save }) {
 }
 
 function ArticleList({ data, save }) {
+  if (!data) return null;
   const type = "blogs";
   const rows = data[type];
   const base = "/admin/blogs/new";
@@ -1620,6 +1883,7 @@ function ArticleList({ data, save }) {
 }
 
 function ArticleForm({ data, id, save }) {
+  if (!data) return null;
   const router = useRouter();
   const type = "blogs";
   const current = data[type].find((item) => item.id === id || item.slug === id);
@@ -1643,6 +1907,7 @@ function ArticleForm({ data, id, save }) {
 }
 
 function Appointments({ data, save }) {
+  if (!data || !data.appointments) return null;
   function updateStatus(id, status) {
     save({ ...data, appointments: data.appointments.map((item) => (item.id === id ? { ...item, status } : item)) }, "Appointment updated.");
   }
@@ -1710,9 +1975,70 @@ function ServiceFields({ data, form, setForm }) {
       <Field label="Price" value={String(form.price || "")} onChange={(value) => setForm({ ...form, price: value })} />
       <Field label="Timeline" value={form.timeline || ""} onChange={(value) => setForm({ ...form, timeline: value })} />
       <RichEditor label="Summary" value={form.summary} onChange={(value) => setForm({ ...form, summary: value })} />
+      <Textarea label="Requirements (one per line)" value={lines(form.requirements)} onChange={(value) => setForm({ ...form, requirements: value })} />
+      <Textarea label="Benefits (one per line)" value={lines(form.benefits)} onChange={(value) => setForm({ ...form, benefits: value })} />
+      <Textarea label="Eligibility (one per line)" value={lines(form.eligibility)} onChange={(value) => setForm({ ...form, eligibility: value })} />
+      <div className="rounded-xl border border-primary/10 bg-paper p-5">
+        <h3 className="mb-4 text-lg font-black text-primary">Service FAQs</h3>
+        {(form.faqItems || []).map((item, index) => (
+          <div key={index} className="mb-4 rounded-lg border border-primary/10 bg-white p-4">
+            <div className="mb-3 flex items-center justify-between gap-2">
+              <strong className="text-primary">FAQ #{index + 1}</strong>
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, faqItems: form.faqItems.filter((_, i) => i !== index) })}
+                className="rounded-full bg-red-50 px-3 py-1 text-xs font-bold text-red-600 transition hover:bg-red-100"
+              >
+                Delete
+              </button>
+            </div>
+            <div className="grid gap-3">
+              <Textarea
+                label="Question"
+                value={item.question || ""}
+                onChange={(value) => {
+                  const updated = [...form.faqItems];
+                  updated[index] = { ...item, question: value };
+                  setForm({ ...form, faqItems: updated });
+                }}
+                placeholder="e.g., How long does this service take?"
+              />
+              <Textarea
+                label="Answer"
+                value={item.answer || ""}
+                onChange={(value) => {
+                  const updated = [...form.faqItems];
+                  updated[index] = { ...item, answer: value };
+                  setForm({ ...form, faqItems: updated });
+                }}
+                placeholder="e.g., Timeline depends on authority processing..."
+              />
+              <label className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  checked={item.enabled !== false}
+                  onChange={(e) => {
+                    const updated = [...form.faqItems];
+                    updated[index] = { ...item, enabled: e.target.checked };
+                    setForm({ ...form, faqItems: updated });
+                  }}
+                  className="size-5 rounded border-primary"
+                />
+                <span className="font-bold text-primary">Enabled</span>
+              </label>
+            </div>
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={() => setForm({ ...form, faqItems: [...(form.faqItems || []), { question: "", answer: "", enabled: true }] })}
+          className="mt-3 rounded-full bg-primary px-5 py-2.5 text-sm font-black text-white transition hover:bg-primary/90"
+        >
+          + Add FAQ
+        </button>
+      </div>
       <Field label="Meta Title" value={form.metaTitle} onChange={(value) => setForm({ ...form, metaTitle: value })} />
       <Textarea label="Meta Description" value={form.metaDescription} onChange={(value) => setForm({ ...form, metaDescription: value })} />
-      <Textarea label="Requirements (one per line)" value={lines(form.requirements)} onChange={(value) => setForm({ ...form, requirements: value })} />
       <Toggle label="Visible" checked={form.enabled !== false} onChange={(value) => setForm({ ...form, enabled: value })} />
     </>
   );
@@ -1848,7 +2174,7 @@ function ImageField({ label, value, onChange }) {
       <input className="rounded-2xl border border-dashed border-primary/20 bg-paper px-4 py-3 text-sm font-bold text-primary file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-black file:text-white" type="file" accept="image/*" onChange={(event) => uploadImage(event.target.files?.[0])} />
       {uploadStatus ? <span className="text-xs font-black text-primary/70">{uploadStatus}</span> : null}
       {value ? (
-        <img className="h-28 w-full max-w-sm rounded-2xl border border-primary/10 object-cover" src={value} alt="" />
+        <img className="h-28 w-full max-w-sm rounded-2xl border border-primary/10 object-cover" src={value} alt={`${label} preview`} />
       ) : null}
     </label>
   );

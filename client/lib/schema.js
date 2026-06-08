@@ -1,7 +1,108 @@
-/**
- * JSON-LD Schema Generator for SEO
- * Generates structured data for Google, Bing, and other search engines
- */
+export function generateLocalBusinessSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "@id": "https://zumarlawfirm.com/#localbusiness",
+    "name": "Zumar Law Firm",
+    "url": "https://zumarlawfirm.com",
+    "logo": "https://zumarlawfirm.com/images/zumar-law-firm-logo.webp",
+    "image": "https://zumarlawfirm.com/images/zumar-law-firm-hero.webp",
+    "telephone": "+92-303-598-8574",
+    "email": "team@zumarlawfirm.com",
+    "description": "Professional tax, business registration, intellectual property, licensing, and regulatory services in Pakistan. Expert legal and corporate advisory.",
+    "priceRange": "PKR 5,000 - PKR 500,000",
+    "areaServed": [
+      {
+        "@type": "Country",
+        "name": "Pakistan"
+      },
+      {
+        "@type": "City",
+        "name": "Lahore"
+      },
+      {
+        "@type": "City",
+        "name": "Rawalpindi"
+      },
+      {
+        "@type": "City",
+        "name": "Islamabad"
+      }
+    ],
+    "address": [
+      {
+        "@type": "PostalAddress",
+        "streetAddress": "Lahore Branch",
+        "addressLocality": "Lahore",
+        "addressRegion": "Punjab",
+        "postalCode": "54000",
+        "addressCountry": "PK",
+        "name": "Lahore Office"
+      },
+      {
+        "@type": "PostalAddress",
+        "streetAddress": "Rawalpindi/Islamabad Branch",
+        "addressLocality": "Rawalpindi",
+        "addressRegion": "Punjab",
+        "addressCountry": "PK",
+        "name": "Rawalpindi/Islamabad Office"
+      }
+    ],
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "opens": "09:00",
+        "closes": "18:00",
+        "name": "Weekday Hours"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Saturday",
+        "opens": "10:00",
+        "closes": "16:00",
+        "name": "Saturday Hours"
+      }
+    ],
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 31.5204,
+      "longitude": 74.3587,
+      "name": "Lahore Office"
+    },
+    "sameAs": [
+      "https://www.facebook.com/zumarlawfirm",
+      "https://www.linkedin.com/company/zumarlawfirm",
+      "https://www.instagram.com/zumarlawfirm",
+      "https://www.twitter.com/zumarlawfirm"
+    ],
+    "contactPoint": [
+      {
+        "@type": "ContactPoint",
+        "contactType": "Customer Service",
+        "telephone": "+92-303-598-8574",
+        "email": "team@zumarlawfirm.com",
+        "areaServed": "PK",
+        "availableLanguage": "en",
+        "hoursAvailable": "Mo-Fr 09:00-18:00, Sa 10:00-16:00"
+      },
+      {
+        "@type": "ContactPoint",
+        "contactType": "Sales",
+        "telephone": "+92-303-598-8574",
+        "email": "sales@zumarlawfirm.com",
+        "areaServed": "PK"
+      }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "ratingCount": "150",
+      "bestRating": "5",
+      "worstRating": "1"
+    }
+  };
+}
 
 export function generateOrganizationSchema() {
   return {
@@ -10,6 +111,7 @@ export function generateOrganizationSchema() {
     "@id": "https://zumarlawfirm.com/#organization",
     "name": "Zumar Law Firm",
     "url": "https://zumarlawfirm.com",
+    "logo": "https://zumarlawfirm.com/images/zumar-law-firm-logo.webp",
     "telephone": "+92-303-598-8574",
     "email": "team@zumarlawfirm.com",
     "description": "Professional tax, business registration, intellectual property, licensing, and regulatory services in Pakistan. Expert legal and corporate advisory.",
@@ -62,27 +164,61 @@ export function generateServiceSchema(service) {
     "name": service.title,
     "description": service.summary,
     "url": `https://zumarlawfirm.com/services/${service.slug}`,
+    "image": service.image || "https://zumarlawfirm.com/images/zumar-law-firm-logo.webp",
     "serviceType": service.category,
+    "category": service.category,
     "provider": {
-      "@type": "LegalService",
+      "@type": "ProfessionalService",
       "@id": "https://zumarlawfirm.com/#organization",
       "name": "Zumar Law Firm",
-      "url": "https://zumarlawfirm.com"
+      "url": "https://zumarlawfirm.com",
+      "telephone": "+92-303-598-8574",
+      "email": "team@zumarlawfirm.com"
     },
-    "areaServed": {
-      "@type": "Country",
-      "name": "Pakistan"
-    },
+    "areaServed": [
+      {
+        "@type": "Country",
+        "name": "Pakistan"
+      },
+      {
+        "@type": "City",
+        "name": "Lahore"
+      },
+      {
+        "@type": "City",
+        "name": "Rawalpindi"
+      },
+      {
+        "@type": "City",
+        "name": "Islamabad"
+      }
+    ],
     "availableChannel": {
       "@type": "ServiceChannel",
       "serviceUrl": "https://app.zumarlawfirm.com/signup",
-      "availableLanguage": "en"
+      "availableLanguage": ["en", "ur"],
+      "servicePhone": "+92-303-598-8574"
     },
     "offers": {
       "@type": "Offer",
       "price": service.price || "5000",
       "priceCurrency": "PKR",
-      "availability": "https://schema.org/InStock"
+      "availability": "https://schema.org/InStock",
+      "url": `https://zumarlawfirm.com/services/${service.slug}`
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "Customer Service",
+      "telephone": "+92-303-598-8574",
+      "email": "team@zumarlawfirm.com",
+      "availableLanguage": "en"
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "ratingCount": "150",
+      "bestRating": "5",
+      "worstRating": "1"
     }
   };
 }
@@ -100,19 +236,26 @@ export function generateBreadcrumbSchema(breadcrumbs) {
   };
 }
 
-export function generateFAQSchema(faqs) {
+export function generateFAQSchema(faqs, pageUrl = "https://zumarlawfirm.com") {
+  if (!Array.isArray(faqs) || faqs.length === 0) {
+    return null;
+  }
+
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "@id": "https://zumarlawfirm.com/#faq",
-    "mainEntity": faqs.map((faq) => ({
-      "@type": "Question",
-      "name": faq.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.answer
-      }
-    }))
+    "@id": `${pageUrl}#faq`,
+    "url": pageUrl,
+    "mainEntity": faqs
+      .filter((faq) => faq && faq.question && faq.answer)
+      .map((faq) => ({
+        "@type": "Question",
+        "name": String(faq.question || "").trim(),
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": String(faq.answer || "").trim().replace(/<[^>]*>/g, "")
+        }
+      }))
   };
 }
 
@@ -188,10 +331,10 @@ export function generateArticleSchema(blog) {
       "url": "https://zumarlawfirm.com",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://zumarlawfirm.com/images/zumar-logo.webp"
+        "url": "https://zumarlawfirm.com/images/zumar-law-firm-logo.webp"
       }
     },
-    "image": blog.image || "https://zumarlawfirm.com/images/zumar-logo.webp"
+    "image": blog.image || "https://zumarlawfirm.com/images/zumar-law-firm-logo.webp"
   };
 }
 

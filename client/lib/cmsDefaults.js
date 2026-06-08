@@ -268,6 +268,54 @@ export const defaultHomeContent = {
     buttonHref: "/branches",
     limit: "2"
   },
+  faq: {
+    enabled: true,
+    eyebrow: "FAQ",
+    title: "Questions about Zumar Law Firm.",
+    copy: "Quick answers about our tax, company registration, legal consultation, and compliance services in Pakistan.",
+    items: [
+      {
+        icon: "scale",
+        question: "What services does Zumar Law Firm provide?",
+        answer: "Zumar Law Firm provides tax filing, NTN registration, sales tax registration, company registration, trademark registration, licensing, compliance, intellectual property, and legal consultation services."
+      },
+      {
+        icon: "landmark",
+        question: "Is Zumar Law Firm registered in Pakistan?",
+        answer: "Yes. Zumar Law Firm operates in Pakistan and provides services through its Lahore and Rawalpindi/Islamabad offices with online support for clients across the country."
+      },
+      {
+        icon: "tax",
+        question: "Does Zumar Law Firm provide tax filing services?",
+        answer: "Yes. The firm handles income tax return filing, NTN registration, FBR profile work, sales tax registration, and related tax compliance for individuals, businesses, freelancers, and companies."
+      },
+      {
+        icon: "building",
+        question: "Does Zumar Law Firm provide company registration services?",
+        answer: "Yes. Zumar Law Firm supports private limited company registration, single member company registration, partnership and AOP registration, LLP registration, SECP filing, and related business setup services."
+      },
+      {
+        icon: "globe",
+        question: "Can overseas Pakistanis use Zumar Law Firm services?",
+        answer: "Yes. Overseas Pakistanis can contact Zumar Law Firm online, share documents digitally, and use the client portal for eligible registration, tax, company, trademark, and compliance services."
+      },
+      {
+        icon: "phone",
+        question: "How can I contact Zumar Law Firm?",
+        answer: "You can contact Zumar Law Firm through the website contact page, phone, email, branch office details, or the online client portal for service submission and follow-up."
+      },
+      {
+        icon: "gavel",
+        question: "Does Zumar Law Firm provide legal consultation?",
+        answer: "Yes. Zumar Law Firm provides practical legal consultation for business registration, tax compliance, regulatory licensing, intellectual property, and documentation matters."
+      },
+      {
+        icon: "business",
+        question: "What industries does Zumar Law Firm serve?",
+        answer: "The firm serves startups, retailers, traders, freelancers, service providers, manufacturers, importers, exporters, NGOs, NPOs, software businesses, professionals, and companies in Pakistan."
+      }
+    ]
+  },
   youtubeVideos: {
     enabled: true,
     eyebrow: "YouTube",
@@ -306,6 +354,21 @@ export const defaultAboutContent = {
     "Zumar Law Firm supports individuals, startups, companies, freelancers, NGOs, and professionals with the legal and compliance work needed to operate confidently. The firm combines service catalog clarity with portal-based intake, checklist-driven documentation, and direct communication.",
   introSecondCopy:
     "Our work covers tax registrations and returns, company and SECP matters, intellectual property, PSEB, chamber memberships, import/export licensing, and regulatory registrations for local and international service needs.",
+  overviewEyebrow: "Company Overview",
+  overviewTitle: "A Pakistan-focused advisory firm for tax, corporate, registration, and compliance work.",
+  overviewCopy:
+    "Zumar Law Firm is built around practical client service: clear document requirements, transparent communication, online intake, and follow-up until the matter reaches a defined result. The firm supports individuals, founders, companies, NGOs, freelancers, overseas Pakistanis, and professionals who need dependable help with filings, registrations, licenses, and advisory work.",
+  historyEyebrow: "Company History",
+  historyTitle: "Growth shaped by client needs and expanding compliance requirements.",
+  establishmentYear: "2020",
+  historyCopy:
+    "Zumar Law Firm began with a focused commitment to make tax, registration, and compliance services easier to understand for Pakistani clients. Over time, the firm expanded its service catalog, opened branch support, developed online client workflows, and added specialist services across tax, company registration, intellectual property, licensing, and regulatory compliance.",
+  missionTitle: "Mission Statement",
+  missionCopy:
+    "Our mission is to provide reliable, transparent, and practical legal, tax, corporate, and compliance support so clients can complete essential filings and registrations with confidence. Long term, Zumar Law Firm aims to keep improving client access through better digital systems, clearer guidance, and accountable follow-up.",
+  visionTitle: "Vision Statement",
+  visionCopy:
+    "Our vision is to become a trusted Pakistan-wide professional services firm known for integrity, client care, organized documentation, and dependable advisory. We aim to help businesses and individuals meet legal and compliance obligations while building long-term client relationships.",
   processEyebrow: "How we work",
   processTitle: "A structured workflow for every service request.",
   processCopy:
@@ -327,6 +390,52 @@ export const defaultAboutContent = {
       copy: "The team keeps cases moving with portal-based communication and direct status updates."
     }
   ],
+  milestones: [
+    { year: "2020", title: "Foundation", copy: "Zumar Law Firm began with a focus on practical tax, registration, and compliance support for Pakistani clients.", enabled: true },
+    { year: "2021", title: "Expanded service catalog", copy: "The firm broadened support across NTN, income tax, sales tax, company registration, licensing, and intellectual property services.", enabled: true },
+    { year: "2023", title: "Digital client workflow", copy: "Online client intake and service tracking became a stronger part of the firm's workflow for remote and overseas clients.", enabled: true },
+    { year: "2024", title: "Branch and national support", copy: "The firm strengthened Lahore and Rawalpindi/Islamabad support while serving clients across Pakistan through online communication.", enabled: true }
+  ],
+  coreValues: [
+    { icon: "shield", title: "Integrity", copy: "We keep client matters grounded in honest guidance and responsible documentation.", enabled: true },
+    { icon: "search", title: "Transparency", copy: "We explain scope, requirements, pricing, and next steps before work moves forward.", enabled: true },
+    { icon: "check", title: "Accountability", copy: "We track service progress and keep ownership clear from intake to completion.", enabled: true },
+    { icon: "certificate", title: "Professionalism", copy: "We handle documents, filings, and communication with disciplined standards.", enabled: true },
+    { icon: "star", title: "Client Satisfaction", copy: "We focus on timely response, practical solutions, and long-term client trust.", enabled: true }
+  ],
+  certifications: {
+    enabled: true,
+    eyebrow: "Registrations & Certifications",
+    title: "Government registrations, licenses, and memberships.",
+    copy:
+      "Relevant registration certificates, license certificates, membership certificates, and registration numbers can be displayed here when available. Upload certificate images from the admin panel and add verified certificate details.",
+    items: [
+      {
+        icon: "certificate",
+        title: "Registration Certificate",
+        number: "Available on request",
+        issuer: "Relevant Government Authority",
+        image: "",
+        enabled: true
+      },
+      {
+        icon: "filing",
+        title: "License Certificate",
+        number: "Available on request",
+        issuer: "Relevant Licensing Authority",
+        image: "",
+        enabled: true
+      },
+      {
+        icon: "landmark",
+        title: "Membership Certificate",
+        number: "Available on request",
+        issuer: "Relevant Chamber or Professional Body",
+        image: "",
+        enabled: true
+      }
+    ]
+  },
   teamPreview: {
     eyebrow: "Team",
     title: "Main members of the team behind your filings.",
@@ -379,8 +488,14 @@ export const defaultPageContent = {
       "Prepare filing details and submit through the relevant portal.",
       "Follow up until completion or next compliance step."
     ],
+    benefitsEyebrow: "Why Choose This Service",
+    benefitsTitle: "Key Benefits",
+    benefitsCopy: "Get professional support for this service with structured guidance, transparent communication, and reliable follow-up.",
     requirementsTitle: "Required Details / Documents",
     emptyRequirementsText: "Requirements are confirmed during consultation because this service may vary by case.",
+    eligibilityEyebrow: "Who Can Avail",
+    eligibilityTitle: "Service Eligibility",
+    eligibilityCopy: "This service is available for eligible individuals and businesses. Confirm your eligibility during consultation with our team.",
     feeLabel: "Professional fee",
     timelineLabel: "Timeline",
     feeNote: "Final government fees, challans, and case-specific expenses may vary where applicable.",
@@ -392,6 +507,41 @@ export const defaultPageContent = {
     callHref: "tel:+923035988574",
     whatsappLabel: "WhatsApp",
     whatsappPhone: "923035988574",
+    faqEyebrow: "FAQ",
+    faqTitle: "Frequently Asked Questions",
+    faqCopy: "Common questions about this service.",
+    faqItems: [
+      {
+        question: "How long does this service take to complete?",
+        answer: "Timeline depends on authority processing, document completeness, and case complexity. We provide realistic timelines during consultation and keep you updated throughout the process.",
+        enabled: true
+      },
+      {
+        question: "What documents are required?",
+        answer: "Required documents vary by specific circumstances. During our initial consultation, we review your situation and provide a complete checklist of needed documents to proceed with confidence.",
+        enabled: true
+      },
+      {
+        question: "Can I handle this myself or do I need professional help?",
+        answer: "While self-filing is possible, professional guidance helps avoid costly mistakes, ensures compliance with current regulations, and typically saves time through our established authority relationships.",
+        enabled: true
+      },
+      {
+        question: "What if my application gets rejected?",
+        answer: "We handle rejections by identifying the issue, correcting documentation, resubmitting appropriately, and following up until approval. This is included in our service commitment.",
+        enabled: true
+      },
+      {
+        question: "Are there additional government fees beyond your professional fee?",
+        answer: "Yes. Our professional fee covers our guidance and filing work. Government fees, regulatory charges, and case-specific expenses are separate and vary by authority and service scope.",
+        enabled: true
+      },
+      {
+        question: "How do I get started?",
+        answer: "Start online through our client portal, call us for an immediate consultation, or send an inquiry with your service details. We'll confirm your needs, provide pricing, and guide next steps.",
+        enabled: true
+      }
+    ],
     relatedEyebrow: "Related services",
     relatedTitle: "You may also need these services.",
     allServicesLabel: "All Services"
@@ -472,7 +622,7 @@ export const defaultPageContent = {
     ceoEyebrow: "Leadership",
     ceoName: "Arslan Rana",
     ceoRole: "CEO OF ZUMAR LAW FIRM",
-    ceoImage: "/images/CEO.webp",
+    ceoImage: "/images/zumar-law-firm-ceo-asif-arslan.webp",
     ceoBio:
       "Our vision is to become a trusted leader in Corporate, Taxation, and IPO Consultancy services by delivering excellence, integrity, and innovative legal solutions. We aim to empower businesses, entrepreneurs, and investors with professional guidance that supports sustainable growth and long-term success.\n\nWe believe that strong legal foundations create strong businesses. Therefore, our focus is to provide strategic corporate and tax solutions that help organizations operate with confidence, compliance, and transparency in today's evolving business environment.\n\nOur commitment is to build lasting relationships with clients through professionalism, trust, and exceptional service standards while continuously adapting to modern legal and corporate challenges.",
     historyEyebrow: "Company History",
@@ -493,7 +643,7 @@ export const defaultPageContent = {
         designation: "HR Manager",
         role: "HR Manager",
         branch: "Islamabad Branch",
-        image: "/images/Bushra.webp",
+        image: "/images/bushra-niazi-zumar-law-firm-islamabad.webp",
         bio: "Supports HR coordination, team communication, and branch administration for Islamabad office operations."
       },
       {
@@ -501,7 +651,7 @@ export const defaultPageContent = {
         designation: "Corporate Compliance Officer",
         role: "Corporate Compliance Officer",
         branch: "Lahore Branch",
-        image: "/images/Asif.webp",
+        image: "/images/asif-arslan-zumar-law-firm-lahore.webp",
         bio: "Coordinates corporate compliance documentation, company matters, and regulatory follow-up from the Lahore branch."
       },
 
@@ -510,7 +660,7 @@ export const defaultPageContent = {
         designation: "IP Compliance Officer",
         role: "IP Compliance Officer",
         branch: "Lahore Branch",
-        image: "/images/aqssa%20ahmed.webp",
+        image: "/images/aqssa-ahmed-zumar-law-firm-lahore.webp",
         bio: "Handles intellectual property compliance coordination, document review, and client follow-up."
       },
       {
@@ -544,7 +694,7 @@ export const defaultPageContent = {
     eyebrow: "Contact",
     title: "Talk to the team",
     copy: "Send your service query or start directly from the online client portal.",
-    image: "/images/Contact%20Page.webp",
+    image: "/images/zumar-law-firm-contact-support.webp",
     formTitle: "Inquiry Form",
     formCopy:
       "This frontend form is ready for backend integration. For active submission, connect it to the Node.js contact endpoint used by the app.",
@@ -566,7 +716,47 @@ export const defaultPageContent = {
     businessTitle: "Business Tax Calculator",
     businessCopy: "Estimate individual or AOP business income tax from tax year 2022 to 2026.",
     consultationLabel: "Review With Tax Team",
-    consultationHref: "/contact"
+    consultationHref: "/contact",
+    faqEyebrow: "Common Questions",
+    faqTitle: "Tax calculator questions answered",
+    faqItems: [
+      {
+        icon: "tax",
+        question: "How accurate is this tax calculator?",
+        answer: "The calculator provides estimates based on standard tax rates for the selected year. Results assume standard deductions and do not account for special circumstances, relief under specific sections, provincial variations, or individual deductions. Actual tax liability may differ. Always verify with a tax professional before filing.",
+        enabled: true
+      },
+      {
+        icon: "tax",
+        question: "What income types does the salary calculator cover?",
+        answer: "The salary calculator estimates tax for individuals earning salary from employment. It covers basic salary, allowances, and bonuses for tax filers. It does not cover non-taxable income, pension income, or special allowances. For detailed calculations involving deductions and credits, consult Zumar Law Firm.",
+        enabled: true
+      },
+      {
+        icon: "tax",
+        question: "Can I use the business calculator for my partnership?",
+        answer: "The business calculator is designed for individual proprietors and Associations of Persons (AOP). It provides estimates based on gross income and standard deductions. For detailed partnership taxation, corporate structures, or AOP-specific matters, contact our tax team for consultation.",
+        enabled: true
+      },
+      {
+        icon: "tax",
+        question: "Does this calculator include provincial taxes?",
+        answer: "The calculator covers federal tax rates. Provincial sales tax, withholding taxes, and other provincial levies are not included in the estimates. Your total tax liability may include additional provincial taxes depending on your province and business type. Contact us for comprehensive calculations.",
+        enabled: true
+      },
+      {
+        icon: "tax",
+        question: "How often are the tax rates updated?",
+        answer: "Tax rates are updated annually when the tax year changes. Our calculator includes rates from 2022 to 2026. Once a new tax year is announced, we update the calculator accordingly. For the current tax year rates and any mid-year changes, check with the FBR or contact our team.",
+        enabled: true
+      },
+      {
+        icon: "tax",
+        question: "What should I do with the calculator results?",
+        answer: "Use the results as a planning tool to estimate your approximate tax liability. Before filing returns or making tax payments, verify the calculations with a qualified tax professional. Zumar Law Firm can review your income, deductions, and file accurate returns based on your actual circumstances.",
+        enabled: true
+      }
+    ]
   },
   careers: {
     label: "Careers",

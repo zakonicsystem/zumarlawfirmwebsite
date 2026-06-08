@@ -3,6 +3,7 @@ import FaIcon from "@/components/FaIcon";
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
 import Link from "next/link";
+import { plainText } from "@/lib/text";
 
 export async function generateMetadata() {
   return getPageMetadata("serviceAreas");
@@ -47,7 +48,7 @@ export default async function ServiceAreasPage() {
             {visibleAreas.map((area) => (
               <Link className="group min-w-0 overflow-hidden rounded-3xl border border-primary/10 bg-white shadow-xl shadow-primary/5 transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/15" href={`/service-areas/${area.slug}`} key={area.slug}>
                 <div className="relative">
-                  <img className="h-52 w-full object-cover transition duration-500 group-hover:scale-105" src={area.image || "/images/zumar-logo.webp"} alt={area.title} />
+                  <img className="h-52 w-full object-cover transition duration-500 group-hover:scale-105" src={area.image || "/images/zumar-law-firm-logo.webp"} alt={`${plainText(area.title, "Service area")} services`} />
                   <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1.5 text-xs font-black text-primary shadow-lg shadow-primary/10">{area.province || "Pakistan"}</span>
                 </div>
                 <div className="p-6">

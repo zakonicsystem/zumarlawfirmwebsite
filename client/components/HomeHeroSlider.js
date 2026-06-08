@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import FaIcon from "@/components/FaIcon";
 import RichContent from "@/components/RichContent";
+import { plainText } from "@/lib/text";
 
 export default function HomeHeroSlider({ slides = [] }) {
   const visibleSlides = useMemo(() => slides.filter((slide) => slide.enabled !== false), [slides]);
@@ -32,7 +33,8 @@ export default function HomeHeroSlider({ slides = [] }) {
     return null;
   }
 
-  const current = visibleSlides[active] || visibleSlides[0];
+  const seoSlide = visibleSlides[0];
+  const current = visibleSlides[active] || seoSlide;
   const blocks = (current.blocks || []).filter((block) => block.enabled !== false).slice(0, 3);
 
   return (
@@ -41,26 +43,25 @@ export default function HomeHeroSlider({ slides = [] }) {
         <Image
           className="absolute inset-0 h-full w-full object-cover transition duration-[1400ms]"
           src={current.image}
-          alt=""
-          aria-hidden="true"
+          alt={`${plainText(current.title || seoSlide.title, "Zumar Law Firm service")} hero image`}
           fill
           priority
           quality={72}
           sizes="(max-width: 640px) 100vw, 100vw"
-          key={`${current.title}-${active}`}
+          key={`${current.image || active}`}
         />
       ) : null}
       <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/78 to-primary/20" />
       <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-transparent to-ink/20" />
 
       <div className="relative z-10 mx-auto flex min-h-[430px] w-[min(1180px,calc(100%-24px))] items-center py-14 pb-16 sm:min-h-[500px] sm:w-[min(1180px,calc(100%-32px))] sm:py-20">
-        <div className="max-w-3xl" key={active}>
+        <div className="max-w-3xl">
           <p className="mb-4 inline-flex max-w-full items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-secondary backdrop-blur animate-[heroFade_0.75s_ease-out_both] sm:mb-5 sm:gap-3 sm:px-4 sm:text-xs sm:tracking-[0.2em]">
             <FaIcon className="size-3.5" name="scale" />
-            <span className="truncate">{current.eyebrow && <RichContent content={current.eyebrow} />}</span>
+            <span className="truncate">{seoSlide.eyebrow && <RichContent content={seoSlide.eyebrow} />}</span>
           </p>
           <h1 className="text-3xl font-black leading-tight text-white animate-[heroRise_0.85s_ease-out_both] sm:text-4xl sm:leading-[0.95] lg:text-4xl">
-            {current.title && <RichContent content={current.title} />}
+            {seoSlide.title && <RichContent content={seoSlide.title} />}
           </h1>
 
           {blocks.length > 0 && (
@@ -78,19 +79,19 @@ export default function HomeHeroSlider({ slides = [] }) {
           )}
 
           <div className="mt-5 max-w-2xl text-base font-semibold leading-7 text-white/80 animate-[heroRise_0.95s_ease-out_both] sm:mt-7 sm:text-xl sm:leading-8">
-            {current.copy && <RichContent content={current.copy} />}
+            {seoSlide.copy && <RichContent content={seoSlide.copy} />}
           </div>
 
           <div className="mt-7 grid gap-3 animate-[heroRise_1.05s_ease-out_both] min-[420px]:flex min-[420px]:flex-wrap sm:mt-9">
-            {current.primaryLabel ? (
-              <SmartLink className="inline-flex min-h-12 items-center justify-center rounded-full bg-secondary px-6 text-xs font-black uppercase tracking-wide text-primary shadow-2xl shadow-black/20 transition hover:-translate-y-1 hover:bg-white sm:min-h-13 sm:px-7 sm:text-sm" href={current.primaryHref || "/services"}>
-                {current.primaryLabel}
+            {seoSlide.primaryLabel ? (
+              <SmartLink className="inline-flex min-h-12 items-center justify-center rounded-full bg-secondary px-6 text-xs font-black uppercase tracking-wide text-primary shadow-2xl shadow-black/20 transition hover:-translate-y-1 hover:bg-white sm:min-h-13 sm:px-7 sm:text-sm" href={seoSlide.primaryHref || "/services"}>
+                {seoSlide.primaryLabel}
                 <FaIcon className="ml-2 size-3.5" name="arrowRight" />
               </SmartLink>
             ) : null}
-            {current.secondaryLabel ? (
-              <SmartLink className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/25 bg-white/10 px-6 text-xs font-black uppercase tracking-wide text-white backdrop-blur transition hover:-translate-y-1 hover:bg-white hover:text-primary sm:min-h-13 sm:px-7 sm:text-sm" href={current.secondaryHref || "/contact"}>
-                {current.secondaryLabel}
+            {seoSlide.secondaryLabel ? (
+              <SmartLink className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/25 bg-white/10 px-6 text-xs font-black uppercase tracking-wide text-white backdrop-blur transition hover:-translate-y-1 hover:bg-white hover:text-primary sm:min-h-13 sm:px-7 sm:text-sm" href={seoSlide.secondaryHref || "/contact"}>
+                {seoSlide.secondaryLabel}
               </SmartLink>
             ) : null}
           </div>

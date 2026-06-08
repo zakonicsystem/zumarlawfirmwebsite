@@ -106,7 +106,7 @@ export default function ServiceCarousel({ items }) {
                 slideRefs.current[itemIndex] = element;
               }}
             >
-              <Link href={`/services/${service.slug}`} className={`group block overflow-hidden bg-white rounded-lg transition-all duration-300 sm:rounded-[1.5rem] ${itemIndex === index ? "ring-2 ring-secondary shadow-2xl shadow-secondary/30" : ""}`}>
+              <article className={`group block overflow-hidden bg-white rounded-lg transition-all duration-300 sm:rounded-[1.5rem] ${itemIndex === index ? "ring-2 ring-secondary shadow-2xl shadow-secondary/30" : ""}`}>
                 <div className="relative flex flex-col overflow-hidden p-4 sm:p-7 lg:p-8">
                   <div className="pointer-events-none absolute -right-20 -top-24 hidden size-72 rounded-full bg-secondary/45 blur-3xl sm:block" />
                   <div className="pointer-events-none absolute -bottom-28 left-1/2 hidden size-80 rounded-full bg-primary/10 blur-3xl sm:block" />
@@ -133,10 +133,10 @@ export default function ServiceCarousel({ items }) {
                       <span className="mt-2 block text-sm font-semibold leading-5 text-muted">Open details for scope and document requirements.</span>
                     </span>
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                      <span className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-primary px-5 text-xs font-black uppercase tracking-wide text-white transition duration-300 group-hover:bg-secondary group-hover:text-primary sm:min-h-12 sm:px-6 sm:text-sm">
+                      <Link href={`/services/${service.slug}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-primary px-5 text-xs font-black uppercase tracking-wide text-white transition duration-300 hover:bg-secondary hover:text-primary sm:min-h-12 sm:px-6 sm:text-sm">
                         View Details
                         <FaIcon className="size-3.5 transition group-hover:translate-x-1" name="arrowRight" />
-                      </span>
+                      </Link>
                       <a href="https://app.zumarlawfirm.com/signup" target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-secondary px-5 text-xs font-black uppercase tracking-wide text-primary transition duration-300 hover:bg-secondary/90 sm:min-h-12 sm:px-6 sm:text-sm">
                         <FaIcon className="size-3.5" name="registration" />
                         Start Online
@@ -144,7 +144,7 @@ export default function ServiceCarousel({ items }) {
                     </div>
                   </div>
                 </div>
-              </Link>
+              </article>
             </div>
           ))}
         </div>

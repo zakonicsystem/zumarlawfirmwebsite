@@ -7,8 +7,27 @@ import { serviceData } from "./serviceSchemas";
 const dataDirectory = path.join(process.cwd(), "data");
 const dataFile = path.join(dataDirectory, "cms-content.json");
 const branchImages = {
-  lahore: "/images/Lahore%20Branch.webp",
-  "rawalpindi-islamabad": "/images/Islamabad%20Branch.webp"
+  lahore: "/images/zumar-law-firm-lahore-office.webp",
+  "rawalpindi-islamabad": "/images/zumar-law-firm-islamabad-office.webp"
+};
+const legacyImagePaths = {
+  "/images/zumar-logo.webp": "/images/zumar-law-firm-logo.webp",
+  "/images/Lahore%20Branch.webp": "/images/zumar-law-firm-lahore-office.webp",
+  "/images/Lahore Branch.webp": "/images/zumar-law-firm-lahore-office.webp",
+  "/images/Islamabad%20Branch.webp": "/images/zumar-law-firm-islamabad-office.webp",
+  "/images/Islamabad Branch.webp": "/images/zumar-law-firm-islamabad-office.webp",
+  "/images/Contact%20Page.webp": "/images/zumar-law-firm-contact-support.webp",
+  "/images/Contact Page.webp": "/images/zumar-law-firm-contact-support.webp",
+  "/images/CEO.webp": "/images/zumar-law-firm-ceo-asif-arslan.webp",
+  "/images/Bushra.webp": "/images/bushra-niazi-zumar-law-firm-islamabad.webp",
+  "/images/Asif.webp": "/images/asif-arslan-zumar-law-firm-lahore.webp",
+  "/images/aqssa%20ahmed.webp": "/images/aqssa-ahmed-zumar-law-firm-lahore.webp",
+  "/images/aqssa ahmed.webp": "/images/aqssa-ahmed-zumar-law-firm-lahore.webp",
+  "/images/About.jpeg": "/images/zumar-law-firm-about-pakistan.jpeg",
+  "/images/2nd%20slide.jpeg": "/images/company-registration-services-pakistan.jpeg",
+  "/images/2nd slide.jpeg": "/images/company-registration-services-pakistan.jpeg",
+  "/images/tax%20return.jpeg": "/images/tax-filing-services-pakistan.jpeg",
+  "/images/tax return.jpeg": "/images/tax-filing-services-pakistan.jpeg"
 };
 const branchMapUrls = {
   lahore: "https://www.google.com/maps/place/Zumar+Law+Firm/@31.5545954,74.3028964,676m/data=!3m3!1e3!4b1!5s0x3919035239402f37:0xab082b65398f26be!4m6!3m5!1s0x3919019c399b3c3f:0x8386d63b401f100a!8m2!3d31.5545909!4d74.3054713!16s%2Fg%2F11l1f488xq?entry=ttu&g_ep=EgoyMDI2MDUxMy4wIKXMDSoASAFQAw%3D%3D",
@@ -167,7 +186,7 @@ export function normalizeCmsData(data) {
     }
   };
 
-  return {
+  return normalizeLegacyImagePaths({
     ...merged,
     homeSections: Array.isArray(merged.homeSections) ? merged.homeSections : defaults.homeSections,
     heroSlides: Array.isArray(merged.heroSlides) ? merged.heroSlides : defaults.heroSlides,
@@ -177,7 +196,25 @@ export function normalizeCmsData(data) {
     serviceAreas: Array.isArray(merged.serviceAreas) ? merged.serviceAreas : defaults.serviceAreas,
     services: mergeServices(defaults.services, merged.services).map(enrichService),
     blogs: Array.isArray(merged.blogs) ? merged.blogs : defaults.blogs
-  };
+  });
+}
+
+function normalizeLegacyImagePaths(value) {
+  if (typeof value === "string") {
+    return legacyImagePaths[value] || value;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) => normalizeLegacyImagePaths(item));
+  }
+
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, entry]) => [key, normalizeLegacyImagePaths(entry)])
+    );
+  }
+
+  return value;
 }
 
 function mergeServices(defaultServices, services) {
@@ -296,6 +333,11 @@ function mergeHomeContent(defaults, content = {}) {
     },
     updates: { ...defaults.updates, ...(content?.updates || {}) },
     branches: { ...defaults.branches, ...(content?.branches || {}) },
+    faq: {
+      ...defaults.faq,
+      ...(content?.faq || {}),
+      items: Array.isArray(content?.faq?.items) ? content.faq.items : defaults.faq.items
+    },
     youtubeVideos: {
       ...defaults.youtubeVideos,
       ...(content?.youtubeVideos || {}),

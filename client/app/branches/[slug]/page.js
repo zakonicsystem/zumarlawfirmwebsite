@@ -2,6 +2,7 @@ import Link from "next/link";
 import FaIcon from "@/components/FaIcon";
 import { findBySlug, readCmsData } from "@/lib/cmsStore";
 import { notFound } from "next/navigation";
+import { plainText } from "@/lib/text";
 
 export async function generateStaticParams() {
   const { branches } = await readCmsData();
@@ -54,7 +55,7 @@ export default async function BranchDetailPage({ params }) {
             </div>
           </div>
           <div className="overflow-hidden rounded-[2rem] border border-white/70 bg-white p-2 shadow-2xl shadow-primary/10">
-            <img className="h-72 w-full rounded-[1.5rem] object-cover sm:h-80" src={branch.image} alt={`${branch.name} branch`} />
+            <img className="h-72 w-full rounded-[1.5rem] object-cover sm:h-80" src={branch.image} alt={`${plainText(branch.name, "Zumar Law Firm")} branch office`} />
           </div>
         </div>
       </section>

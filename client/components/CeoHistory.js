@@ -1,5 +1,6 @@
 import FaIcon from "@/components/FaIcon";
 import RichContent from "@/components/RichContent";
+import { plainText } from "@/lib/text";
 
 export default function CeoHistory({ page }) {
 
@@ -8,7 +9,7 @@ export default function CeoHistory({ page }) {
       <section className="bg-[#fffdfb] py-16 sm:py-20" id="leadership">
         <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
           <div className="overflow-hidden rounded-[2rem] border border-primary/10 bg-white p-3 shadow-2xl shadow-primary/10">
-            <img className="h-[520px] w-full rounded-[1.5rem] bg-white object-cover object-top" src={page.ceoImage} alt={page.ceoName} loading="lazy" decoding="async" />
+            <img className="h-[520px] w-full rounded-[1.5rem] bg-white object-cover object-top" src={page.ceoImage} alt={`${plainText(page.ceoName, "CEO")} portrait`} loading="lazy" decoding="async" />
           </div>
           <div>
             <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-primary">{page.ceoEyebrow}</p>

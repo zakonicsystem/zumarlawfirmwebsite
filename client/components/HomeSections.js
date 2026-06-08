@@ -6,6 +6,8 @@ import ServiceCarousel from "@/components/ServiceCarousel";
 import ServiceBrowser from "@/components/ServiceBrowser";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import YoutubeVideoCarousel from "@/components/YoutubeVideoCarousel";
+import FaqAccordion from "@/components/FaqAccordion";
+import { plainText } from "@/lib/text";
 
 export function SectionDivider() {
   return (
@@ -58,7 +60,7 @@ export function HomeWhyChooseSection({ content }) {
     <section className="bg-white py-12 sm:py-16" data-reveal="up">
       <div className="mx-auto grid w-[min(1180px,calc(100%-24px))] gap-7 sm:w-[min(1180px,calc(100%-32px))] sm:gap-8 lg:grid-cols-[0.95fr_1fr] lg:items-center">
         <div className="relative overflow-hidden rounded-lg bg-primary p-5 text-white shadow-2xl shadow-primary/15 sm:p-10" data-reveal="left">
-          <img className="absolute inset-0 h-full w-full object-cover opacity-35" src={content?.image} alt="" aria-hidden="true" loading="lazy" decoding="async" />
+          <img className="absolute inset-0 h-full w-full object-cover opacity-35" src={content?.image} alt={`${plainText(content?.panelTitle || content?.title, "Zumar Law Firm")} background`} loading="lazy" decoding="async" />
           <div className="absolute inset-0 bg-gradient-to-br from-primary/95 via-primary/85 to-primary/65" />
           <div className="relative z-10">
             <h2 className="max-w-xl text-2xl font-black leading-tight sm:text-4xl">
@@ -160,7 +162,7 @@ export function HomeServiceAreasSection({ content, serviceAreas = [] }) {
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {serviceAreas.filter((area) => area.enabled !== false).slice(0, Number(content?.limit || 4)).map((area) => (
             <Link className="group overflow-hidden rounded-[2rem] border border-primary/10 bg-white shadow-xl shadow-primary/5 transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/15" href={`/service-areas/${area.slug}`} key={area.slug}>
-              <img className="h-44 w-full object-cover transition duration-500 group-hover:scale-105" src={area.image} alt={area.title} loading="lazy" decoding="async" />
+              <img className="h-44 w-full object-cover transition duration-500 group-hover:scale-105" src={area.image} alt={`${plainText(area.title, "Service area")} services`} loading="lazy" decoding="async" />
               <div className="p-5">
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <FaIcon className="size-7 text-primary" name={area.icon || "landmark"} />
@@ -245,7 +247,7 @@ export function HomeBranchesSection({ content, branches = [] }) {
           {branches.filter((branch) => branch.enabled !== false).slice(0, Number(content?.limit || 2)).map((branch) => (
             <article className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 shadow-xl shadow-black/10 transition hover:-translate-y-1" key={branch.slug}>
               <Link className="block" href={`/branches/${branch.slug}`}>
-                <img className="h-56 w-full object-cover" src={branch.image} alt={`${branch.name} branch`} loading="lazy" decoding="async" />
+                <img className="h-56 w-full object-cover" src={branch.image} alt={`${plainText(branch.name, "Zumar Law Firm")} branch office`} loading="lazy" decoding="async" />
               </Link>
               <div className="p-6">
                 <Link className="inline-flex items-center gap-3 text-xl font-black transition hover:text-secondary" href={`/branches/${branch.slug}`}>
@@ -299,6 +301,35 @@ export function HomeYoutubeSection({ content }) {
   );
 }
 
+export function HomeFaqSection({ content }) {
+  if (content?.enabled === false) {
+    return null;
+  }
+
+  const items = (content?.items || []).filter((item) => item.enabled !== false);
+
+  if (!items.length) {
+    return null;
+  }
+
+  return (
+    <section className="bg-paper py-12 sm:py-16" id="faq" data-reveal="up">
+      <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
+        <div className="lg:sticky lg:top-28">
+          <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-primary">{content?.eyebrow || "FAQ"}</p>
+          <h2 className="text-3xl font-black leading-tight text-primary sm:text-5xl">{content?.title || "Frequently asked questions."}</h2>
+          {content?.copy ? (
+            <div className="mt-5 text-base leading-8 text-muted">
+              <RichContent content={content.copy} />
+            </div>
+          ) : null}
+        </div>
+        <FaqAccordion items={items} />
+      </div>
+    </section>
+  );
+}
+
 function ArticlePreviewColumn({ eyebrow, title, linkText, linkHref, items, basePath }) {
   return (
     <div data-reveal="up">
@@ -312,7 +343,7 @@ function ArticlePreviewColumn({ eyebrow, title, linkText, linkHref, items, baseP
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {items.slice(0, 3).map((item) => (
           <Link className="overflow-hidden rounded-[1.5rem] border border-primary/10 bg-white shadow-lg shadow-primary/5 transition hover:-translate-y-1" href={`${basePath}/${item.slug}`} key={item.slug}>
-            <img className="h-56 w-full object-cover" src={item.image} alt={item.title} loading="lazy" decoding="async" />
+            <img className="h-56 w-full object-cover" src={item.image} alt={plainText(item.title, "Zumar Law Firm update")} loading="lazy" decoding="async" />
             <div className="p-4">
               <p className="text-xs font-black uppercase text-primary/60">{item.date}</p>
               <h3 className="mt-2 text-xl font-black text-primary">{item.title}</h3>

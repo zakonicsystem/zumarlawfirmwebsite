@@ -4,6 +4,7 @@ import Reveal from "@/components/Reveal";
 import {
   HomeBranchesSection,
   HomeFeaturedSection,
+  HomeFaqSection,
   HomeProcessSection,
   HomeServiceAreasSection,
   HomeServicesSection,
@@ -16,7 +17,7 @@ import {
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
 import JsonLd from "@/components/JsonLd";
-import { generateWebsiteSchema } from "@/lib/schema";
+import { generateFAQSchema, generateWebsiteSchema, generateLocalBusinessSchema, generateOrganizationSchema } from "@/lib/schema";
 
 export async function generateMetadata() {
   const metadata = await getPageMetadata("home");
@@ -38,10 +39,14 @@ export default async function HomePage() {
   const homeGridServices = selectServices(services, serviceSelections.homeGridSlugs, 6);
   const newsItems = cms.news.filter((item) => item.enabled !== false);
   const blogPosts = cms.blogs.filter((post) => post.enabled !== false);
+  const homeFaqItems = (cms.homeContent?.faq?.items || []).filter((item) => item.enabled !== false);
 
   return (
     <>
       <JsonLd schema={generateWebsiteSchema()} />
+      <JsonLd schema={generateLocalBusinessSchema()} />
+      <JsonLd schema={generateOrganizationSchema()} />
+      {homeFaqItems.length ? <JsonLd schema={generateFAQSchema(homeFaqItems, "https://zumarlawfirm.com")} /> : null}
       <Reveal />
       <HomeHeroSlider slides={cms.heroSlides} />
       <HomeStatsSection stats={cms.homeStats} />
@@ -60,6 +65,7 @@ export default async function HomePage() {
       <SectionDivider />
       <HomeUpdatesSection content={cms.homeContent?.updates} newsItems={newsItems} blogPosts={blogPosts} />
       <SectionDivider />
+      <HomeFaqSection content={{ ...(cms.homeContent?.faq || {}), items: homeFaqItems }} />
       <HomeYoutubeSection content={cms.homeContent?.youtubeVideos} />
       <HomeBranchesSection content={cms.homeContent?.branches} branches={cms.branches} />
     </>

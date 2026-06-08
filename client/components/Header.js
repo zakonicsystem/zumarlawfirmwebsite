@@ -156,7 +156,7 @@ export default function Header() {
           </div>
 
           <Link className="order-1 justify-self-center rounded-full bg-white p-2 shadow-xl shadow-primary/10 ring-1 ring-primary/10 sm:p-3 md:order-2" href="/" aria-label="Zumar Law Firm home">
-            <img className="h-14 w-auto object-contain sm:h-24" src="/images/zumar-logo.webp" alt="Zumar Law Firm logo" width="258" height="160" decoding="async" />
+            <img className="h-14 w-auto object-contain sm:h-24" src="/images/zumar-law-firm-logo.webp" alt="Zumar Law Firm logo" width="258" height="160" decoding="async" />
           </Link>
 
           <div className="order-3 grid gap-1 justify-items-center md:justify-items-end md:text-right">

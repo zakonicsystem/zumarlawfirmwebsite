@@ -47,9 +47,11 @@ export default async function ServiceDetailPage({ params }) {
   return (
     <>
       <JsonLd schema={generateServiceSchema(service)} />
-      {(detailContent.faqItems || []).length > 0 && (
-        <JsonLd schema={generateFAQSchema(detailContent.faqItems)} />
-      )}
+      {(service.faqItems || []).length > 0 ? (
+        <JsonLd schema={generateFAQSchema(service.faqItems, `https://zumarlawfirm.com/services/${service.slug}`)} />
+      ) : (detailContent.faqItems || []).length > 0 ? (
+        <JsonLd schema={generateFAQSchema(detailContent.faqItems, `https://zumarlawfirm.com/services/${service.slug}`)} />
+      ) : null}
       <section className="border-b border-primary/10 bg-gradient-to-br from-paper via-white to-secondary/60 py-16 sm:py-20">
         <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
@@ -111,6 +113,8 @@ export default async function ServiceDetailPage({ params }) {
                 {detailContent.emptyRequirementsText && <RichContent content={detailContent.emptyRequirementsText} />}
               </p>
             )}
+
+
           </div>
 
           <aside className="sticky top-28 rounded-[2rem] border border-primary/10 bg-primary p-7 text-white shadow-2xl shadow-primary/20">
@@ -142,7 +146,70 @@ export default async function ServiceDetailPage({ params }) {
         </div>
       </section>
 
-      {(detailContent.faqItems || []).length > 0 ? (
+      {(service.benefits || []).length > 0 ? (
+        <section className="bg-gradient-to-br from-secondary/10 via-white to-secondary/5 py-16 sm:py-20">
+          <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
+            <div className="mb-12">
+              <p className="mb-3 text-sm font-black uppercase text-primary">{detailContent.benefitsEyebrow || "Benefits"}</p>
+              <h2 className="text-4xl font-black leading-tight text-primary sm:text-5xl">{detailContent.benefitsTitle || "Key Benefits"}</h2>
+              <p className="mt-4 max-w-3xl text-lg leading-8 text-muted">
+                {detailContent.benefitsCopy && <RichContent content={detailContent.benefitsCopy} />}
+              </p>
+            </div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {(service.benefits || []).map((item, index) => (
+                <div className="group rounded-2xl border border-primary/10 bg-white p-7 shadow-lg shadow-primary/5 transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/15" key={`${item}-${index}`}>
+                  <span className="inline-flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-secondary to-secondary/80 text-primary transition duration-300 group-hover:scale-110">
+                    <FaIcon className="size-6" name="check" />
+                  </span>
+                  <p className="mt-5 text-lg font-bold leading-7 text-ink">{item}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {(service.eligibility || []).length > 0 ? (
+        <section className="py-16 sm:py-20">
+          <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
+            <div className="mb-12">
+              <p className="mb-3 text-sm font-black uppercase text-primary">{detailContent.eligibilityEyebrow || "Requirements"}</p>
+              <h2 className="text-4xl font-black leading-tight text-primary sm:text-5xl">{detailContent.eligibilityTitle || "Service Eligibility"}</h2>
+              <p className="mt-4 max-w-3xl text-lg leading-8 text-muted">
+                {detailContent.eligibilityCopy && <RichContent content={detailContent.eligibilityCopy} />}
+              </p>
+            </div>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {(service.eligibility || []).map((item, index) => (
+                <div className="group rounded-2xl border border-primary/10 bg-white p-7 shadow-md shadow-primary/5 transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/15" key={`${item}-${index}`}>
+                  <div className="flex items-start gap-4">
+                    <span className="mt-1 inline-flex shrink-0 items-center justify-center rounded-full bg-secondary/15 p-2">
+                      <FaIcon className="size-5 text-primary" name="check" />
+                    </span>
+                    <p className="text-lg font-bold leading-7 text-ink">{item}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      {(service.faqItems || []).length > 0 ? (
+        <section className="bg-[#fffdfb] py-16 sm:py-20">
+          <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
+            <div className="mb-10">
+              <p className="mb-3 text-sm font-black uppercase text-primary">FAQ</p>
+              <h2 className="text-4xl font-black leading-tight text-primary sm:text-5xl">Frequently Asked Questions</h2>
+              <p className="mt-4 max-w-3xl text-lg leading-8 text-muted">
+                Common questions about {service.title} service
+              </p>
+            </div>
+            <FaqAccordion items={service.faqItems} />
+          </div>
+        </section>
+      ) : (detailContent.faqItems || []).length > 0 ? (
         <section className="bg-[#fffdfb] py-16 sm:py-20">
           <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
             <div className="mb-10">

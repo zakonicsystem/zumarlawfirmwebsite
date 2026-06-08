@@ -5,6 +5,7 @@ import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
 import JsonLd from "@/components/JsonLd";
 import { generateOrganizationSchema } from "@/lib/schema";
+import { plainText } from "@/lib/text";
 
 export async function generateMetadata() {
   return getPageMetadata("careers");
@@ -24,7 +25,7 @@ export default async function CareersPage() {
         <div className="absolute -right-24 bottom-0 -z-10 h-80 w-80 rounded-full bg-primary/10 blur-3xl" />
         <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
           <div className="overflow-hidden rounded-[2rem] border border-white/80 bg-white p-2 shadow-2xl shadow-primary/10">
-            <img className="h-[420px] w-full rounded-[1.5rem] object-cover" src={page.image} alt="Zumar Law Firm careers" />
+            <img className="h-[420px] w-full rounded-[1.5rem] object-cover" src={page.image} alt={`${plainText(page.introTitle || page.title, "Zumar Law Firm careers")} image`} />
           </div>
           <div className="rounded-[2rem] border border-primary/10 bg-white p-7 shadow-2xl shadow-primary/10 sm:p-9">
             <p className="text-sm font-black uppercase tracking-wide text-primary">{page.introEyebrow}</p>

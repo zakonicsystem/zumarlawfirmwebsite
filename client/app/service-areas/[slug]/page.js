@@ -5,6 +5,7 @@ import { findBySlug, readCmsData } from "@/lib/cmsStore";
 import { notFound } from "next/navigation";
 import JsonLd from "@/components/JsonLd";
 import { generateServiceAreaSchema } from "@/lib/schema";
+import { plainText } from "@/lib/text";
 
 export async function generateStaticParams() {
   const { serviceAreas } = await readCmsData();
@@ -76,7 +77,7 @@ export default async function ServiceAreaDetailPage({ params }) {
               </Link>
             </div>
           </div>
-          <img className="h-72 w-full rounded-[2rem] object-cover shadow-2xl shadow-primary/10 sm:h-80" src={area.image || "/images/zumar-logo.webp"} alt={area.title} />
+          <img className="h-72 w-full rounded-[2rem] object-cover shadow-2xl shadow-primary/10 sm:h-80" src={area.image || "/images/zumar-law-firm-logo.webp"} alt={`${plainText(area.title, "Service area")} services`} />
         </div>
       </section>
 

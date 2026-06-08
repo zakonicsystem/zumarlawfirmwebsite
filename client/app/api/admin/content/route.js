@@ -11,7 +11,7 @@ export async function GET(request) {
     return proxyBackend("GET");
   }
 
-  const authError = await requireAdmin();
+  const authError = await requireAdmin(request);
   if (authError) {
     return authError;
   }

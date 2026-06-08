@@ -1,11 +1,12 @@
 import Link from "next/link";
 import FaIcon from "@/components/FaIcon";
 import RichContent from "@/components/RichContent";
+import { plainText } from "@/lib/text";
 
 export default function ArticleCard({ item, href, label = "Read More", icon = "filing" }) {
   return (
     <Link className="group overflow-hidden rounded-[2rem] border border-primary/10 bg-white shadow-xl shadow-primary/5 transition duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/15" href={href}>
-      <img className="h-56 w-full object-cover transition duration-500 group-hover:scale-105" src={item.image} alt={item.title} />
+      <img className="h-56 w-full object-cover transition duration-500 group-hover:scale-105" src={item.image} alt={plainText(item.title || item.name, "Zumar Law Firm article")} />
       <div className="p-6">
         {item.date ? <p className="mb-3 text-xs font-black uppercase text-primary/70">{item.date}</p> : null}
         <h2 className="text-2xl font-black leading-tight text-primary">{(item.title || item.name) && <RichContent content={item.title || item.name} />}</h2>
