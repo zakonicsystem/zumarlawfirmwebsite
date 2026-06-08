@@ -15,3 +15,7 @@ server/*-dev.log
 server/*-build.log
 server/*.err.log
 npm-debug.log*
+# Ignore CMS data files
+client/data/cms-content.json
+server/data/cms-content.json
+data/
