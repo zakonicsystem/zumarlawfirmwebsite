@@ -155,7 +155,7 @@ export default function Header() {
             </a>
           </div>
 
-          <Link className="order-1 justify-self-center rounded-full bg-white p-2 shadow-xl shadow-primary/10 ring-1 ring-primary/10 sm:p-3 md:order-2" href="/" aria-label="Zumar Law Firm home">
+          <Link className="order-1 justify-self-center rounded-full bg-white p-2 shadow-xl shadow-primary/10 ring-1 ring-primary/10 sm:p-3 md:order-2" href="/" aria-label="Zumar Law Firm home" prefetch={false}>
             <img className="h-14 w-auto object-contain sm:h-24" src="/images/zumar-law-firm-logo.webp" alt="Zumar Law Firm logo" width="258" height="160" decoding="async" />
           </Link>
 
@@ -191,7 +191,7 @@ export default function Header() {
             <nav className="hidden items-center gap-1 text-base font-black lg:flex" aria-label="Primary navigation">
               {navGroups.map((group) => (
                 <div className="group relative" key={group.label}>
-                  <Link className="inline-flex min-h-12 items-center gap-2 rounded-md px-4 transition hover:bg-white/10 hover:text-secondary" href={group.href}>
+                  <Link className="inline-flex min-h-12 items-center gap-2 rounded-md px-4 transition hover:bg-white/10 hover:text-secondary" href={group.href} prefetch={false}>
                     <FaIcon className="size-4 text-secondary" name={group.icon} />
                     {group.label}
                     {group.items ? <span className="text-xs text-white/60">+</span> : null}
@@ -205,7 +205,7 @@ export default function Header() {
                         </div>
                         <div className="grid gap-1">
                           {group.items.map((item) => (
-                            <Link className="grid grid-cols-[40px_1fr] gap-3 rounded-xl p-3 transition hover:bg-secondary/60" href={item.href} key={item.href}>
+                            <Link className="grid grid-cols-[40px_1fr] gap-3 rounded-xl p-3 transition hover:bg-secondary/60" href={item.href} key={item.href} prefetch={false}>
                               <span className="grid size-10 place-items-center rounded-xl bg-primary text-white">
                                 <FaIcon className="size-4" name={item.icon} />
                               </span>
@@ -223,7 +223,7 @@ export default function Header() {
               ))}
             </nav>
 
-            <Link className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-md bg-white px-3 text-[11px] font-black uppercase tracking-wide text-ink transition hover:bg-secondary hover:text-primary sm:min-h-12 sm:px-8 sm:text-sm" href="/contact">
+            <Link className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-md bg-white px-3 text-[11px] font-black uppercase tracking-wide text-ink transition hover:bg-secondary hover:text-primary sm:min-h-12 sm:px-8 sm:text-sm" href="/contact" prefetch={false}>
               Contact Us
             </Link>
           </div>
@@ -281,12 +281,12 @@ export default function Header() {
 
                       {isActive ? (
                         <div className="grid gap-2 p-3">
-                          <Link className="rounded-2xl bg-paper p-4 text-primary transition active:scale-[0.99]" href={group.href} onClick={closeMobileMenu}>
+                          <Link className="rounded-2xl bg-paper p-4 text-primary transition active:scale-[0.99]" href={group.href} onClick={closeMobileMenu} prefetch={false}>
                             <span className="block text-base font-black">Open {group.label}</span>
                             <span className="mt-1 block text-sm font-semibold leading-5 text-muted">Main page</span>
                           </Link>
                           {(group.items || []).map((item) => (
-                            <Link className="grid grid-cols-[42px_1fr] gap-3 rounded-2xl border border-primary/10 bg-white p-4 transition active:scale-[0.99] hover:bg-secondary/40" href={item.href} key={item.href} onClick={closeMobileMenu}>
+                            <Link className="grid grid-cols-[42px_1fr] gap-3 rounded-2xl border border-primary/10 bg-white p-4 transition active:scale-[0.99] hover:bg-secondary/40" href={item.href} key={item.href} onClick={closeMobileMenu} prefetch={false}>
                               <span className="grid size-10 place-items-center rounded-xl bg-secondary text-primary">
                                 <FaIcon className="size-4" name={item.icon} />
                               </span>
@@ -305,7 +305,7 @@ export default function Header() {
             </div>
 
             <div className="border-t border-primary/10 bg-white p-3 sm:p-4">
-              <Link className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-primary px-5 text-sm font-black uppercase tracking-wide text-white transition active:scale-[0.98]" href="/contact" onClick={closeMobileMenu}>
+              <Link className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-primary px-5 text-sm font-black uppercase tracking-wide text-white transition active:scale-[0.98]" href="/contact" onClick={closeMobileMenu} prefetch={false}>
                 Contact Us
               </Link>
             </div>
@@ -353,6 +353,7 @@ export default function Header() {
                   href={item.href}
                   key={`${item.type}-${item.href}`}
                   onClick={closeSearch}
+                  prefetch={false}
                 >
                   <span className="text-xs font-black uppercase tracking-wide text-primary/55">{item.type}</span>
                   <span className="font-black text-primary group-hover:text-primary/85">{item.title}</span>

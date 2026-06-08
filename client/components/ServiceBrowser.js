@@ -103,6 +103,7 @@ export default function ServiceBrowser({ initialCategory = "All", initialType = 
             className="group flex min-h-56 flex-col justify-between overflow-hidden rounded-lg border border-primary/10 bg-white p-4 shadow-sm shadow-primary/5 transition duration-300 hover:-translate-y-2 hover:border-primary/25 hover:shadow-2xl hover:shadow-primary/15 sm:min-h-64 sm:p-6"
             key={service.slug}
             href={`/services/${service.slug}`}
+            prefetch={false}
           >
             <div>
               <div className="flex items-start justify-between gap-3 sm:gap-4">
@@ -141,7 +142,7 @@ export default function ServiceBrowser({ initialCategory = "All", initialType = 
 
       {showAllButton ? (
         <div className="mt-10 flex justify-center">
-          <Link className="group inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-7 text-sm font-black text-white shadow-xl shadow-primary/20 transition duration-300 hover:-translate-y-1 hover:bg-primary/90" href="/services">
+          <Link className="group inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-7 text-sm font-black text-white shadow-xl shadow-primary/20 transition duration-300 hover:-translate-y-1 hover:bg-primary/90" href="/services" prefetch={false}>
             See All Services
             <FaIcon className="ml-2 size-4 transition duration-300 group-hover:translate-x-1" name="arrowRight" />
           </Link>

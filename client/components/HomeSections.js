@@ -161,7 +161,7 @@ export function HomeServiceAreasSection({ content, serviceAreas = [] }) {
         </div>
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {serviceAreas.filter((area) => area.enabled !== false).slice(0, Number(content?.limit || 4)).map((area) => (
-            <Link className="group overflow-hidden rounded-[2rem] border border-primary/10 bg-white shadow-xl shadow-primary/5 transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/15" href={`/service-areas/${area.slug}`} key={area.slug}>
+            <Link className="group overflow-hidden rounded-[2rem] border border-primary/10 bg-white shadow-xl shadow-primary/5 transition hover:-translate-y-2 hover:shadow-2xl hover:shadow-primary/15" href={`/service-areas/${area.slug}`} key={area.slug} prefetch={false}>
               <img className="h-44 w-full object-cover transition duration-500 group-hover:scale-105" src={area.image} alt={`${plainText(area.title, "Service area")} services`} loading="lazy" decoding="async" />
               <div className="p-5">
                 <div className="mb-4 flex items-center justify-between gap-3">
@@ -188,8 +188,8 @@ export function HomeTestimonialsSection({ content }) {
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-primary via-primary to-[#37152a] py-14 text-white sm:py-20" data-reveal="up">
-      <div className="absolute left-[-8rem] top-[-8rem] size-72 rounded-full bg-secondary/10 blur-3xl" />
-      <div className="absolute bottom-[-10rem] right-[-6rem] size-80 rounded-full bg-white/10 blur-3xl" />
+      <div className="absolute left-[-8rem] top-[-8rem] size-72 rounded-full bg-secondary/10" />
+      <div className="absolute bottom-[-10rem] right-[-6rem] size-80 rounded-full bg-white/10" />
       <div className="relative z-10 mx-auto w-[min(1180px,calc(100%-32px))]">
         <div className="mx-auto mb-10 max-w-3xl text-center" data-reveal="up">
           <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-secondary">{content?.eyebrow}</p>
@@ -246,11 +246,11 @@ export function HomeBranchesSection({ content, branches = [] }) {
         <div className="grid gap-6 md:grid-cols-2">
           {branches.filter((branch) => branch.enabled !== false).slice(0, Number(content?.limit || 2)).map((branch) => (
             <article className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/10 shadow-xl shadow-black/10 transition hover:-translate-y-1" key={branch.slug}>
-              <Link className="block" href={`/branches/${branch.slug}`}>
+              <Link className="block" href={`/branches/${branch.slug}`} prefetch={false}>
                 <img className="h-56 w-full object-cover" src={branch.image} alt={`${plainText(branch.name, "Zumar Law Firm")} branch office`} loading="lazy" decoding="async" />
               </Link>
               <div className="p-6">
-                <Link className="inline-flex items-center gap-3 text-xl font-black transition hover:text-secondary" href={`/branches/${branch.slug}`}>
+                <Link className="inline-flex items-center gap-3 text-xl font-black transition hover:text-secondary" href={`/branches/${branch.slug}`} prefetch={false}>
                   <FaIcon className="size-5 text-secondary" name="landmark" />
                   {branch.name}
                 </Link>
@@ -342,7 +342,7 @@ function ArticlePreviewColumn({ eyebrow, title, linkText, linkHref, items, baseP
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {items.slice(0, 3).map((item) => (
-          <Link className="overflow-hidden rounded-[1.5rem] border border-primary/10 bg-white shadow-lg shadow-primary/5 transition hover:-translate-y-1" href={`${basePath}/${item.slug}`} key={item.slug}>
+          <Link className="overflow-hidden rounded-[1.5rem] border border-primary/10 bg-white shadow-lg shadow-primary/5 transition hover:-translate-y-1" href={`${basePath}/${item.slug}`} key={item.slug} prefetch={false}>
             <img className="h-56 w-full object-cover" src={item.image} alt={plainText(item.title, "Zumar Law Firm update")} loading="lazy" decoding="async" />
             <div className="p-4">
               <p className="text-xs font-black uppercase text-primary/60">{item.date}</p>
@@ -364,5 +364,5 @@ function SmartLink({ href, className, children }) {
     return <a className={className} href={value} target="_blank" rel="noreferrer">{children}</a>;
   }
 
-  return <Link className={className} href={value}>{children}</Link>;
+  return <Link className={className} href={value} prefetch={false}>{children}</Link>;
 }

@@ -9,13 +9,24 @@ import RichContent from "@/components/RichContent";
 export default function ServiceCarousel({ items }) {
   const [index, setIndex] = useState(0);
   const [activeHeight, setActiveHeight] = useState(0);
+  const [canAutoRotate, setCanAutoRotate] = useState(false);
   const viewport = useRef(null);
   const thumbnailScroll = useRef(null);
   const slideRefs = useRef([]);
   const featured = useMemo(() => (Array.isArray(items) && items.length > 0 ? items : services).filter((service) => service.enabled !== false).slice(0, 14), [items]);
 
   useEffect(() => {
-    if (featured.length === 0) {
+    const media = window.matchMedia("(min-width: 768px) and (prefers-reduced-motion: no-preference)");
+    const updateAutoRotate = () => setCanAutoRotate(media.matches);
+
+    updateAutoRotate();
+    media.addEventListener("change", updateAutoRotate);
+
+    return () => media.removeEventListener("change", updateAutoRotate);
+  }, []);
+
+  useEffect(() => {
+    if (!canAutoRotate || featured.length === 0) {
       return undefined;
     }
 
@@ -24,7 +35,7 @@ export default function ServiceCarousel({ items }) {
     }, 3600);
 
     return () => window.clearInterval(timer);
-  }, [featured.length]);
+  }, [canAutoRotate, featured.length]);
 
   useEffect(() => {
     function updateHeight() {
@@ -106,10 +117,10 @@ export default function ServiceCarousel({ items }) {
                 slideRefs.current[itemIndex] = element;
               }}
             >
-              <article className={`group block overflow-hidden bg-white rounded-lg transition-all duration-300 sm:rounded-[1.5rem] ${itemIndex === index ? "ring-2 ring-secondary shadow-2xl shadow-secondary/30" : ""}`}>
+              <article className={`group block overflow-hidden bg-white rounded-lg transition-all duration-300 sm:rounded-[1.5rem] ${itemIndex === index ? "ring-2 ring-secondary shadow-xl shadow-secondary/20 sm:shadow-2xl sm:shadow-secondary/30" : ""}`}>
                 <div className="relative flex flex-col overflow-hidden p-4 sm:p-7 lg:p-8">
-                  <div className="pointer-events-none absolute -right-20 -top-24 hidden size-72 rounded-full bg-secondary/45 blur-3xl sm:block" />
-                  <div className="pointer-events-none absolute -bottom-28 left-1/2 hidden size-80 rounded-full bg-primary/10 blur-3xl sm:block" />
+                  <div className="pointer-events-none absolute -right-20 -top-24 hidden size-72 rounded-full bg-secondary/25 sm:block" />
+                  <div className="pointer-events-none absolute -bottom-28 left-1/2 hidden size-80 rounded-full bg-primary/5 sm:block" />
                   <div>
                     <div className="mb-4 flex flex-wrap items-center gap-2 sm:mb-5 sm:gap-3">
                       <span className="inline-flex items-center gap-2 rounded-full bg-primary px-3 py-2 text-[11px] font-black uppercase tracking-wide text-white sm:px-4 sm:text-xs">
@@ -133,7 +144,7 @@ export default function ServiceCarousel({ items }) {
                       <span className="mt-2 block text-sm font-semibold leading-5 text-muted">Open details for scope and document requirements.</span>
                     </span>
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                      <Link href={`/services/${service.slug}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-primary px-5 text-xs font-black uppercase tracking-wide text-white transition duration-300 hover:bg-secondary hover:text-primary sm:min-h-12 sm:px-6 sm:text-sm">
+                      <Link href={`/services/${service.slug}`} prefetch={false} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-primary px-5 text-xs font-black uppercase tracking-wide text-white transition duration-300 hover:bg-secondary hover:text-primary sm:min-h-12 sm:px-6 sm:text-sm">
                         View Details
                         <FaIcon className="size-3.5 transition group-hover:translate-x-1" name="arrowRight" />
                       </Link>

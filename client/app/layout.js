@@ -2,8 +2,6 @@ import "./globals.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import MouseEffect from "@/components/MouseEffect";
-import PageTransition from "@/components/PageTransition";
 import StickyWhatsappButton from "@/components/StickyWhatsappButton";
 import { readCmsData } from "@/lib/cmsStore";
 import { Plus_Jakarta_Sans } from "next/font/google";
@@ -30,6 +28,41 @@ export async function generateMetadata() {
     description:
       "Professional tax, company registration, intellectual property, licensing, and regulatory services in Pakistan.",
     metadataBase: new URL("https://zumarlawfirm.com"),
+    alternates: {
+      canonical: "https://zumarlawfirm.com"
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1
+      }
+    },
+    openGraph: {
+      type: "website",
+      url: "https://zumarlawfirm.com",
+      siteName: "Zumar Law Firm",
+      title: "Zumar Law Firm | Tax, Corporate & Regulatory Services",
+      description: "Professional tax, company registration, intellectual property, licensing, and regulatory services in Pakistan.",
+      images: [
+        {
+          url: "/images/zumar-law-firm-logo.webp",
+          width: 258,
+          height: 160,
+          alt: "Zumar Law Firm logo"
+        }
+      ]
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Zumar Law Firm | Tax, Corporate & Regulatory Services",
+      description: "Professional tax, company registration, intellectual property, licensing, and regulatory services in Pakistan.",
+      images: ["/images/zumar-law-firm-logo.webp"]
+    },
     verification: googleSiteVerifications.length ? { google: googleSiteVerifications } : undefined,
     icons: {
       icon: "/images/favicon.ico",
@@ -63,10 +96,9 @@ export default async function RootLayout({ children }) {
       <body className="font-sans text-ink antialiased" suppressHydrationWarning>
         <JsonLd schema={generateOrganizationSchema()} />
         <JsonLd schema={generateWebsiteSchema()} />
-        <MouseEffect />
         <Header />
         <main>
-          <PageTransition>{children}</PageTransition>
+          {children}
         </main>
         <StickyWhatsappButton />
         <Footer />

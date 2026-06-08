@@ -4,6 +4,8 @@ import { useEffect } from "react";
 
 export default function Reveal() {
   useEffect(() => {
+    document.documentElement.classList.add("js");
+
     const pageLoadItems = document.querySelectorAll("[data-page-load]");
     pageLoadItems.forEach((item, index) => {
       item.style.setProperty("--reveal-delay", `${index * 80}ms`);
@@ -11,6 +13,12 @@ export default function Reveal() {
     });
 
     const revealItems = document.querySelectorAll("[data-reveal]");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      revealItems.forEach((item) => item.classList.add("is-visible"));
+      return undefined;
+    }
+
     if (!("IntersectionObserver" in window)) {
       revealItems.forEach((item) => item.classList.add("is-visible"));
       return undefined;

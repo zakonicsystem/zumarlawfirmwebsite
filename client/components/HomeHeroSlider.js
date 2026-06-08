@@ -10,9 +10,20 @@ import { plainText } from "@/lib/text";
 export default function HomeHeroSlider({ slides = [] }) {
   const visibleSlides = useMemo(() => slides.filter((slide) => slide.enabled !== false), [slides]);
   const [active, setActive] = useState(0);
+  const [canAutoRotate, setCanAutoRotate] = useState(false);
 
   useEffect(() => {
-    if (visibleSlides.length < 2) {
+    const media = window.matchMedia("(min-width: 768px) and (prefers-reduced-motion: no-preference)");
+    const updateAutoRotate = () => setCanAutoRotate(media.matches);
+
+    updateAutoRotate();
+    media.addEventListener("change", updateAutoRotate);
+
+    return () => media.removeEventListener("change", updateAutoRotate);
+  }, []);
+
+  useEffect(() => {
+    if (!canAutoRotate || visibleSlides.length < 2) {
       return undefined;
     }
 
@@ -21,7 +32,7 @@ export default function HomeHeroSlider({ slides = [] }) {
     }, 6500);
 
     return () => clearInterval(timer);
-  }, [visibleSlides.length]);
+  }, [canAutoRotate, visibleSlides.length]);
 
   useEffect(() => {
     if (active >= visibleSlides.length) {
@@ -41,12 +52,13 @@ export default function HomeHeroSlider({ slides = [] }) {
     <section className="relative min-h-[430px] overflow-hidden bg-primary text-white sm:min-h-[500px]" data-page-load>
       {current.image ? (
         <Image
-          className="absolute inset-0 h-full w-full object-cover transition duration-[1400ms]"
+          className="absolute inset-0 h-full w-full object-cover transition duration-700"
           src={current.image}
           alt={`${plainText(current.title || seoSlide.title, "Zumar Law Firm service")} hero image`}
           fill
           priority
-          quality={72}
+          fetchPriority="high"
+          quality={68}
           sizes="(max-width: 640px) 100vw, 100vw"
           key={`${current.image || active}`}
         />
@@ -131,7 +143,7 @@ function SmartLink({ href, className, children }) {
   }
 
   return (
-    <Link className={className} href={value}>
+    <Link className={className} href={value} prefetch={false}>
       {children}
     </Link>
   );

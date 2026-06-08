@@ -35,7 +35,7 @@ export default async function Footer() {
             <h4 className="mb-4 font-extrabold">Services</h4>
             <div className="grid gap-2 text-sm font-semibold text-white/70">
               {serviceGroups.map((category) => (
-                <Link className="inline-flex items-center gap-2 transition-colors hover:text-secondary" key={category} href={`/services?category=${encodeURIComponent(category)}`}>
+                <Link className="inline-flex items-center gap-2 transition-colors hover:text-secondary" key={category} href={`/services?category=${encodeURIComponent(category)}`} prefetch={false}>
                   <FaIcon className="size-3.5" name="scale" />
                   {category}
                 </Link>
@@ -53,13 +53,13 @@ export default async function Footer() {
                     {link.title}
                   </a>
                 ) : (
-                  <Link className="inline-flex items-center gap-2 transition-colors hover:text-secondary" key={link.href} href={link.href}>
+                  <Link className="inline-flex items-center gap-2 transition-colors hover:text-secondary" key={link.href} href={link.href} prefetch={false}>
                     <FaIcon className="size-3.5" name={link.href.includes("appointment") ? "appointment" : link.href.includes("contact") ? "phone" : link.href.includes("careers") ? "business" : link.href.includes("faqs") ? "faq" : "landmark"} />
                     {link.title}
                   </Link>
                 )
               )}
-              <Link className="inline-flex items-center gap-2 transition-colors hover:text-secondary" href="/calculators">
+              <Link className="inline-flex items-center gap-2 transition-colors hover:text-secondary" href="/calculators" prefetch={false}>
                 <FaIcon className="size-3.5" name="tax" />
                 Tax Calculators
               </Link>
@@ -70,7 +70,7 @@ export default async function Footer() {
             <h4 className="mb-4 font-extrabold">Policies</h4>
             <div className="grid gap-2 text-sm font-semibold text-white/70">
               {policyLinks.map((link) => (
-                <Link className="inline-flex items-center gap-2 transition-colors hover:text-secondary" key={link.href} href={link.href}>
+                <Link className="inline-flex items-center gap-2 transition-colors hover:text-secondary" key={link.href} href={link.href} prefetch={false}>
                   <FaIcon className="size-3.5" name="filing" />
                   {link.title}
                 </Link>
@@ -85,7 +85,7 @@ export default async function Footer() {
                 <div className="rounded-2xl border border-white/10 p-4 transition hover:border-secondary/50 hover:text-white" key={branch.slug}>
                   <strong className="mb-2 inline-flex items-center gap-2 text-white">
                     <FaIcon className="size-3.5 text-secondary" name="landmark" />
-                    <Link className="transition hover:text-secondary" href={`/branches/${branch.slug}`}>{branch.name}</Link>
+                    <Link className="transition hover:text-secondary" href={`/branches/${branch.slug}`} prefetch={false}>{branch.name}</Link>
                   </strong>
                   <span className="block">{branch.phone}</span>
                   <span className="block">{branch.email}</span>
