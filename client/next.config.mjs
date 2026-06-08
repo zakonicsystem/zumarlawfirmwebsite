@@ -36,49 +36,46 @@ const nextConfig = {
       { source: "/images/tax%20return.jpeg", destination: "/images/tax-filing-services-pakistan.jpeg", permanent: true },
 
       // Old blog/guide pages
-      { source: "/dts-license-pakistan-registration-completeguide/", destination: "/services/dts-license", permanent: true },
-      { source: "/dts-license-kpk-dts-license-sindh-services/", destination: "/services/dts-license", permanent: true },
+      { source: "/dts-license-pakistan-registration-completeguide", destination: "/services/dts-license", permanent: true },
+      { source: "/dts-license-kpk-dts-license-sindh-services", destination: "/services/dts-license", permanent: true },
 
       // Old tax calculator pages
-      { source: "/salary-tax-calculator-pakistan/", destination: "/calculators", permanent: true },
-      { source: "/business-tax-calculator-pakistan/", destination: "/calculators", permanent: true },
-      { source: "/tax-calculator/", destination: "/calculators", permanent: true },
+      { source: "/salary-tax-calculator-pakistan", destination: "/calculators", permanent: true },
+      { source: "/business-tax-calculator-pakistan", destination: "/calculators", permanent: true },
+      { source: "/tax-calculator", destination: "/calculators", permanent: true },
 
       // Old misc pages
-      { source: "/freelancer-registration-fee-zumar-law-firm/", destination: "/services/freelancer-registration", permanent: true },
-      { source: "/pseb-online-registration/", destination: "/services/company-registration-pseb", permanent: true },
-      { source: "/international-services/", destination: "/services", permanent: true },
-      { source: "/about-us/", destination: "/about", permanent: true },
+      { source: "/freelancer-registration-fee-zumar-law-firm", destination: "/services/freelancer-registration", permanent: true },
+      { source: "/pseb-online-registration", destination: "/services/company-registration-pseb", permanent: true },
+      { source: "/international-services", destination: "/services", permanent: true },
+      { source: "/about-us", destination: "/about", permanent: true },
 
       // Old service pages - General
-      { source: "/services/ntn-registration/", destination: "/services/ntn-registration-individual", permanent: true },
-      { source: "/services/company-registration/", destination: "/services/private-limited-company-registration", permanent: true },
-      { source: "/services/pseb-registration/", destination: "/services/company-registration-pseb", permanent: true },
-      { source: "/services/business-registration/", destination: "/services/ntn-registration-business", permanent: true },
+      { source: "/services/ntn-registration", destination: "/services/ntn-registration-individual", permanent: true },
+      { source: "/services/company-registration", destination: "/services/private-limited-company-registration", permanent: true },
+      { source: "/services/pseb-registration", destination: "/services/company-registration-pseb", permanent: true },
+      { source: "/services/business-registration", destination: "/services/ntn-registration-business", permanent: true },
 
       // Old service pages - Tax & Registration
-      { source: "/services/income-tax-return/", destination: "/services/annual-tax-return-company", permanent: true },
-      { source: "/services/sales-tax-filing/", destination: "/services/gst-registration-trader", permanent: true },
-      { source: "/services/sales-tax-return/", destination: "/services/gst-registration-trader", permanent: true },
+      { source: "/services/income-tax-return", destination: "/services/annual-tax-return-company", permanent: true },
+      { source: "/services/sales-tax-filing", destination: "/services/gst-registration-trader", permanent: true },
+      { source: "/services/sales-tax-return", destination: "/services/gst-registration-trader", permanent: true },
 
       // Old service pages - NGO & Nonprofits
-      { source: "/services/npo-registration/", destination: "/services/ntn-registration-ngo-npo", permanent: true },
-      { source: "/services/ngo-registration/", destination: "/services/ntn-registration-ngo-npo", permanent: true },
+      { source: "/services/npo-registration", destination: "/services/ntn-registration-ngo-npo", permanent: true },
+      { source: "/services/ngo-registration", destination: "/services/ntn-registration-ngo-npo", permanent: true },
 
       // Old service pages - Intellectual Property
-      { source: "/services/trademark-registration/", destination: "/services/trademark-registration", permanent: true },
-      { source: "/services/intellectual-property-registration/", destination: "/services/trademark-registration", permanent: true },
-      { source: "/services/copyright-registration/", destination: "/services/trademark-registration", permanent: true },
+      { source: "/services/intellectual-property-registration", destination: "/services/trademark-registration", permanent: true },
+      { source: "/services/copyright-registration", destination: "/services/trademark-registration", permanent: true },
 
       // Old service pages - Arms License (multiple regional variants)
-      { source: "/services/arms-license/", destination: "/services/arms-license-punjab-non-prohibitedbore", permanent: true },
-      { source: "/services/kpk-arms-license-registration-service/", destination: "/services/arms-license-all-pakistan-non-prohibited-bore", permanent: true },
-      { source: "/services/arms-license-registration-service-in-lahore/", destination: "/services/arms-license-punjab-non-prohibitedbore", permanent: true },
-      { source: "/services/balochistan-arms-license-registration/", destination: "/services/arms-license-all-pakistan-non-prohibited-bore", permanent: true },
+      { source: "/services/arms-license", destination: "/services/arms-license-punjab-non-prohibitedbore", permanent: true },
+      { source: "/services/kpk-arms-license-registration-service", destination: "/services/arms-license-all-pakistan-non-prohibited-bore", permanent: true },
+      { source: "/services/arms-license-registration-service-in-lahore", destination: "/services/arms-license-punjab-non-prohibitedbore", permanent: true },
+      { source: "/services/balochistan-arms-license-registration", destination: "/services/arms-license-all-pakistan-non-prohibited-bore", permanent: true },
 
-      // Old service pages - Licenses (no change needed, but keeping for reference)
-      { source: "/services/import-export-license/", destination: "/services/import-export-license", permanent: true },
-      { source: "/services/dts-license/", destination: "/services/dts-license", permanent: true }
+      // Old service pages - Licenses handled by current canonical service pages.
     ];
   },
   async headers() {
