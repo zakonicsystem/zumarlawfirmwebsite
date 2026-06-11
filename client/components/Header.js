@@ -29,7 +29,21 @@ const navGroups = [
   {
     label: "About",
     href: "/about",
-    icon: "building"
+    icon: "building",
+    items: [
+      {
+        label: "About Zumar Law Firm",
+        href: "/about",
+        icon: "building",
+        copy: "Company overview, values, mission, and registrations."
+      },
+      {
+        label: "CEO",
+        href: "/ceo",
+        icon: "user",
+        copy: "Leadership profile, firm history, and professional journey."
+      }
+    ]
   },
   {
     label: "Blog",
@@ -37,16 +51,10 @@ const navGroups = [
     icon: "receipt"
   },
   {
-    label: "CEO",
-    href: "/ceo",
-    icon: "user"
-  },
-  {
-    label: "Appointment",
-    href: "/appointment",
-    icon: "appointment"
-  },
-  
+    label: "Contact",
+    href: "/contact",
+    icon: "headset"
+  }
 ];
 
 export default function Header() {

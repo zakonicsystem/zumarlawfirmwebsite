@@ -1586,7 +1586,7 @@ function HomeBlockEditor({ title, block, fields, multilineFields = [], onUpdate 
 }
 
 function ServiceSelectionEditor({ title, description, services, selectedSlugs, onUpdate }) {
-  const selected = new Set(selectedSlugs || []);
+  const selected = new Set(normalizeSelectionInput(selectedSlugs));
   const visibleServices = (services || []).filter((service) => service.enabled !== false);
 
   function toggle(slug) {
@@ -2351,7 +2351,22 @@ function normalizeServiceSlugs(value, services = [], currentSlug = "") {
       .map((service) => service.slug)
   );
 
-  return splitLines(value).filter((slug, index, slugs) => allowed.has(slug) && slugs.indexOf(slug) === index);
+  return normalizeSelectionInput(value).filter((slug, index, slugs) => allowed.has(slug) && slugs.indexOf(slug) === index);
+}
+
+function normalizeSelectionInput(value) {
+  if (Array.isArray(value)) {
+    return value.flatMap((item) => normalizeSelectionInput(item));
+  }
+
+  if (value && typeof value === "object") {
+    return normalizeSelectionInput(value.slug || value.id || value.title || value.value);
+  }
+
+  return String(value || "")
+    .split(/\r?\n|,/)
+    .map((item) => item.trim())
+    .filter(Boolean);
 }
 
 function fieldLabel(value) {

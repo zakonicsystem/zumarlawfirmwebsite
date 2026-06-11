@@ -44,13 +44,13 @@ export default async function ServiceDetailPage({ params }) {
       return bScore - aScore;
     })
     .slice(0, 3);
-  const manualRelatedServices = mapServiceSlugs(services, service.relatedServiceSlugs, service.slug).slice(0, 3);
+  const manualRelatedServices = mapServiceSlugs(services, getServiceSelectionValues(service, ["relatedServiceSlugs", "relatedServices", "manualRelatedServices"]), service.slug).slice(0, 3);
   const relatedServices = manualRelatedServices.length ? manualRelatedServices : automaticRelatedServices;
   const relatedServiceSlugs = new Set(relatedServices.map((item) => item.slug));
   const automaticCarouselServices = services
     .filter((item) => item.enabled !== false && item.slug !== service.slug && !relatedServiceSlugs.has(item.slug))
     .slice(0, 14);
-  const manualCarouselServices = mapServiceSlugs(services, service.carouselServiceSlugs, service.slug)
+  const manualCarouselServices = mapServiceSlugs(services, getServiceSelectionValues(service, ["carouselServiceSlugs", "carouselServices", "manualCarouselServices", "otherServiceSlugs", "otherServices"]), service.slug)
     .filter((item) => !relatedServiceSlugs.has(item.slug))
     .slice(0, 14);
   const carouselServices = manualCarouselServices.length ? manualCarouselServices : automaticCarouselServices;
@@ -184,7 +184,7 @@ export default async function ServiceDetailPage({ params }) {
       </section>
 
       {(service.benefits || []).length > 0 ? (
-        <section className="bg-gradient-to-br from-secondary/10 via-white to-secondary/5 py-10 sm:py-12">
+        <section className="bg-gradient-to-br from-secondary/10 via-white to-secondary/5 py-8 sm:py-10">
           <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
             <div className="mb-7">
               <p className="mb-2 text-sm font-black uppercase text-primary">{detailContent.benefitsEyebrow || "Benefits"}</p>
@@ -208,7 +208,7 @@ export default async function ServiceDetailPage({ params }) {
       ) : null}
 
       {(service.eligibility || []).length > 0 ? (
-        <section className="py-10 sm:py-12">
+        <section className="py-8 sm:py-10">
           <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
             <div className="mb-7">
               <p className="mb-2 text-sm font-black uppercase text-primary">{detailContent.eligibilityEyebrow || "Requirements"}</p>
@@ -283,7 +283,8 @@ export default async function ServiceDetailPage({ params }) {
 }
 
 function mapServiceSlugs(services, slugs, currentSlug) {
-  if (!Array.isArray(slugs) || !slugs.length) {
+  const requested = normalizeSelectionValues(slugs);
+  if (!requested.length) {
     return [];
   }
 
@@ -291,16 +292,16 @@ function mapServiceSlugs(services, slugs, currentSlug) {
     services
       .filter((service) => service.enabled !== false && service.slug !== currentSlug)
       .flatMap((service) => [
-        [service.slug, service],
-        [service.id, service],
-        [service.title, service]
+        [normalizeSelectionKey(service.slug), service],
+        [normalizeSelectionKey(service.id), service],
+        [normalizeSelectionKey(service.title), service]
       ])
       .filter(([key]) => key)
   );
 
   const used = new Set();
-  return slugs
-    .map((slug) => bySlug.get(slug))
+  return requested
+    .map((slug) => bySlug.get(normalizeSelectionKey(slug)))
     .filter((service) => {
       if (!service || used.has(service.slug)) {
         return false;
@@ -308,4 +309,27 @@ function mapServiceSlugs(services, slugs, currentSlug) {
       used.add(service.slug);
       return true;
     });
+}
+
+function getServiceSelectionValues(service, keys) {
+  return keys.flatMap((key) => normalizeSelectionValues(service?.[key]));
+}
+
+function normalizeSelectionValues(value) {
+  if (Array.isArray(value)) {
+    return value.flatMap((item) => normalizeSelectionValues(item));
+  }
+
+  if (value && typeof value === "object") {
+    return normalizeSelectionValues(value.slug || value.id || value.title || value.value);
+  }
+
+  return String(value || "")
+    .split(/\r?\n|,/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function normalizeSelectionKey(value) {
+  return String(value || "").trim().toLowerCase();
 }

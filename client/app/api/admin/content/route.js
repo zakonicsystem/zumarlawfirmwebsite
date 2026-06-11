@@ -23,7 +23,8 @@ export async function GET(request) {
 export async function PUT(request) {
   if (backendUrl) {
     const data = await request.json();
-    return proxyBackend("PUT", JSON.stringify(normalizeCmsData(normalizeIncomingData(data))));
+    const normalized = normalizeCmsData(normalizeIncomingData(data));
+    return proxyBackend("PUT", JSON.stringify(normalized), normalized);
   }
 
   const authError = await requireAdmin(request);
@@ -34,10 +35,7 @@ export async function PUT(request) {
   const data = await request.json();
   const normalized = normalizeIncomingData(data);
   const saved = await writeCmsData(normalized);
-  revalidateTag("cms-content");
-  revalidatePath("/", "layout");
-  revalidatePath("/services", "layout");
-  revalidatePath("/appointment", "page");
+  revalidateCmsRoutes(saved);
   return NextResponse.json(saved);
 }
 
@@ -53,7 +51,7 @@ async function requireAdmin(request) {
   return null;
 }
 
-async function proxyBackend(method, body) {
+async function proxyBackend(method, body, dataForRevalidation) {
   const response = await fetch(`${backendUrl}/api/admin/content`, {
     method,
     headers: {
@@ -65,12 +63,22 @@ async function proxyBackend(method, body) {
 
   const data = await response.json();
   if (method === "PUT" && response.ok) {
-    revalidateTag("cms-content");
-    revalidatePath("/", "layout");
-    revalidatePath("/services", "layout");
-    revalidatePath("/appointment", "page");
+    revalidateCmsRoutes(dataForRevalidation || data);
   }
   return NextResponse.json(normalizeCmsData(data), { status: response.status });
+}
+
+function revalidateCmsRoutes(data = {}) {
+  revalidateTag("cms-content");
+  revalidatePath("/", "layout");
+  revalidatePath("/services", "layout");
+  revalidatePath("/appointment", "page");
+
+  for (const service of data.services || []) {
+    if (service?.slug) {
+      revalidatePath(`/services/${service.slug}`, "page");
+    }
+  }
 }
 
 function normalizeIncomingData(data) {
