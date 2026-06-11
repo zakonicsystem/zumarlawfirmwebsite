@@ -36,7 +36,7 @@ export default async function ServiceDetailPage({ params }) {
     notFound();
   }
 
-  const relatedServices = services
+  const automaticRelatedServices = services
     .filter((item) => item.enabled !== false && item.slug !== service.slug)
     .sort((a, b) => {
       const aScore = Number(a.category === service.category) + Number((a.serviceType || "national") === (service.serviceType || "national"));
@@ -44,12 +44,20 @@ export default async function ServiceDetailPage({ params }) {
       return bScore - aScore;
     })
     .slice(0, 3);
-  const carouselServices = services
+  const manualRelatedServices = mapServiceSlugs(services, service.relatedServiceSlugs, service.slug).slice(0, 3);
+  const relatedServices = manualRelatedServices.length ? manualRelatedServices : automaticRelatedServices;
+  const automaticCarouselServices = services
     .filter((item) => item.enabled !== false && item.slug !== service.slug)
     .slice(0, 14);
+  const manualCarouselServices = mapServiceSlugs(services, service.carouselServiceSlugs, service.slug).slice(0, 14);
+  const carouselServices = manualCarouselServices.length ? manualCarouselServices : automaticCarouselServices;
   const serviceFaqItems = (service.faqItems || []).filter((item) => item.enabled !== false);
   const fallbackFaqItems = (detailContent.faqItems || []).filter((item) => item.enabled !== false);
   const faqItems = serviceFaqItems.length ? serviceFaqItems : fallbackFaqItems;
+  const overviewTitle = service.overviewTitle || detailContent.overviewTitle;
+  const overviewCopy = service.overviewCopy || detailContent.overviewCopy;
+  const processTitle = service.processTitle || detailContent.processTitle;
+  const processSteps = Array.isArray(service.processSteps) && service.processSteps.length ? service.processSteps : detailContent.processSteps || [];
 
   return (
     <>
@@ -88,14 +96,14 @@ export default async function ServiceDetailPage({ params }) {
       <section className="py-16 sm:py-20">
         <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[1fr_380px] lg:items-start">
           <div className="rounded-[2rem] border border-primary/10 bg-white p-7 shadow-xl shadow-primary/5 sm:p-9">
-            <h2 className="text-3xl font-black text-primary">{detailContent.overviewTitle}</h2>
+            <h2 className="text-3xl font-black text-primary">{overviewTitle && <RichContent content={overviewTitle} inline />}</h2>
             <div className="mt-5 text-lg leading-8 text-muted">
-              {detailContent.overviewCopy && <RichContent content={detailContent.overviewCopy} />}
+              {overviewCopy && <RichContent content={overviewCopy} />}
             </div>
 
-            <h3 className="mt-10 text-2xl font-black text-primary">{detailContent.processTitle}</h3>
+            <h3 className="mt-10 text-2xl font-black text-primary">{processTitle && <RichContent content={processTitle} inline />}</h3>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              {(detailContent.processSteps || []).map((item, index) => (
+              {processSteps.map((item, index) => (
                 <div className="rounded-2xl border border-primary/10 bg-paper p-4" key={`${item}-${index}`}>
                   <span className="text-xs font-black uppercase text-primary/50">{String(index + 1).padStart(2, "0")}</span>
                   <div className="mt-2 font-bold leading-7 text-ink/80">{item && <RichContent content={item} />}</div>
@@ -269,4 +277,18 @@ export default async function ServiceDetailPage({ params }) {
       ) : null}
     </>
   );
+}
+
+function mapServiceSlugs(services, slugs, currentSlug) {
+  if (!Array.isArray(slugs) || !slugs.length) {
+    return [];
+  }
+
+  const bySlug = new Map(
+    services
+      .filter((service) => service.enabled !== false && service.slug !== currentSlug)
+      .map((service) => [service.slug, service])
+  );
+
+  return slugs.map((slug) => bySlug.get(slug)).filter(Boolean);
 }

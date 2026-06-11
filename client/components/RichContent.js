@@ -73,12 +73,23 @@ function sanitizeHtml(content) {
   return html.trim();
 }
 
-export default function RichContent({ content, className = "", as }) {
-  const html = useMemo(() => sanitizeHtml(content), [content]);
+function inlineHtml(html) {
+  return html
+    .replace(/<\/?(p|div|h[1-6]|blockquote)\b[^>]*>/gi, "")
+    .replace(/<\/?li\b[^>]*>/gi, " ")
+    .replace(/<\/?(ul|ol)\b[^>]*>/gi, "")
+    .trim();
+}
+
+export default function RichContent({ content, className = "", as, inline = false }) {
+  const html = useMemo(() => {
+    const sanitized = sanitizeHtml(content);
+    return inline ? inlineHtml(sanitized) : sanitized;
+  }, [content, inline]);
 
   if (!html) return null;
 
-  const Component = as || (blockTagPattern.test(html) ? "div" : "span");
+  const Component = as || (!inline && blockTagPattern.test(html) ? "div" : "span");
 
   return (
     <Component

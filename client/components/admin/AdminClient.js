@@ -56,6 +56,12 @@ const emptyService = {
   price: "",
   timeline: "",
   summary: "",
+  overviewTitle: "",
+  overviewCopy: "",
+  processTitle: "",
+  processSteps: [],
+  relatedServiceSlugs: [],
+  carouselServiceSlugs: [],
   requirements: [],
   benefits: [],
   eligibility: [],
@@ -2001,6 +2007,35 @@ function ServiceFields({ data, form, setForm }) {
       <Field label="Price" value={String(form.price || "")} onChange={(value) => setForm({ ...form, price: value })} />
       <Field label="Timeline" value={form.timeline || ""} onChange={(value) => setForm({ ...form, timeline: value })} />
       <RichEditor label="Summary" value={form.summary} onChange={(value) => setForm({ ...form, summary: value })} />
+      <div className="rounded-xl border border-primary/10 bg-paper p-5">
+        <h3 className="mb-4 text-lg font-black text-primary">Service Detail Overview</h3>
+        <div className="grid gap-4">
+          <RichEditor label="Overview Title" value={form.overviewTitle || ""} onChange={(value) => setForm({ ...form, overviewTitle: value })} />
+          <RichEditor label="Overview Copy" value={form.overviewCopy || ""} onChange={(value) => setForm({ ...form, overviewCopy: value })} />
+        </div>
+      </div>
+      <StringListEditor
+        title="How This Service Is Handled"
+        items={ensureArray(form.processSteps)}
+        onUpdate={(items) => setForm({ ...form, processSteps: items })}
+        addLabel="Add Step"
+        richItems
+      />
+      <RichEditor label="Service Handle / Process Title" value={form.processTitle || ""} onChange={(value) => setForm({ ...form, processTitle: value })} />
+      <ServiceSelectionEditor
+        title="Manual Related Services"
+        description="Choose services shown under the right-side CTA buttons. If none are selected, related services are chosen automatically."
+        services={(data.services || []).filter((service) => service.slug !== form.slug)}
+        selectedSlugs={form.relatedServiceSlugs || []}
+        onUpdate={(slugs) => setForm({ ...form, relatedServiceSlugs: slugs })}
+      />
+      <ServiceSelectionEditor
+        title="Manual Carousel Services"
+        description="Choose services shown in the bottom carousel. If none are selected, other visible services are shown automatically."
+        services={(data.services || []).filter((service) => service.slug !== form.slug)}
+        selectedSlugs={form.carouselServiceSlugs || []}
+        onUpdate={(slugs) => setForm({ ...form, carouselServiceSlugs: slugs })}
+      />
       <StringListEditor
         title="Requirements / Documents"
         items={ensureArray(form.requirements)}
