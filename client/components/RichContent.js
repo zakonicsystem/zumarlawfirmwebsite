@@ -3,6 +3,28 @@
 import { useMemo } from "react";
 
 const allowedStyles = new Set(["color", "font-size", "font-style", "font-weight", "text-decoration"]);
+const blockTagPattern = /<(p|div|h[1-6]|ul|ol|li|blockquote)\b/i;
+
+function decodeHtmlEntities(content) {
+  let html = String(content || "");
+
+  if (!/&(?:lt|gt|amp|quot|#39);/i.test(html)) {
+    return html;
+  }
+
+  if (typeof document === "undefined") {
+    return html
+      .replace(/&lt;/gi, "<")
+      .replace(/&gt;/gi, ">")
+      .replace(/&quot;/gi, "\"")
+      .replace(/&#39;/gi, "'")
+      .replace(/&amp;/gi, "&");
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.innerHTML = html;
+  return textarea.value;
+}
 
 function normalizeStyle(styleText = "") {
   const styles = new Map();
@@ -23,7 +45,7 @@ function normalizeStyle(styleText = "") {
 }
 
 function sanitizeHtml(content) {
-  let html = String(content || "");
+  let html = decodeHtmlEntities(content);
 
   html = html.replace(/<(script|style|iframe|object|embed|form|input|button|textarea|select)\b[^>]*>[\s\S]*?<\/\1>/gi, "");
   html = html.replace(/<\/?(script|style|iframe|object|embed|form|input|button|textarea|select)\b[^>]*>/gi, "");
@@ -37,20 +59,29 @@ function sanitizeHtml(content) {
     return cleanStyle ? ` style=${quote}${cleanStyle}${quote}` : "";
   });
 
-  html = html.replace(/<span\b[^>]*>/gi, "");
-  html = html.replace(/<\/span>/gi, "");
+  html = html.replace(/<span\b([^>]*)>/gi, (_match, attributes) => {
+    const styleMatch = attributes.match(/\sstyle\s*=\s*(["'])(.*?)\1/i);
+    if (!styleMatch) {
+      return "<span>";
+    }
+
+    const cleanStyle = normalizeStyle(styleMatch[2]);
+    return cleanStyle ? `<span style="${cleanStyle}">` : "<span>";
+  });
   html = html.replace(/<(\w+)\b([^>]*)>\s*<\/\1>/gi, "");
 
   return html.trim();
 }
 
-export default function RichContent({ content, className = "" }) {
+export default function RichContent({ content, className = "", as }) {
   const html = useMemo(() => sanitizeHtml(content), [content]);
 
   if (!html) return null;
 
+  const Component = as || (blockTagPattern.test(html) ? "div" : "span");
+
   return (
-    <span
+    <Component
       className={`rich-content break-words ${className}`}
       dangerouslySetInnerHTML={{ __html: html }}
       suppressHydrationWarning

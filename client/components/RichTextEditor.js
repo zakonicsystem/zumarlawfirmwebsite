@@ -17,13 +17,6 @@ const colorOptions = [
 
 const allowedTags = new Set(["A", "B", "BLOCKQUOTE", "BR", "DIV", "EM", "H1", "H2", "H3", "H4", "H5", "H6", "I", "LI", "OL", "P", "SPAN", "STRONG", "U", "UL"]);
 const allowedStyles = new Set(["color", "font-size", "font-style", "font-weight", "text-decoration"]);
-const styleMap = {
-  color: "color",
-  fontSize: "font-size",
-  fontStyle: "font-style",
-  fontWeight: "font-weight",
-  textDecoration: "text-decoration"
-};
 
 function normalizeStyle(styleText = "") {
   const styles = new Map();
@@ -43,20 +36,16 @@ function normalizeStyle(styleText = "") {
   return [...styles.entries()].map(([property, value]) => `${property}: ${value}`).join("; ");
 }
 
-function removeStyleProperty(root, property) {
-  const cssProperty = styleMap[property] || property;
-  const elements = root.querySelectorAll ? root.querySelectorAll("[style]") : [];
+function decodeHtmlEntities(content) {
+  let html = String(content || "");
 
-  elements.forEach((element) => {
-    element.style.removeProperty(cssProperty);
-    const cleanStyle = normalizeStyle(element.getAttribute("style") || "");
+  if (!/&(?:lt|gt|amp|quot|#39);/i.test(html) || typeof document === "undefined") {
+    return html;
+  }
 
-    if (cleanStyle) {
-      element.setAttribute("style", cleanStyle);
-    } else {
-      element.removeAttribute("style");
-    }
-  });
+  const textarea = document.createElement("textarea");
+  textarea.innerHTML = html;
+  return textarea.value;
 }
 
 function normalizeElementStyle(element) {
@@ -80,10 +69,29 @@ function unwrapNode(node) {
   parent.removeChild(node);
 }
 
+function replaceTag(element, tagName) {
+  const replacement = document.createElement(tagName);
+
+  [...element.attributes].forEach((attribute) => {
+    replacement.setAttribute(attribute.name, attribute.value);
+  });
+
+  while (element.firstChild) {
+    replacement.appendChild(element.firstChild);
+  }
+
+  element.replaceWith(replacement);
+  return replacement;
+}
+
 function cleanDom(root) {
   const elements = [...root.querySelectorAll("*")].reverse();
 
   elements.forEach((element) => {
+    if (element.tagName === "DIV") {
+      element = replaceTag(element, "p");
+    }
+
     if (!allowedTags.has(element.tagName)) {
       unwrapNode(element);
       return;
@@ -148,7 +156,7 @@ function cleanHtml(html) {
   if (!html || typeof document === "undefined") return "";
 
   const container = document.createElement("div");
-  container.innerHTML = html;
+  container.innerHTML = decodeHtmlEntities(html);
   cleanDom(container);
 
   return container.innerHTML
@@ -166,8 +174,10 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
     const editor = editorRef.current;
     if (!editor) return;
 
-    if (editor.innerHTML !== (value || "")) {
-      editor.innerHTML = value || "";
+    const nextHtml = decodeHtmlEntities(value || "");
+
+    if (editor.innerHTML !== nextHtml) {
+      editor.innerHTML = nextHtml;
       cleanDom(editor);
       setCharacterCount(editor.innerText.length);
     }
@@ -222,6 +232,10 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
     if (!selectedRoot || !editor.contains(selectedRoot)) return;
 
     const targets = getStyleTargets(range, editor);
+    if (!targets.length) {
+      return;
+    }
+
     targets.forEach((target) => {
       target.style[property] = value;
       normalizeElementStyle(target);
@@ -386,5 +400,5 @@ function getStyleTargets(range, editor) {
     return [fallback];
   }
 
-  return [editor];
+  return [];
 }

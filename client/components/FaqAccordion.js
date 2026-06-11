@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import FaIcon from "@/components/FaIcon";
+import RichContent from "@/components/RichContent";
 
 export default function FaqAccordion({ items = [] }) {
   const [open, setOpen] = useState(0);
@@ -27,7 +28,7 @@ export default function FaqAccordion({ items = [] }) {
               <span className={`grid size-14 place-items-center rounded-2xl transition ${active ? "bg-primary text-white" : "bg-secondary text-primary"}`}>
                 <FaIcon className="size-6" name={item.icon || "faq"} />
               </span>
-              <span className="text-xl font-black leading-tight text-primary sm:text-2xl">{item.question}</span>
+              <span className="text-xl font-black leading-tight text-primary sm:text-2xl">{item.question && <RichContent content={item.question} />}</span>
               <span className={`grid size-10 place-items-center rounded-full border border-primary/10 text-primary transition ${active ? "rotate-45 bg-secondary" : "bg-white"}`}>
                 +
               </span>
@@ -36,7 +37,7 @@ export default function FaqAccordion({ items = [] }) {
             <div className={`grid transition-all duration-300 ${active ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
               <div className="overflow-hidden">
                 <div className="border-t border-primary/10 px-5 pb-6 pt-5 sm:ml-[80px] sm:px-6">
-                  <p className="text-lg leading-8 text-muted">{item.answer}</p>
+                  <RichContent as="div" className="text-lg leading-8 text-muted" content={item.answer} />
                 </div>
               </div>
             </div>
