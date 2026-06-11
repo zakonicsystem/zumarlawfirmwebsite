@@ -501,8 +501,8 @@ export const defaultPageContent = {
     feeNote: "Final government fees, challans, and case-specific expenses may vary where applicable.",
     startOnlineLabel: "Start Online",
     startOnlineHref: "https://app.zumarlawfirm.com/signup",
-    appointmentLabel: "Contact Us",
-    appointmentHref: "/contact",
+    appointmentLabel: "Book Appointment",
+    appointmentHref: "/appointment",
     callLabel: "Call +92 303 598 8574",
     callHref: "tel:+923035988574",
     whatsappLabel: "WhatsApp",
@@ -562,7 +562,7 @@ export const defaultPageContent = {
     coverageFallback: "Our team supports this city through online consultation, document review, filing preparation, and follow-up with relevant tax, corporate, licensing, and regulatory authorities.",
     relatedTitle: "Popular services in this city",
     appointmentLabel: "Book Consultation",
-    appointmentHref: "/contact",
+    appointmentHref: "/appointment",
     allAreasLabel: "All Service Areas"
   },
   branches: {

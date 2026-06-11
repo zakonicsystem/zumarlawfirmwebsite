@@ -5,6 +5,7 @@ const siteUrl = "https://zumarlawfirm.com";
 const staticRoutes = [
   "/",
   "/about",
+  "/appointment",
   "/blog",
   "/branches",
   "/calculators",

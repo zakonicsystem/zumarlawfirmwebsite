@@ -41,6 +41,11 @@ const navGroups = [
     href: "/ceo",
     icon: "user"
   },
+  {
+    label: "Appointment",
+    href: "/appointment",
+    icon: "appointment"
+  },
   
 ];
 
@@ -223,8 +228,8 @@ export default function Header() {
               ))}
             </nav>
 
-            <Link className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-md bg-white px-3 text-[11px] font-black uppercase tracking-wide text-ink transition hover:bg-secondary hover:text-primary sm:min-h-12 sm:px-8 sm:text-sm" href="/contact" prefetch={false}>
-              Contact Us
+            <Link className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-md bg-white px-3 text-[11px] font-black uppercase tracking-wide text-ink transition hover:bg-secondary hover:text-primary sm:min-h-12 sm:px-8 sm:text-sm" href="/appointment" prefetch={false}>
+              Appointment
             </Link>
           </div>
         </div>
@@ -305,8 +310,8 @@ export default function Header() {
             </div>
 
             <div className="border-t border-primary/10 bg-white p-3 sm:p-4">
-              <Link className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-primary px-5 text-sm font-black uppercase tracking-wide text-white transition active:scale-[0.98]" href="/contact" onClick={closeMobileMenu} prefetch={false}>
-                Contact Us
+              <Link className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-primary px-5 text-sm font-black uppercase tracking-wide text-white transition active:scale-[0.98]" href="/appointment" onClick={closeMobileMenu} prefetch={false}>
+                Appointment
               </Link>
             </div>
           </div>

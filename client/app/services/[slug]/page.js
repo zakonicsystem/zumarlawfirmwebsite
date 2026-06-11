@@ -46,10 +46,13 @@ export default async function ServiceDetailPage({ params }) {
     .slice(0, 3);
   const manualRelatedServices = mapServiceSlugs(services, service.relatedServiceSlugs, service.slug).slice(0, 3);
   const relatedServices = manualRelatedServices.length ? manualRelatedServices : automaticRelatedServices;
+  const relatedServiceSlugs = new Set(relatedServices.map((item) => item.slug));
   const automaticCarouselServices = services
-    .filter((item) => item.enabled !== false && item.slug !== service.slug)
+    .filter((item) => item.enabled !== false && item.slug !== service.slug && !relatedServiceSlugs.has(item.slug))
     .slice(0, 14);
-  const manualCarouselServices = mapServiceSlugs(services, service.carouselServiceSlugs, service.slug).slice(0, 14);
+  const manualCarouselServices = mapServiceSlugs(services, service.carouselServiceSlugs, service.slug)
+    .filter((item) => !relatedServiceSlugs.has(item.slug))
+    .slice(0, 14);
   const carouselServices = manualCarouselServices.length ? manualCarouselServices : automaticCarouselServices;
   const serviceFaqItems = (service.faqItems || []).filter((item) => item.enabled !== false);
   const fallbackFaqItems = (detailContent.faqItems || []).filter((item) => item.enabled !== false);
@@ -181,22 +184,22 @@ export default async function ServiceDetailPage({ params }) {
       </section>
 
       {(service.benefits || []).length > 0 ? (
-        <section className="bg-gradient-to-br from-secondary/10 via-white to-secondary/5 py-16 sm:py-20">
+        <section className="bg-gradient-to-br from-secondary/10 via-white to-secondary/5 py-10 sm:py-12">
           <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
-            <div className="mb-12">
-              <p className="mb-3 text-sm font-black uppercase text-primary">{detailContent.benefitsEyebrow || "Benefits"}</p>
-              <h2 className="text-4xl font-black leading-tight text-primary sm:text-5xl">{detailContent.benefitsTitle || "Key Benefits"}</h2>
-              <p className="mt-4 max-w-3xl text-lg leading-8 text-muted">
+            <div className="mb-7">
+              <p className="mb-2 text-sm font-black uppercase text-primary">{detailContent.benefitsEyebrow || "Benefits"}</p>
+              <h2 className="text-3xl font-black leading-tight text-primary sm:text-4xl">{detailContent.benefitsTitle || "Key Benefits"}</h2>
+              <p className="mt-3 max-w-3xl text-base leading-7 text-muted">
                 {detailContent.benefitsCopy && <RichContent content={detailContent.benefitsCopy} />}
               </p>
             </div>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {(service.benefits || []).map((item, index) => (
-                <div className="group rounded-2xl border border-primary/10 bg-white p-7 shadow-lg shadow-primary/5 transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/15" key={`${item}-${index}`}>
-                  <span className="inline-flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-secondary to-secondary/80 text-primary transition duration-300 group-hover:scale-110">
-                    <FaIcon className="size-6" name="check" />
+                <div className="group rounded-2xl border border-primary/10 bg-white p-5 shadow-lg shadow-primary/5 transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/15" key={`${item}-${index}`}>
+                  <span className="inline-flex size-11 items-center justify-center rounded-xl bg-gradient-to-br from-secondary to-secondary/80 text-primary transition duration-300 group-hover:scale-110">
+                    <FaIcon className="size-5" name="check" />
                   </span>
-                  <div className="mt-5 text-lg font-bold leading-7 text-ink">{item && <RichContent content={item} />}</div>
+                  <div className="mt-4 text-base font-bold leading-7 text-ink">{item && <RichContent content={item} />}</div>
                 </div>
               ))}
             </div>
@@ -205,23 +208,23 @@ export default async function ServiceDetailPage({ params }) {
       ) : null}
 
       {(service.eligibility || []).length > 0 ? (
-        <section className="py-16 sm:py-20">
+        <section className="py-10 sm:py-12">
           <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
-            <div className="mb-12">
-              <p className="mb-3 text-sm font-black uppercase text-primary">{detailContent.eligibilityEyebrow || "Requirements"}</p>
-              <h2 className="text-4xl font-black leading-tight text-primary sm:text-5xl">{detailContent.eligibilityTitle || "Service Eligibility"}</h2>
-              <p className="mt-4 max-w-3xl text-lg leading-8 text-muted">
+            <div className="mb-7">
+              <p className="mb-2 text-sm font-black uppercase text-primary">{detailContent.eligibilityEyebrow || "Requirements"}</p>
+              <h2 className="text-3xl font-black leading-tight text-primary sm:text-4xl">{detailContent.eligibilityTitle || "Service Eligibility"}</h2>
+              <p className="mt-3 max-w-3xl text-base leading-7 text-muted">
                 {detailContent.eligibilityCopy && <RichContent content={detailContent.eligibilityCopy} />}
               </p>
             </div>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {(service.eligibility || []).map((item, index) => (
-                <div className="group rounded-2xl border border-primary/10 bg-white p-7 shadow-md shadow-primary/5 transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/15" key={`${item}-${index}`}>
-                  <div className="flex items-start gap-4">
+                <div className="group rounded-2xl border border-primary/10 bg-white p-5 shadow-md shadow-primary/5 transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/15" key={`${item}-${index}`}>
+                  <div className="flex items-start gap-3">
                     <span className="mt-1 inline-flex shrink-0 items-center justify-center rounded-full bg-secondary/15 p-2">
-                      <FaIcon className="size-5 text-primary" name="check" />
+                      <FaIcon className="size-4 text-primary" name="check" />
                     </span>
-                    <div className="text-lg font-bold leading-7 text-ink">{item && <RichContent content={item} />}</div>
+                    <div className="text-base font-bold leading-7 text-ink">{item && <RichContent content={item} />}</div>
                   </div>
                 </div>
               ))}
@@ -287,8 +290,22 @@ function mapServiceSlugs(services, slugs, currentSlug) {
   const bySlug = new Map(
     services
       .filter((service) => service.enabled !== false && service.slug !== currentSlug)
-      .map((service) => [service.slug, service])
+      .flatMap((service) => [
+        [service.slug, service],
+        [service.id, service],
+        [service.title, service]
+      ])
+      .filter(([key]) => key)
   );
 
-  return slugs.map((slug) => bySlug.get(slug)).filter(Boolean);
+  const used = new Set();
+  return slugs
+    .map((slug) => bySlug.get(slug))
+    .filter((service) => {
+      if (!service || used.has(service.slug)) {
+        return false;
+      }
+      used.add(service.slug);
+      return true;
+    });
 }

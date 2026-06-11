@@ -138,7 +138,7 @@ export async function writeCmsData(data) {
 
 async function readBackendCmsData() {
   const response = await fetch(`${backendUrl}/api/content`, {
-    next: { revalidate: cmsFetchRevalidateSeconds }
+    next: { revalidate: cmsFetchRevalidateSeconds, tags: ["cms-content"] }
   });
 
   if (!response.ok) {

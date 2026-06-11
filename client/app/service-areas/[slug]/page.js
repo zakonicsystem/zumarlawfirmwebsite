@@ -67,7 +67,7 @@ export default async function ServiceAreaDetailPage({ params }) {
               {area.summary && <RichContent content={area.summary} />}
             </div>
             <div className="mt-7 flex flex-wrap gap-3">
-              <Link className="inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-black text-white" href={page.appointmentHref || "/contact"}>
+              <Link className="inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-black text-white" href={page.appointmentHref || "/appointment"}>
                 <FaIcon className="mr-2 size-4" name="appointment" />
                 {page.appointmentLabel || "Book Appointment"}
               </Link>

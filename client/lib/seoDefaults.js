@@ -50,7 +50,7 @@ export const defaultSeoPages = {
   },
   appointment: {
     label: "Appointment",
-    path: "/contact",
+    path: "/appointment",
     metaTitle: "Appointment",
     metaDescription: "Book a consultation with Zumar Law Firm."
   },

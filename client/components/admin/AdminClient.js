@@ -106,6 +106,7 @@ const pageSidebarItems = [
   ["Branches", "/admin/pages?page=branches", "landmark"],
   ["Branch Detail", "/admin/pages?page=branchDetail", "landmark"],
   ["Blog", "/admin/pages?page=blog", "certificate"],
+  ["Appointment", "/admin/pages?page=appointment", "appointment"],
   ["Contact", "/admin/pages?page=contact", "headset"],
   ["Careers", "/admin/pages?page=careers", "business"],
   ["Service Detail", "/admin/pages?page=serviceDetail", "filing"],
@@ -1862,7 +1863,10 @@ function ServiceForm({ data, id, save }) {
       slug,
       requirements: splitLines(form.requirements),
       benefits: splitLines(form.benefits),
-      eligibility: splitLines(form.eligibility)
+      eligibility: splitLines(form.eligibility),
+      processSteps: splitLines(form.processSteps),
+      relatedServiceSlugs: normalizeServiceSlugs(form.relatedServiceSlugs, data.services, slug),
+      carouselServiceSlugs: normalizeServiceSlugs(form.carouselServiceSlugs, data.services, slug)
     };
     const next = upsertRecord(data.services, record, current, id);
     save({ ...data, services: next }, isEditing ? "Service updated." : "Service created.", true).then(() => router.push("/admin/services"));
@@ -2338,6 +2342,16 @@ function splitLines(value) {
       .split("\n")
       .map((item) => item.trim())
       .filter(Boolean);
+}
+
+function normalizeServiceSlugs(value, services = [], currentSlug = "") {
+  const allowed = new Set(
+    (services || [])
+      .filter((service) => service.enabled !== false && service.slug !== currentSlug)
+      .map((service) => service.slug)
+  );
+
+  return splitLines(value).filter((slug, index, slugs) => allowed.has(slug) && slugs.indexOf(slug) === index);
 }
 
 function fieldLabel(value) {

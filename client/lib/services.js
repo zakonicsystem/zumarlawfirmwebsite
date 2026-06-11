@@ -519,6 +519,7 @@ export const quickLinks = [
   { title: "Tax Calculator", href: "/calculators" },
   { title: "Careers", href: "/careers" },
   { title: "Branches", href: "/branches" },
+  { title: "Appointment", href: "/appointment" },
   { title: "Contact", href: "/contact" },
   { title: "Client Portal", href: "https://app.zumarlawfirm.com/login" },
   { title: "Create Account", href: "https://app.zumarlawfirm.com/signup" }
