@@ -12,7 +12,7 @@ const navGroups = [
     icon: "scale"
   },
   {
-    label: "All Services",
+    label: "Services",
     href: "/services",
     icon: "filing"
   },

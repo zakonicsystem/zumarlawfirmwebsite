@@ -42,17 +42,14 @@ export default async function ServiceDetailPage({ params }) {
       const aScore = Number(a.category === service.category) + Number((a.serviceType || "national") === (service.serviceType || "national"));
       const bScore = Number(b.category === service.category) + Number((b.serviceType || "national") === (service.serviceType || "national"));
       return bScore - aScore;
-    })
-    .slice(0, 3);
-  const manualRelatedServices = mapServiceSlugs(services, getServiceSelectionValues(service, ["relatedServiceSlugs", "relatedServices", "manualRelatedServices"]), service.slug).slice(0, 3);
+    });
+  const manualRelatedServices = mapServiceSlugs(services, getServiceSelectionValues(service, ["relatedServiceSlugs", "relatedServices", "manualRelatedServices"]), service.slug);
   const relatedServices = manualRelatedServices.length ? manualRelatedServices : automaticRelatedServices;
   const relatedServiceSlugs = new Set(relatedServices.map((item) => item.slug));
   const automaticCarouselServices = services
-    .filter((item) => item.enabled !== false && item.slug !== service.slug && !relatedServiceSlugs.has(item.slug))
-    .slice(0, 14);
+    .filter((item) => item.enabled !== false && item.slug !== service.slug && !relatedServiceSlugs.has(item.slug));
   const manualCarouselServices = mapServiceSlugs(services, getServiceSelectionValues(service, ["carouselServiceSlugs", "carouselServices", "manualCarouselServices", "otherServiceSlugs", "otherServices"]), service.slug)
-    .filter((item) => !relatedServiceSlugs.has(item.slug))
-    .slice(0, 14);
+    .filter((item) => !relatedServiceSlugs.has(item.slug));
   const carouselServices = manualCarouselServices.length ? manualCarouselServices : automaticCarouselServices;
   const serviceFaqItems = (service.faqItems || []).filter((item) => item.enabled !== false);
   const fallbackFaqItems = (detailContent.faqItems || []).filter((item) => item.enabled !== false);
