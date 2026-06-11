@@ -542,8 +542,11 @@ export const defaultPageContent = {
         enabled: true
       }
     ],
+    longDescriptionTitle: "Detailed Information",
+    longDescription: "",
     relatedEyebrow: "Related services",
     relatedTitle: "You may also need these services.",
+    otherServicesTitle: "Other Services",
     allServicesLabel: "All Services"
   },
   serviceAreas: {

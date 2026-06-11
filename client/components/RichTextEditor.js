@@ -11,10 +11,11 @@ const colorOptions = [
   ["#6f6670", "Muted"],
   ["#000000", "Black"],
   ["#b91c1c", "Red"],
+  ["#ffffff", "white"],
   ["#15803d", "Green"]
 ];
 
-const allowedTags = new Set(["A", "B", "BLOCKQUOTE", "BR", "DIV", "EM", "H1", "H2", "H3", "H4", "H5", "H6", "I", "LI", "OL", "P", "STRONG", "U", "UL"]);
+const allowedTags = new Set(["A", "B", "BLOCKQUOTE", "BR", "DIV", "EM", "H1", "H2", "H3", "H4", "H5", "H6", "I", "LI", "OL", "P", "SPAN", "STRONG", "U", "UL"]);
 const allowedStyles = new Set(["color", "font-size", "font-style", "font-weight", "text-decoration"]);
 const styleMap = {
   color: "color",
@@ -42,6 +43,32 @@ function normalizeStyle(styleText = "") {
   return [...styles.entries()].map(([property, value]) => `${property}: ${value}`).join("; ");
 }
 
+function removeStyleProperty(root, property) {
+  const cssProperty = styleMap[property] || property;
+  const elements = root.querySelectorAll ? root.querySelectorAll("[style]") : [];
+
+  elements.forEach((element) => {
+    element.style.removeProperty(cssProperty);
+    const cleanStyle = normalizeStyle(element.getAttribute("style") || "");
+
+    if (cleanStyle) {
+      element.setAttribute("style", cleanStyle);
+    } else {
+      element.removeAttribute("style");
+    }
+  });
+}
+
+function normalizeElementStyle(element) {
+  const cleanStyle = normalizeStyle(element.getAttribute("style") || "");
+
+  if (cleanStyle) {
+    element.setAttribute("style", cleanStyle);
+  } else {
+    element.removeAttribute("style");
+  }
+}
+
 function unwrapNode(node) {
   const parent = node.parentNode;
   if (!parent) return;
@@ -51,42 +78,6 @@ function unwrapNode(node) {
   }
 
   parent.removeChild(node);
-}
-
-function closestStyleTarget(node, editor) {
-  const element = node?.nodeType === Node.ELEMENT_NODE ? node : node?.parentElement;
-  const target = element?.closest?.("a,h1,h2,h3,h4,h5,h6,p,li,blockquote,div");
-
-  if (target && editor.contains(target) && target !== editor) {
-    return target;
-  }
-
-  return null;
-}
-
-function styleTargetsFromRange(range, editor) {
-  const targets = new Set();
-  const startTarget = closestStyleTarget(range.startContainer, editor);
-  const endTarget = closestStyleTarget(range.endContainer, editor);
-
-  if (startTarget) targets.add(startTarget);
-  if (endTarget) targets.add(endTarget);
-
-  const walker = document.createTreeWalker(editor, NodeFilter.SHOW_ELEMENT, {
-    acceptNode(node) {
-      if (!["A", "H1", "H2", "H3", "H4", "H5", "H6", "P", "LI", "BLOCKQUOTE", "DIV"].includes(node.tagName)) {
-        return NodeFilter.FILTER_SKIP;
-      }
-
-      return range.intersectsNode(node) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
-    }
-  });
-
-  while (walker.nextNode()) {
-    targets.add(walker.currentNode);
-  }
-
-  return [...targets].filter((target) => editor.contains(target));
 }
 
 function cleanDom(root) {
@@ -135,8 +126,14 @@ function cleanDom(root) {
       element.setAttribute("rel", "noreferrer");
     }
 
-    if (element.tagName === "SPAN") {
+    if (element.tagName === "SPAN" && !element.attributes.length) {
       unwrapNode(element);
+    }
+  });
+
+  root.querySelectorAll("span span").forEach((span) => {
+    if (!span.getAttribute("style") && !span.attributes.length) {
+      unwrapNode(span);
     }
   });
 
@@ -218,19 +215,16 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
     if (!selection?.rangeCount) return;
 
     const range = selection.getRangeAt(0);
-    if (range.collapsed) return;
+    const selectedRoot = range.commonAncestorContainer.nodeType === Node.ELEMENT_NODE
+      ? range.commonAncestorContainer
+      : range.commonAncestorContainer.parentNode;
 
-    const targets = styleTargetsFromRange(range, editor);
+    if (!selectedRoot || !editor.contains(selectedRoot)) return;
 
+    const targets = getStyleTargets(range, editor);
     targets.forEach((target) => {
       target.style[property] = value;
-      const cleanStyle = normalizeStyle(target.getAttribute("style") || "");
-
-      if (cleanStyle) {
-        target.setAttribute("style", cleanStyle);
-      } else {
-        target.removeAttribute("style");
-      }
+      normalizeElementStyle(target);
     });
 
     cleanDom(editor);
@@ -366,4 +360,31 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
       </div>
     </div>
   );
+}
+
+function getStyleTargets(range, editor) {
+  const selector = "p,div,h1,h2,h3,h4,h5,h6,li,blockquote,a,strong,b,em,i,u";
+  const targets = new Set();
+  const elements = editor.querySelectorAll(selector);
+
+  elements.forEach((element) => {
+    if (range.intersectsNode(element)) {
+      targets.add(element);
+    }
+  });
+
+  if (targets.size) {
+    return [...targets];
+  }
+
+  const container = range.commonAncestorContainer.nodeType === Node.ELEMENT_NODE
+    ? range.commonAncestorContainer
+    : range.commonAncestorContainer.parentElement;
+  const fallback = container?.closest(selector);
+
+  if (fallback && editor.contains(fallback)) {
+    return [fallback];
+  }
+
+  return [editor];
 }

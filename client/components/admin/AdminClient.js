@@ -495,8 +495,28 @@ function PageContentEditor({ data, updateData, save, initialPage }) {
             <Field label="Call URL" value={page.callHref} onChange={(value) => updatePage("callHref", value)} />
             <Field label="WhatsApp Label" value={page.whatsappLabel} onChange={(value) => updatePage("whatsappLabel", value)} />
             <Field label="WhatsApp Phone" value={page.whatsappPhone} onChange={(value) => updatePage("whatsappPhone", value)} />
+            <div className="rounded-2xl border border-primary/10 p-4">
+              <h3 className="mb-4 text-lg font-bold text-primary">FAQ Section</h3>
+              <div className="grid gap-4">
+                <RichEditor label="FAQ Eyebrow" value={page.faqEyebrow} onChange={(value) => updatePage("faqEyebrow", value)} />
+                <RichEditor label="FAQ Title" value={page.faqTitle} onChange={(value) => updatePage("faqTitle", value)} />
+                <RichEditor label="FAQ Copy" value={page.faqCopy} onChange={(value) => updatePage("faqCopy", value)} />
+                <EditableList
+                  title="Fallback FAQ Items"
+                  items={page.faqItems || []}
+                  fields={["question", "answer", "enabled"]}
+                  richFields={["answer"]}
+                  onUpdate={(index, field, value) => updatePageList("faqItems", index, field, value)}
+                  onAdd={() => addPageListItem("faqItems", { question: "New question", answer: "New answer", enabled: true })}
+                  onRemove={(index) => removePageListItem("faqItems", index)}
+                />
+              </div>
+            </div>
+            <RichEditor label="Long Description Title" value={page.longDescriptionTitle} onChange={(value) => updatePage("longDescriptionTitle", value)} />
+            <RichEditor label="Long Description" value={page.longDescription} onChange={(value) => updatePage("longDescription", value)} />
             <RichEditor label="Related Eyebrow" value={page.relatedEyebrow} onChange={(value) => updatePage("relatedEyebrow", value)} />
             <RichEditor label="Related Title" value={page.relatedTitle} onChange={(value) => updatePage("relatedTitle", value)} />
+            <RichEditor label="Other Services Carousel Title" value={page.otherServicesTitle} onChange={(value) => updatePage("otherServicesTitle", value)} />
             <Field label="All Services Label" value={page.allServicesLabel} onChange={(value) => updatePage("allServicesLabel", value)} />
           </>
         ) : null}
@@ -645,7 +665,7 @@ function SeoEditor({ data, updateData, save }) {
   );
 }
 
-function EditableList({ title, items, fields, multilineFields = [], onUpdate, onAdd, onRemove }) {
+function EditableList({ title, items, fields, multilineFields = [], richFields = [], onUpdate, onAdd, onRemove }) {
   const [openItems, setOpenItems] = useState({});
 
   function toggleItem(index) {
@@ -677,6 +697,8 @@ function EditableList({ title, items, fields, multilineFields = [], onUpdate, on
                     <IconField key={field} label={fieldLabel(field)} value={item[field]} onChange={(value) => onUpdate(index, field, value)} />
                   ) : field.toLowerCase().includes("image") ? (
                     <ImageField key={field} label={fieldLabel(field)} value={item[field]} onChange={(value) => onUpdate(index, field, value)} />
+                  ) : richFields.includes(field) ? (
+                    <RichEditor key={field} label={fieldLabel(field)} value={item[field]} onChange={(value) => onUpdate(index, field, value)} />
                   ) : multilineFields.includes(field) ? (
                     <Textarea key={field} label={fieldLabel(field)} value={lines(item[field])} placeholder={fieldPlaceholder(field)} onChange={(value) => onUpdate(index, field, value)} />
                   ) : (
@@ -785,7 +807,7 @@ function HeroSlideBlocks({ blocks, slideIndex, onUpdateBlock, onAddBlock, onRemo
   );
 }
 
-function StringListEditor({ title, items, onUpdate, maxItems = Infinity, addLabel = "Add", placeholder = "" }) {
+function StringListEditor({ title, items, onUpdate, maxItems = Infinity, addLabel = "Add", placeholder = "", richItems = false }) {
   const [openItems, setOpenItems] = useState({});
   const canAdd = (items || []).length < maxItems;
 
@@ -814,7 +836,11 @@ function StringListEditor({ title, items, onUpdate, maxItems = Infinity, addLabe
             </button>
             {openItems[index] ? (
               <div className="mt-3 grid gap-2">
-                <Textarea label={`Item ${index + 1}`} value={item} placeholder={placeholder} onChange={(value) => updateItem(index, value)} />
+                {richItems ? (
+                  <RichEditor label={`Item ${index + 1}`} value={item} placeholder={placeholder} onChange={(value) => updateItem(index, value)} />
+                ) : (
+                  <Textarea label={`Item ${index + 1}`} value={item} placeholder={placeholder} onChange={(value) => updateItem(index, value)} />
+                )}
                 <button type="button" className="w-fit rounded-full border border-red-200 px-4 py-2 text-sm font-black text-red-700" onClick={() => {
                   onUpdate(items.filter((_, itemIndex) => itemIndex !== index));
                   notifyAdminToast(`${title} item deleted. Save changes to apply.`);
@@ -1975,9 +2001,27 @@ function ServiceFields({ data, form, setForm }) {
       <Field label="Price" value={String(form.price || "")} onChange={(value) => setForm({ ...form, price: value })} />
       <Field label="Timeline" value={form.timeline || ""} onChange={(value) => setForm({ ...form, timeline: value })} />
       <RichEditor label="Summary" value={form.summary} onChange={(value) => setForm({ ...form, summary: value })} />
-      <Textarea label="Requirements (one per line)" value={lines(form.requirements)} onChange={(value) => setForm({ ...form, requirements: value })} />
-      <Textarea label="Benefits (one per line)" value={lines(form.benefits)} onChange={(value) => setForm({ ...form, benefits: value })} />
-      <Textarea label="Eligibility (one per line)" value={lines(form.eligibility)} onChange={(value) => setForm({ ...form, eligibility: value })} />
+      <StringListEditor
+        title="Requirements / Documents"
+        items={ensureArray(form.requirements)}
+        onUpdate={(items) => setForm({ ...form, requirements: items })}
+        addLabel="Add Requirement"
+        richItems
+      />
+      <StringListEditor
+        title="Benefits"
+        items={ensureArray(form.benefits)}
+        onUpdate={(items) => setForm({ ...form, benefits: items })}
+        addLabel="Add Benefit"
+        richItems
+      />
+      <StringListEditor
+        title="Eligibility"
+        items={ensureArray(form.eligibility)}
+        onUpdate={(items) => setForm({ ...form, eligibility: items })}
+        addLabel="Add Eligibility"
+        richItems
+      />
       <div className="rounded-xl border border-primary/10 bg-paper p-5">
         <h3 className="mb-4 text-lg font-black text-primary">Service FAQs</h3>
         {(form.faqItems || []).map((item, index) => (
@@ -1997,17 +2041,17 @@ function ServiceFields({ data, form, setForm }) {
                 label="Question"
                 value={item.question || ""}
                 onChange={(value) => {
-                  const updated = [...form.faqItems];
+                  const updated = [...(form.faqItems || [])];
                   updated[index] = { ...item, question: value };
                   setForm({ ...form, faqItems: updated });
                 }}
                 placeholder="e.g., How long does this service take?"
               />
-              <Textarea
+              <RichEditor
                 label="Answer"
                 value={item.answer || ""}
                 onChange={(value) => {
-                  const updated = [...form.faqItems];
+                  const updated = [...(form.faqItems || [])];
                   updated[index] = { ...item, answer: value };
                   setForm({ ...form, faqItems: updated });
                 }}
@@ -2018,7 +2062,7 @@ function ServiceFields({ data, form, setForm }) {
                   type="checkbox"
                   checked={item.enabled !== false}
                   onChange={(e) => {
-                    const updated = [...form.faqItems];
+                    const updated = [...(form.faqItems || [])];
                     updated[index] = { ...item, enabled: e.target.checked };
                     setForm({ ...form, faqItems: updated });
                   }}
@@ -2239,6 +2283,17 @@ function Rows({ items, columns }) {
 
 function lines(value) {
   return Array.isArray(value) ? value.join("\n") : value || "";
+}
+
+function ensureArray(value) {
+  if (Array.isArray(value)) {
+    return value;
+  }
+
+  return String(value || "")
+    .split("\n")
+    .map((item) => item.trim())
+    .filter(Boolean);
 }
 
 function splitLines(value) {
