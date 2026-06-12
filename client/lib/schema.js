@@ -93,14 +93,7 @@ export function generateLocalBusinessSchema() {
         "email": "sales@zumarlawfirm.com",
         "areaServed": "PK"
       }
-    ],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "ratingCount": "150",
-      "bestRating": "5",
-      "worstRating": "1"
-    }
+    ]
   };
 }
 
@@ -212,13 +205,6 @@ export function generateServiceSchema(service) {
       "telephone": "+92-303-598-8574",
       "email": "team@zumarlawfirm.com",
       "availableLanguage": "en"
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "ratingCount": "150",
-      "bestRating": "5",
-      "worstRating": "1"
     }
   };
 }
