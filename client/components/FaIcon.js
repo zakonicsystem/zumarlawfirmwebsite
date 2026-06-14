@@ -2,6 +2,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowLeft,
   faArrowRight,
+  faAlignCenter,
+  faAlignJustify,
+  faAlignLeft,
+  faAlignRight,
   faBalanceScale,
   faBold,
   faBriefcase,
@@ -46,6 +50,10 @@ import {
 
 const icons = {
   appointment: faCalendarCheck,
+  alignCenter: faAlignCenter,
+  alignJustify: faAlignJustify,
+  alignLeft: faAlignLeft,
+  alignRight: faAlignRight,
   arrowLeft: faArrowLeft,
   arrowRight: faArrowRight,
   arms: faShieldHalved,

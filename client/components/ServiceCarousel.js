@@ -17,7 +17,7 @@ export default function ServiceCarousel({ items }) {
   const featured = useMemo(() => (Array.isArray(items) && items.length > 0 ? items : services).filter((service) => service.enabled !== false).slice(0, 14), [items]);
 
   useEffect(() => {
-    const media = window.matchMedia("(min-width: 768px) and (prefers-reduced-motion: no-preference)");
+    const media = window.matchMedia("(prefers-reduced-motion: no-preference)");
     const updateAutoRotate = () => setCanAutoRotate(media.matches);
 
     updateAutoRotate();
@@ -27,7 +27,7 @@ export default function ServiceCarousel({ items }) {
   }, []);
 
   useEffect(() => {
-    if (!canAutoRotate || featured.length === 0) {
+    if (!canAutoRotate || featured.length < 2) {
       return undefined;
     }
 

@@ -16,7 +16,7 @@ const colorOptions = [
 ];
 
 const allowedTags = new Set(["A", "B", "BLOCKQUOTE", "BR", "DIV", "EM", "H1", "H2", "H3", "H4", "H5", "H6", "I", "LI", "OL", "P", "SPAN", "STRONG", "U", "UL"]);
-const allowedStyles = new Set(["color", "font-size", "font-style", "font-weight", "text-decoration"]);
+const allowedStyles = new Set(["color", "font-size", "font-style", "font-weight", "text-align", "text-decoration"]);
 
 function normalizeStyle(styleText = "") {
   const styles = new Map();
@@ -398,6 +398,19 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
           {["p", "h1", "h2", "h3", "h4", "h5", "h6"].map((tag) => (
             <button key={tag} type="button" className="rounded-lg border border-primary/10 bg-white px-3 py-2 text-xs font-black uppercase text-primary transition hover:border-primary/30 hover:bg-primary/5" title={tag.toUpperCase()} onMouseDown={keepEditorSelection} onClick={() => applyBlock(tag)}>
               {tag}
+            </button>
+          ))}
+
+          <div className="w-px bg-primary/10" />
+
+          {[
+            ["left", "alignLeft", "Align Left"],
+            ["center", "alignCenter", "Align Center"],
+            ["right", "alignRight", "Align Right"],
+            ["justify", "alignJustify", "Justify"]
+          ].map(([value, icon, label]) => (
+            <button key={value} type="button" className={buttonClass} title={label} onMouseDown={keepEditorSelection} onClick={() => applyInlineStyle("textAlign", value)}>
+              <FaIcon name={icon} className="size-4" />
             </button>
           ))}
 
