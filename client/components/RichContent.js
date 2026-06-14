@@ -122,24 +122,30 @@ function styleObject(styleText = "") {
 }
 
 function unwrapSingleRoot(html) {
-  const trimmed = String(html || "").trim();
-  const match = trimmed.match(/^<([a-z][a-z0-9]*)\b([^>]*)>([\s\S]*)<\/\1>$/i);
+  let inner = String(html || "").trim();
+  let styleText = "";
 
-  if (!match) {
-    return { html: trimmed, style: {} };
+  for (let index = 0; index < 8; index += 1) {
+    const match = inner.match(/^<([a-z][a-z0-9]*)\b([^>]*)>([\s\S]*)<\/\1>$/i);
+
+    if (!match) {
+      break;
+    }
+
+    const [, tagName, attributes, innerHtml] = match;
+
+    if (!/^(span|p|div|blockquote|h[1-6])$/i.test(tagName)) {
+      break;
+    }
+
+    const styleMatch = attributes.match(/\sstyle\s*=\s*(["'])(.*?)\1/i);
+    styleText = normalizeStyle(`${styleText}; ${styleMatch ? styleMatch[2] : ""}`);
+    inner = innerHtml.trim();
   }
-
-  const [, tagName, attributes, innerHtml] = match;
-
-  if (!/^(span|p|div|blockquote|h[1-6])$/i.test(tagName)) {
-    return { html: trimmed, style: {} };
-  }
-
-  const styleMatch = attributes.match(/\sstyle\s*=\s*(["'])(.*?)\1/i);
 
   return {
-    html: innerHtml.trim(),
-    style: styleMatch ? styleObject(styleMatch[2]) : {}
+    html: inner,
+    style: styleObject(styleText)
   };
 }
 
