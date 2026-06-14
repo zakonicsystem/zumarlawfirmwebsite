@@ -95,38 +95,43 @@ export default async function ServiceDetailPage({ params }) {
 
       <section className="py-16 sm:py-20">
         <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[1fr_380px] lg:items-start">
-          <div className="order-2 rounded-[2rem] border border-primary/10 bg-white p-7 shadow-xl shadow-primary/5 sm:p-9 lg:sticky lg:top-28 lg:order-1 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:overscroll-contain">
-            {detailContent.requirementsTitle ? <RichContent as="h2" className="text-3xl font-black text-primary" content={detailContent.requirementsTitle} /> : null}
-            {service.requirements.length > 0 ? (
-              <ul className="mt-5 grid gap-3">
-                {service.requirements.map((item) => (
-                  <li className="flex gap-3 rounded-2xl bg-paper px-4 py-3 text-ink/80" key={item}>
-                    <FaIcon className="mt-1 size-4 shrink-0 text-primary" name="filing" />
-                    <span>{item && <RichContent content={item} />}</span>
-                  </li>
+          <div className="order-2 rounded-[2rem] border border-primary/10 bg-white shadow-xl shadow-primary/5 lg:sticky lg:top-28 lg:order-1 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:overscroll-contain">
+            <section className="border-b border-primary/10 p-7 sm:p-9">
+              {detailContent.requirementsTitle ? <RichContent as="h2" className="text-3xl font-black text-primary" content={detailContent.requirementsTitle} /> : null}
+              {service.requirements.length > 0 ? (
+                <ul className="mt-5 grid gap-3">
+                  {service.requirements.map((item) => (
+                    <li className="flex gap-3 rounded-2xl bg-paper px-4 py-3 text-ink/80" key={item}>
+                      <FaIcon className="mt-1 size-4 shrink-0 text-primary" name="filing" />
+                      <span>{item && <RichContent content={item} />}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-5 text-lg leading-8 text-muted">
+                  {detailContent.emptyRequirementsText && <RichContent content={detailContent.emptyRequirementsText} />}
+                </p>
+              )}
+            </section>
+
+            <section className="border-b border-primary/10 p-7 sm:p-9">
+              {overviewTitle ? <RichContent as="h2" className="text-3xl font-black text-primary" content={overviewTitle} /> : null}
+              <div className="mt-5 text-lg leading-8 text-muted">
+                {overviewCopy && <RichContent content={overviewCopy} />}
+              </div>
+            </section>
+
+            <section className="p-7 sm:p-9">
+              {processTitle ? <RichContent as="h3" className="text-2xl font-black text-primary" content={processTitle} /> : null}
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                {processSteps.map((item, index) => (
+                  <div className="rounded-2xl border border-primary/10 bg-paper p-4" key={`${item}-${index}`}>
+                    <span className="text-xs font-black uppercase text-primary/50">{String(index + 1).padStart(2, "0")}</span>
+                    <div className="mt-2 font-bold leading-7 text-ink/80">{item && <RichContent content={item} />}</div>
+                  </div>
                 ))}
-              </ul>
-            ) : (
-              <p className="mt-5 text-lg leading-8 text-muted">
-                {detailContent.emptyRequirementsText && <RichContent content={detailContent.emptyRequirementsText} />}
-              </p>
-            )}
-
-            {overviewTitle ? <RichContent as="h2" className="mt-10 text-3xl font-black text-primary" content={overviewTitle} /> : null}
-            <div className="mt-5 text-lg leading-8 text-muted">
-              {overviewCopy && <RichContent content={overviewCopy} />}
-            </div>
-
-            {processTitle ? <RichContent as="h3" className="mt-10 text-2xl font-black text-primary" content={processTitle} /> : null}
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              {processSteps.map((item, index) => (
-                <div className="rounded-2xl border border-primary/10 bg-paper p-4" key={`${item}-${index}`}>
-                  <span className="text-xs font-black uppercase text-primary/50">{String(index + 1).padStart(2, "0")}</span>
-                  <div className="mt-2 font-bold leading-7 text-ink/80">{item && <RichContent content={item} />}</div>
-                </div>
-              ))}
-            </div>
-
+              </div>
+            </section>
           </div>
 
           <aside className="order-1 rounded-[2rem] border border-primary/10 bg-primary p-7 text-white shadow-2xl shadow-primary/20 lg:sticky lg:top-28 lg:order-2">
@@ -166,7 +171,7 @@ export default async function ServiceDetailPage({ params }) {
                           <FaIcon className="size-4" name={item.icon} />
                         </span>
                         <span className="min-w-0">
-                          <span className="block font-black leading-5 text-white">{item.title && <RichContent className="rich-content-compact" content={item.title} inline />}</span>
+                          <span className="block font-black leading-5 text-white">{item.title && <RichContent className="rich-content-compact" content={item.title} inline componentStyle />}</span>
                           <span className="mt-1 block text-xs font-bold text-white/60">{item.formattedPrice}</span>
                         </span>
                       </span>

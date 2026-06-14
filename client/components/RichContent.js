@@ -99,6 +99,14 @@ function sanitizeHtml(content) {
   return html.trim();
 }
 
+function componentHtml(html) {
+  return html
+    .replace(/\s+style\s*=\s*(["']).*?\1/gi, "")
+    .replace(/<span\b[^>]*>/gi, "")
+    .replace(/<\/span>/gi, "")
+    .trim();
+}
+
 function unwrapSingleSpanHeadings(html) {
   let result = html;
 
@@ -191,15 +199,15 @@ function inlineAttributes(tag, attributes = "") {
   return `${attributes} style="${defaultStyle}"`;
 }
 
-export default function RichContent({ content, className = "", as, inline = false }) {
+export default function RichContent({ content, className = "", as, inline = false, componentStyle = false }) {
   const result = useMemo(() => {
-    const sanitized = sanitizeHtml(content);
+    const sanitized = componentStyle ? componentHtml(sanitizeHtml(content)) : sanitizeHtml(content);
     if (as) {
       return unwrapSingleRoot(sanitized);
     }
 
     return { html: inline ? inlineHtml(sanitized) : sanitized, style: {} };
-  }, [as, content, inline]);
+  }, [as, componentStyle, content, inline]);
 
   const { html, style } = result;
 

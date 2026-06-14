@@ -134,8 +134,8 @@ export default function ServiceCarousel({ items }) {
                         </span>
                       ) : null}
                     </div>
-                    {service.title ? <RichContent as="h3" className="max-w-3xl text-2xl font-black leading-tight text-primary rich-content-compact rich-content-clamp-2 sm:text-5xl" content={service.title} /> : null}
-                    <div className="mt-3 max-w-3xl text-sm leading-6 text-muted sm:mt-4 sm:text-base sm:leading-7">{service.summary && <RichContent className="rich-content-compact rich-content-clamp-3" content={service.summary} />}</div>
+                    {service.title ? <RichContent as="h3" className="max-w-3xl text-2xl font-black leading-tight text-primary rich-content-compact rich-content-clamp-2 sm:text-5xl" content={service.title} componentStyle /> : null}
+                    <div className="mt-3 max-w-3xl text-sm leading-6 text-muted sm:mt-4 sm:text-base sm:leading-7">{service.summary && <RichContent className="rich-content-compact rich-content-clamp-3" content={service.summary} componentStyle />}</div>
                   </div>
 
                   <div className="relative mt-5 grid gap-4 rounded-lg border border-primary/10 bg-paper p-3 sm:mt-6 sm:rounded-[1.25rem] sm:p-4">
@@ -176,7 +176,7 @@ export default function ServiceCarousel({ items }) {
                 <FaIcon className={itemIndex === index ? "size-4 text-secondary" : "size-4 text-primary"} name={service.icon} />
                 <span className="line-clamp-1 text-xs font-black uppercase tracking-wide">{service.category}</span>
               </span>
-              <span className={`mt-2 line-clamp-2 block text-sm font-black ${itemIndex === index ? "text-white" : "text-ink"}`}>{service.title && <RichContent className="rich-content-compact" content={service.title} inline />}</span>
+              <span className={`mt-2 line-clamp-2 block text-sm font-black ${itemIndex === index ? "text-white" : "text-ink"}`}>{service.title && <RichContent className="rich-content-compact" content={service.title} inline componentStyle />}</span>
             </button>
           ))}
         </div>
