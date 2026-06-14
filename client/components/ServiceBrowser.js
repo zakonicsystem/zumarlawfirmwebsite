@@ -115,8 +115,8 @@ export default function ServiceBrowser({ initialCategory = "All", initialType = 
                   {service.category}
                 </span>
               </div>
-              <h3 className="mt-5 text-xl font-black leading-tight text-primary sm:mt-7 sm:text-2xl">{service.title && <RichContent content={service.title} inline />}</h3>
-              <div className="mt-3 text-sm leading-6 text-muted sm:leading-7">{service.summary && <RichContent content={service.summary} />}</div>
+              {service.title ? <RichContent as="h3" className="mt-5 text-xl font-black leading-tight text-primary rich-content-compact rich-content-clamp-2 sm:mt-7 sm:text-2xl" content={service.title} /> : null}
+              <div className="mt-3 text-sm leading-6 text-muted sm:leading-7">{service.summary && <RichContent className="rich-content-compact rich-content-clamp-3" content={service.summary} />}</div>
             </div>
             <div className="mt-6 flex flex-col gap-3 sm:mt-8">
               <strong className="text-primary">{service.formattedPrice}</strong>

@@ -68,6 +68,20 @@ function normalizeElementStyle(element) {
   }
 }
 
+function mergeStyle(element, styleText) {
+  const cleanStyle = normalizeStyle(`${element.getAttribute("style") || ""}; ${styleText || ""}`);
+
+  if (cleanStyle) {
+    element.setAttribute("style", cleanStyle);
+  } else {
+    element.removeAttribute("style");
+  }
+}
+
+function significantChildren(element) {
+  return [...element.childNodes].filter((child) => child.nodeType !== Node.TEXT_NODE || child.textContent.trim());
+}
+
 function unwrapNode(node) {
   const parent = node.parentNode;
   if (!parent) return;
@@ -149,8 +163,21 @@ function cleanDom(root) {
     }
   });
 
+  root.querySelectorAll("p,h1,h2,h3,h4,h5,h6,li,blockquote").forEach((element) => {
+    const children = significantChildren(element);
+    const onlyChild = children.length === 1 ? children[0] : null;
+
+    if (onlyChild?.nodeType === Node.ELEMENT_NODE && onlyChild.tagName === "SPAN") {
+      mergeStyle(element, onlyChild.getAttribute("style") || "");
+      unwrapNode(onlyChild);
+    }
+  });
+
   root.querySelectorAll("span span").forEach((span) => {
-    if (!span.getAttribute("style") && !span.attributes.length) {
+    const parent = span.parentElement;
+
+    if (parent?.tagName === "SPAN") {
+      mergeStyle(parent, span.getAttribute("style") || "");
       unwrapNode(span);
     }
   });
@@ -387,11 +414,21 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
 }
 
 function getStyleTargets(range, editor) {
-  const selector = "p,div,h1,h2,h3,h4,h5,h6,li,blockquote,a,strong,b,em,i,u";
+  const blockSelector = "p,div,h1,h2,h3,h4,h5,h6,li,blockquote";
   const targets = new Set();
-  const elements = editor.querySelectorAll(selector);
+  const blockElements = editor.querySelectorAll(blockSelector);
 
-  elements.forEach((element) => {
+  blockElements.forEach((element) => {
+    if (range.intersectsNode(element)) {
+      targets.add(element);
+    }
+  });
+
+  if (targets.size) {
+    return [...targets];
+  }
+
+  editor.querySelectorAll("a").forEach((element) => {
     if (range.intersectsNode(element)) {
       targets.add(element);
     }
@@ -404,7 +441,7 @@ function getStyleTargets(range, editor) {
   const container = range.commonAncestorContainer.nodeType === Node.ELEMENT_NODE
     ? range.commonAncestorContainer
     : range.commonAncestorContainer.parentElement;
-  const fallback = container?.closest(selector);
+  const fallback = container?.closest(blockSelector) || container?.closest("a");
 
   if (fallback && editor.contains(fallback)) {
     return [fallback];

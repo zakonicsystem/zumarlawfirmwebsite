@@ -107,6 +107,42 @@ function inlineHtml(html) {
     .trim();
 }
 
+function styleObject(styleText = "") {
+  return Object.fromEntries(
+    normalizeStyle(styleText)
+      .split(";")
+      .map((entry) => entry.trim())
+      .filter(Boolean)
+      .map((entry) => {
+        const [property, ...rawValue] = entry.split(":");
+        const key = property.trim().replace(/-([a-z])/g, (_match, letter) => letter.toUpperCase());
+        return [key, rawValue.join(":").trim()];
+      })
+  );
+}
+
+function unwrapSingleRoot(html) {
+  const trimmed = String(html || "").trim();
+  const match = trimmed.match(/^<([a-z][a-z0-9]*)\b([^>]*)>([\s\S]*)<\/\1>$/i);
+
+  if (!match) {
+    return { html: trimmed, style: {} };
+  }
+
+  const [, tagName, attributes, innerHtml] = match;
+
+  if (!/^(span|p|div|blockquote|h[1-6])$/i.test(tagName)) {
+    return { html: trimmed, style: {} };
+  }
+
+  const styleMatch = attributes.match(/\sstyle\s*=\s*(["'])(.*?)\1/i);
+
+  return {
+    html: innerHtml.trim(),
+    style: styleMatch ? styleObject(styleMatch[2]) : {}
+  };
+}
+
 function inlineAttributes(tag, attributes = "") {
   const defaultStyle = inlineHeadingStyles[String(tag || "").toLowerCase()];
   if (!defaultStyle) {
@@ -125,10 +161,16 @@ function inlineAttributes(tag, attributes = "") {
 }
 
 export default function RichContent({ content, className = "", as, inline = false }) {
-  const html = useMemo(() => {
+  const result = useMemo(() => {
     const sanitized = sanitizeHtml(content);
-    return inline ? inlineHtml(sanitized) : sanitized;
-  }, [content, inline]);
+    if (as) {
+      return unwrapSingleRoot(sanitized);
+    }
+
+    return { html: inline ? inlineHtml(sanitized) : sanitized, style: {} };
+  }, [as, content, inline]);
+
+  const { html, style } = result;
 
   if (!html) return null;
 
@@ -137,6 +179,7 @@ export default function RichContent({ content, className = "", as, inline = fals
   return (
     <Component
       className={`rich-content break-words ${className}`}
+      style={style}
       dangerouslySetInnerHTML={{ __html: html }}
       suppressHydrationWarning
     />

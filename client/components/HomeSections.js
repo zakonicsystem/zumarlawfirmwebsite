@@ -168,8 +168,8 @@ export function HomeServiceAreasSection({ content, serviceAreas = [] }) {
                   <FaIcon className="size-7 text-primary" name={area.icon || "landmark"} />
                   {area.province ? <span className="rounded-full bg-secondary px-3 py-1 text-xs font-black text-primary">{area.province}</span> : null}
                 </div>
-                <h3 className="text-xl font-black text-primary">{area.title && <RichContent content={area.title} inline />}</h3>
-                <div className="mt-3 text-sm leading-6 text-muted">{area.summary && <RichContent content={area.summary} />}</div>
+                {area.title ? <RichContent as="h3" className="text-xl font-black text-primary rich-content-compact rich-content-clamp-2" content={area.title} /> : null}
+                <div className="mt-3 text-sm leading-6 text-muted">{area.summary && <RichContent className="rich-content-compact rich-content-clamp-3" content={area.summary} />}</div>
               </div>
             </Link>
           ))}
@@ -346,8 +346,8 @@ function ArticlePreviewColumn({ eyebrow, title, linkText, linkHref, items, baseP
             <img className="h-56 w-full object-cover" src={item.image} alt={plainText(item.title, "Zumar Law Firm update")} loading="lazy" decoding="async" />
             <div className="p-4">
               <p className="text-xs font-black uppercase text-primary/60">{item.date}</p>
-              <h3 className="mt-2 text-xl font-black text-primary">{item.title && <RichContent content={item.title} inline />}</h3>
-              <div className="mt-2 text-sm leading-6 text-muted">{item.summary && <RichContent content={item.summary} />}</div>
+              {item.title ? <RichContent as="h3" className="mt-2 text-xl font-black text-primary rich-content-compact rich-content-clamp-2" content={item.title} /> : null}
+              <div className="mt-2 text-sm leading-6 text-muted">{item.summary && <RichContent className="rich-content-compact rich-content-clamp-3" content={item.summary} />}</div>
             </div>
           </Link>
         ))}

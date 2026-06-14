@@ -63,6 +63,37 @@ body {
   color: #3f1830;
 }
 
+.rich-content-compact,
+.rich-content-compact :where(*) {
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+.rich-content-clamp-2,
+.rich-content-clamp-3 {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+}
+
+.rich-content-clamp-2 {
+  -webkit-line-clamp: 2;
+}
+
+.rich-content-clamp-3 {
+  -webkit-line-clamp: 3;
+}
+
+.rich-content-clamp-2 :where(p, div, span, strong, b, em, i, u, a),
+.rich-content-clamp-3 :where(p, div, span, strong, b, em, i, u, a) {
+  display: inline;
+}
+
+.rich-content-clamp-2 :where(br),
+.rich-content-clamp-3 :where(br) {
+  display: none;
+}
+
 .rich-content :where(ul),
 .rich-text-editor :where(ul) {
   list-style: disc;
