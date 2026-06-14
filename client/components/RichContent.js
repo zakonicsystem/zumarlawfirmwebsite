@@ -93,9 +93,34 @@ function sanitizeHtml(content) {
     const cleanStyle = normalizeStyle(styleMatch[2]);
     return cleanStyle ? `<span style="${cleanStyle}">` : "<span>";
   });
+  html = unwrapSingleSpanHeadings(html);
   html = html.replace(/<(\w+)\b([^>]*)>\s*<\/\1>/gi, "");
 
   return html.trim();
+}
+
+function unwrapSingleSpanHeadings(html) {
+  let result = html;
+
+  for (let index = 0; index < 8; index += 1) {
+    const next = result.replace(/<(h[1-6])\b([^>]*)>\s*<span\b([^>]*)>([^<]*(?:<(?!\/?span\b)[^<]*)*)<\/span>\s*<\/\1>/gi, (_match, tag, headingAttributes, spanAttributes, text) => {
+      const headingStyle = headingAttributes.match(/\sstyle\s*=\s*(["'])(.*?)\1/i)?.[2] || "";
+      const spanStyle = spanAttributes.match(/\sstyle\s*=\s*(["'])(.*?)\1/i)?.[2] || "";
+      const cleanStyle = normalizeStyle(`${headingStyle}; ${spanStyle}`);
+      const cleanAttributes = headingAttributes.replace(/\sstyle\s*=\s*(["'])(.*?)\1/i, "").trim();
+      const attributes = `${cleanAttributes ? ` ${cleanAttributes}` : ""}${cleanStyle ? ` style="${cleanStyle}"` : ""}`;
+
+      return `<${tag}${attributes}>${text}</${tag}>`;
+    });
+
+    if (next === result) {
+      break;
+    }
+
+    result = next;
+  }
+
+  return result;
 }
 
 function inlineHtml(html) {
