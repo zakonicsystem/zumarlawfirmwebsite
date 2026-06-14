@@ -23,6 +23,63 @@ body {
   overflow-x: hidden;
 }
 
+.rich-content :where(h1, h2, h3, h4, h5, h6),
+.rich-text-editor :where(h1, h2, h3, h4, h5, h6) {
+  font-weight: 900;
+  line-height: 1.12;
+}
+
+.rich-content :where(h1),
+.rich-text-editor :where(h1) {
+  font-size: 2.5rem;
+}
+
+.rich-content :where(h2),
+.rich-text-editor :where(h2) {
+  font-size: 2rem;
+}
+
+.rich-content :where(h3),
+.rich-text-editor :where(h3) {
+  font-size: 1.5rem;
+}
+
+.rich-content :where(h4, h5, h6),
+.rich-text-editor :where(h4, h5, h6) {
+  font-size: 1.125rem;
+}
+
+.rich-content :where(a),
+.rich-text-editor :where(a) {
+  color: #51213d;
+  font-weight: 800;
+  text-decoration: underline;
+  text-decoration-thickness: 0.09em;
+  text-underline-offset: 0.16em;
+}
+
+.rich-content :where(a:hover),
+.rich-text-editor :where(a:hover) {
+  color: #3f1830;
+}
+
+.rich-content :where(ul),
+.rich-text-editor :where(ul) {
+  list-style: disc;
+  padding-left: 1.35rem;
+}
+
+.rich-content :where(ol),
+.rich-text-editor :where(ol) {
+  list-style: decimal;
+  padding-left: 1.35rem;
+}
+
+.rich-content :where(p + p, p + ul, p + ol, ul + p, ol + p),
+.rich-text-editor :where(p + p, p + ul, p + ol, ul + p, ol + p) {
+  margin-top: 0.75rem;
+}
+
 html.js [data-page-load],
 html.js [data-reveal] {
   opacity: 0;

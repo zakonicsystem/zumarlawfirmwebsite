@@ -4,6 +4,14 @@ import { useMemo } from "react";
 
 const allowedStyles = new Set(["color", "font-size", "font-style", "font-weight", "text-decoration"]);
 const blockTagPattern = /<(p|div|h[1-6]|ul|ol|li|blockquote)\b/i;
+const inlineHeadingStyles = {
+  h1: "font-size: 2.5rem; font-weight: 900; line-height: 1.12",
+  h2: "font-size: 2rem; font-weight: 900; line-height: 1.12",
+  h3: "font-size: 1.5rem; font-weight: 900; line-height: 1.12",
+  h4: "font-size: 1.125rem; font-weight: 900; line-height: 1.12",
+  h5: "font-size: 1.125rem; font-weight: 900; line-height: 1.12",
+  h6: "font-size: 1.125rem; font-weight: 900; line-height: 1.12"
+};
 
 function decodeHtmlEntities(content) {
   let html = String(content || "");
@@ -13,16 +21,33 @@ function decodeHtmlEntities(content) {
   }
 
   if (typeof document === "undefined") {
-    return html
-      .replace(/&lt;/gi, "<")
-      .replace(/&gt;/gi, ">")
-      .replace(/&quot;/gi, "\"")
-      .replace(/&#39;/gi, "'")
-      .replace(/&amp;/gi, "&");
+    for (let index = 0; index < 3; index += 1) {
+      const decoded = html
+        .replace(/&lt;/gi, "<")
+        .replace(/&gt;/gi, ">")
+        .replace(/&quot;/gi, "\"")
+        .replace(/&#39;/gi, "'")
+        .replace(/&amp;/gi, "&");
+
+      if (decoded === html) {
+        break;
+      }
+      html = decoded;
+    }
+
+    return html;
   }
 
   const textarea = document.createElement("textarea");
-  textarea.innerHTML = html;
+  for (let index = 0; index < 3; index += 1) {
+    textarea.innerHTML = html;
+    const decoded = textarea.value;
+    if (decoded === html) {
+      break;
+    }
+    html = decoded;
+  }
+
   return textarea.value;
 }
 
@@ -75,10 +100,28 @@ function sanitizeHtml(content) {
 
 function inlineHtml(html) {
   return html
-    .replace(/<\/?(p|div|h[1-6]|blockquote)\b[^>]*>/gi, "")
+    .replace(/<(p|div|h[1-6]|blockquote)\b([^>]*)>/gi, (_match, tag, attributes) => `<span${inlineAttributes(tag, attributes)}>`)
+    .replace(/<\/(p|div|h[1-6]|blockquote)>/gi, "</span>")
     .replace(/<\/?li\b[^>]*>/gi, " ")
     .replace(/<\/?(ul|ol)\b[^>]*>/gi, "")
     .trim();
+}
+
+function inlineAttributes(tag, attributes = "") {
+  const defaultStyle = inlineHeadingStyles[String(tag || "").toLowerCase()];
+  if (!defaultStyle) {
+    return attributes;
+  }
+
+  const stylePattern = /\sstyle\s*=\s*(["'])(.*?)\1/i;
+  if (stylePattern.test(attributes)) {
+    return attributes.replace(stylePattern, (_match, quote, styleText) => {
+      const cleanStyle = normalizeStyle(`${defaultStyle}; ${styleText}`);
+      return cleanStyle ? ` style=${quote}${cleanStyle}${quote}` : "";
+    });
+  }
+
+  return `${attributes} style="${defaultStyle}"`;
 }
 
 export default function RichContent({ content, className = "", as, inline = false }) {

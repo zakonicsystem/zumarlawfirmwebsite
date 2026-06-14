@@ -70,10 +70,10 @@ export default function HomeHeroSlider({ slides = [] }) {
         <div className="max-w-3xl">
           <p className="mb-4 inline-flex max-w-full items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-secondary backdrop-blur animate-[heroFade_0.75s_ease-out_both] sm:mb-5 sm:gap-3 sm:px-4 sm:text-xs sm:tracking-[0.2em]">
             <FaIcon className="size-3.5" name="scale" />
-            <span className="truncate">{seoSlide.eyebrow && <RichContent content={seoSlide.eyebrow} />}</span>
+            <span className="truncate">{seoSlide.eyebrow && <RichContent content={seoSlide.eyebrow} inline />}</span>
           </p>
           <h1 className="text-3xl font-black leading-tight text-white animate-[heroRise_0.85s_ease-out_both] sm:text-4xl sm:leading-[0.95] lg:text-4xl">
-            {seoSlide.title && <RichContent content={seoSlide.title} />}
+            {seoSlide.title && <RichContent content={seoSlide.title} inline />}
           </h1>
 
           {blocks.length > 0 && (
@@ -83,8 +83,8 @@ export default function HomeHeroSlider({ slides = [] }) {
                   {block.icon && (
                     <FaIcon className="mb-1.5 size-4 text-secondary sm:mb-2 sm:size-5" name={block.icon} />
                   )}
-                  <h3 className="text-[10px] font-black uppercase tracking-wide text-secondary sm:text-xs">{block.label && <RichContent content={block.label} />}</h3>
-                  <p className="mt-1 line-clamp-2 text-[11px] font-semibold leading-4 text-white/80 sm:text-xs sm:leading-5">{block.value && <RichContent content={block.value} />}</p>
+                  <h3 className="text-[10px] font-black uppercase tracking-wide text-secondary sm:text-xs">{block.label && <RichContent content={block.label} inline />}</h3>
+                  <p className="mt-1 line-clamp-2 text-[11px] font-semibold leading-4 text-white/80 sm:text-xs sm:leading-5">{block.value && <RichContent content={block.value} inline />}</p>
                 </div>
               ))}
             </div>

@@ -33,8 +33,8 @@ export function HomeFeaturedSection({ section, services }) {
       <div className="mx-auto w-[min(1180px,calc(100%-24px))] sm:w-[min(1180px,calc(100%-32px))]">
         <div className="mb-7 grid gap-4 sm:mb-10 sm:gap-6 lg:grid-cols-[0.75fr_1fr] lg:items-end">
           <div data-reveal="left">
-            <p className="mb-3 text-sm font-black uppercase text-primary">{section?.eyebrow}</p>
-            <h2 className="text-3xl font-black leading-tight text-primary sm:text-6xl">{section?.title}</h2>
+            <p className="mb-3 text-sm font-black uppercase text-primary">{section?.eyebrow && <RichContent content={section.eyebrow} inline />}</p>
+            <h2 className="text-3xl font-black leading-tight text-primary sm:text-6xl">{section?.title && <RichContent content={section.title} inline />}</h2>
           </div>
           <p className="text-sm leading-7 text-muted sm:text-base sm:leading-8 lg:text-lg" data-reveal="right">
             {section?.copy && <RichContent content={section?.copy} />}
@@ -64,7 +64,7 @@ export function HomeWhyChooseSection({ content }) {
           <div className="absolute inset-0 bg-gradient-to-br from-primary/95 via-primary/85 to-primary/65" />
           <div className="relative z-10">
             <h2 className="max-w-xl text-2xl font-black leading-tight sm:text-4xl">
-              {content?.panelTitle}
+              {content?.panelTitle && <RichContent content={content.panelTitle} inline />}
             </h2>
             <div className="mt-7 grid gap-5 sm:mt-10 sm:gap-7">
               {strengths.map((item, index) => (
@@ -84,10 +84,10 @@ export function HomeWhyChooseSection({ content }) {
 
         <div className="lg:pl-4" data-reveal="right">
           <p className="mb-4 inline-flex border-b-2 border-secondary pb-2 text-sm font-black text-primary">
-            {content?.eyebrow}
+            {content?.eyebrow && <RichContent content={content.eyebrow} inline />}
           </p>
           <h2 className="max-w-2xl text-2xl font-black leading-tight text-ink sm:text-4xl">
-            {content?.title}
+            {content?.title && <RichContent content={content.title} inline />}
           </h2>
           <div className="mt-5 max-w-2xl text-sm leading-7 text-muted sm:mt-6 sm:text-base sm:leading-8">
             {content?.copy && <RichContent content={content?.copy} />}
@@ -131,9 +131,9 @@ export function HomeServicesSection({ section, services, categories }) {
     <section className="my-10 py-5 sm:py-10" id="services" data-reveal="up">
       <div className="mx-auto w-[min(1180px,calc(100%-24px))] sm:w-[min(1180px,calc(100%-32px))]">
         <div className="mb-7 max-w-3xl sm:mb-10" data-reveal="up">
-          <p className="mb-3 text-sm font-black uppercase text-primary">{section?.eyebrow}</p>
+          <p className="mb-3 text-sm font-black uppercase text-primary">{section?.eyebrow && <RichContent content={section.eyebrow} inline />}</p>
           <h2 className="text-3xl font-black leading-tight text-primary sm:text-6xl">
-            {section?.title}
+            {section?.title && <RichContent content={section.title} inline />}
           </h2>
         </div>
         <ServiceBrowser limit={6} showAllButton services={services} categories={categories} />
@@ -152,8 +152,8 @@ export function HomeServiceAreasSection({ content, serviceAreas = [] }) {
       <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
         <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between" data-reveal="up">
           <div>
-            <p className="mb-3 text-sm font-black uppercase text-primary">{content?.eyebrow}</p>
-            <h2 className="text-4xl font-black leading-tight text-primary sm:text-6xl">{content?.title}</h2>
+            <p className="mb-3 text-sm font-black uppercase text-primary">{content?.eyebrow && <RichContent content={content.eyebrow} inline />}</p>
+            <h2 className="text-4xl font-black leading-tight text-primary sm:text-6xl">{content?.title && <RichContent content={content.title} inline />}</h2>
           </div>
           <SmartLink className="inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-black text-white" href={content?.buttonHref || "/service-areas"}>
             {content?.buttonText}
@@ -192,8 +192,8 @@ export function HomeTestimonialsSection({ content }) {
       <div className="absolute bottom-[-10rem] right-[-6rem] size-80 rounded-full bg-white/10" />
       <div className="relative z-10 mx-auto w-[min(1180px,calc(100%-32px))]">
         <div className="mx-auto mb-10 max-w-3xl text-center" data-reveal="up">
-          <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-secondary">{content?.eyebrow}</p>
-          <h2 className="text-4xl font-black leading-tight sm:text-6xl">{content?.title}</h2>
+          <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-secondary">{content?.eyebrow && <RichContent content={content.eyebrow} inline />}</p>
+          <h2 className="text-4xl font-black leading-tight sm:text-6xl">{content?.title && <RichContent content={content.title} inline />}</h2>
           <div className="mx-auto mt-5 max-w-2xl text-base leading-8 text-white/72">
             {content?.copy && <RichContent content={content?.copy} className="prose-invert" />}
           </div>
@@ -236,8 +236,8 @@ export function HomeBranchesSection({ content, branches = [] }) {
       <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
         <div className="mb-10 flex flex-col gap-5 md:flex-row md:items-end md:justify-between" data-reveal="up">
           <div>
-            <p className="mb-3 text-sm font-black uppercase text-secondary">{content?.eyebrow}</p>
-            <h2 className="text-4xl font-black leading-tight sm:text-6xl">{content?.title}</h2>
+            <p className="mb-3 text-sm font-black uppercase text-secondary">{content?.eyebrow && <RichContent content={content.eyebrow} inline />}</p>
+            <h2 className="text-4xl font-black leading-tight sm:text-6xl">{content?.title && <RichContent content={content.title} inline />}</h2>
           </div>
           <SmartLink className="inline-flex min-h-12 items-center justify-center rounded-full bg-secondary px-6 text-sm font-black text-primary" href={content?.buttonHref || "/branches"}>
             {content?.buttonText}
@@ -285,8 +285,8 @@ export function HomeYoutubeSection({ content }) {
       <div className="mx-auto w-[min(1180px,calc(100%-32px))] py-12 sm:py-16">
         <div className="mb-7 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="mb-3 text-sm font-black uppercase text-secondary">{content?.eyebrow}</p>
-            <h2 className="text-4xl font-black leading-tight sm:text-6xl">{content?.title}</h2>
+            <p className="mb-3 text-sm font-black uppercase text-secondary">{content?.eyebrow && <RichContent content={content.eyebrow} inline />}</p>
+            <h2 className="text-4xl font-black leading-tight sm:text-6xl">{content?.title && <RichContent content={content.title} inline />}</h2>
             <div className="mt-5 text-base leading-8 text-white/70 sm:text-lg">
               {content?.copy && <RichContent content={content?.copy} />}
             </div>
@@ -316,8 +316,8 @@ export function HomeFaqSection({ content }) {
     <section className="bg-paper py-12 sm:py-16" id="faq" data-reveal="up">
       <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
         <div className="lg:sticky lg:top-28">
-          <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-primary">{content?.eyebrow || "FAQ"}</p>
-          <h2 className="text-3xl font-black leading-tight text-primary sm:text-5xl">{content?.title || "Frequently asked questions."}</h2>
+          <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-primary">{content?.eyebrow ? <RichContent content={content.eyebrow} inline /> : "FAQ"}</p>
+          <h2 className="text-3xl font-black leading-tight text-primary sm:text-5xl">{content?.title ? <RichContent content={content.title} inline /> : "Frequently asked questions."}</h2>
           {content?.copy ? (
             <div className="mt-5 text-base leading-8 text-muted">
               <RichContent content={content.copy} />
@@ -335,8 +335,8 @@ function ArticlePreviewColumn({ eyebrow, title, linkText, linkHref, items, baseP
     <div data-reveal="up">
       <div className="mb-8 flex items-end justify-between gap-4">
         <div>
-          <p className="mb-3 text-sm font-black uppercase text-primary">{eyebrow}</p>
-          <h2 className="text-4xl font-black text-primary">{title}</h2>
+          <p className="mb-3 text-sm font-black uppercase text-primary">{eyebrow && <RichContent content={eyebrow} inline />}</p>
+          <h2 className="text-4xl font-black text-primary">{title && <RichContent content={title} inline />}</h2>
         </div>
         <SmartLink className="font-black text-primary" href={linkHref}>{linkText}</SmartLink>
       </div>

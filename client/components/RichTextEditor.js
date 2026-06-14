@@ -44,7 +44,17 @@ function decodeHtmlEntities(content) {
   }
 
   const textarea = document.createElement("textarea");
-  textarea.innerHTML = html;
+  for (let index = 0; index < 3; index += 1) {
+    textarea.innerHTML = html;
+    const decoded = textarea.value;
+
+    if (decoded === html) {
+      break;
+    }
+
+    html = decoded;
+  }
+
   return textarea.value;
 }
 
