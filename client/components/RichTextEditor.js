@@ -235,6 +235,63 @@ function cleanHtml(html) {
     .trim();
 }
 
+function escapeHtml(text) {
+  return String(text || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function looksLikeHeading(line) {
+  const text = String(line || "").trim();
+  const words = text.split(/\s+/).filter(Boolean);
+
+  if (!text || words.length > 12 || text.length > 95) {
+    return false;
+  }
+
+  if (/[.;,]$/.test(text)) {
+    return false;
+  }
+
+  return /\?$/.test(text) || /^(about|benefits|documents|eligibility|faq|how|overview|required|requirements|service|what|when|where|who|why)\b/i.test(text);
+}
+
+function plainTextToCleanHtml(text) {
+  const lines = String(text || "")
+    .replace(/\r\n/g, "\n")
+    .split("\n")
+    .map((line) => line.replace(/\s+/g, " ").trim());
+  const blocks = [];
+  let paragraph = [];
+
+  function flushParagraph() {
+    if (!paragraph.length) return;
+    blocks.push(`<p>${escapeHtml(paragraph.join(" "))}</p>`);
+    paragraph = [];
+  }
+
+  lines.forEach((line) => {
+    if (!line) {
+      flushParagraph();
+      return;
+    }
+
+    if (looksLikeHeading(line)) {
+      flushParagraph();
+      blocks.push(`<h3>${escapeHtml(line)}</h3>`);
+      return;
+    }
+
+    paragraph.push(line);
+  });
+
+  flushParagraph();
+  return blocks.join("");
+}
+
 export default function RichTextEditor({ value = "", onChange, placeholder = "Enter text..." }) {
   const editorRef = useRef(null);
   const savedRangeRef = useRef(null);
@@ -244,6 +301,8 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
   useEffect(() => {
     const editor = editorRef.current;
     if (!editor) return;
+
+    document.execCommand("defaultParagraphSeparator", false, "p");
 
     const nextHtml = decodeHtmlEntities(value || "");
 
@@ -376,6 +435,51 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
     saveSelection();
   }
 
+  function handlePaste(event) {
+    const text = event.clipboardData?.getData("text/plain");
+
+    if (!text) {
+      return;
+    }
+
+    event.preventDefault();
+    restoreSelection();
+    document.execCommand("insertHTML", false, plainTextToCleanHtml(text));
+    document.execCommand("formatBlock", false, "p");
+    emitChange();
+    editorRef.current?.focus({ preventScroll: true });
+    saveSelection();
+  }
+
+  function getCurrentBlock() {
+    const selection = window.getSelection();
+    const editor = editorRef.current;
+    if (!selection?.rangeCount || !editor) return null;
+
+    const node = selection.getRangeAt(0).startContainer;
+    const element = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+    const block = element?.closest("p,h1,h2,h3,h4,h5,h6,li,blockquote");
+
+    return block && editor.contains(block) ? block : null;
+  }
+
+  function handleKeyDown(event) {
+    if (event.key !== "Enter" || event.shiftKey) {
+      return;
+    }
+
+    const block = getCurrentBlock();
+    if (!block || !/^H[1-6]$/.test(block.tagName)) {
+      return;
+    }
+
+    window.setTimeout(() => {
+      document.execCommand("formatBlock", false, "p");
+      emitChange();
+      saveSelection();
+    }, 0);
+  }
+
   const buttonClass = "grid size-9 place-items-center rounded-lg border border-primary/10 bg-white text-sm font-black text-primary transition hover:border-primary/30 hover:bg-primary/5 sm:size-10";
   const selectClass = "h-9 rounded-lg border border-primary/10 bg-white px-3 text-xs font-black text-primary outline-none transition hover:border-primary/30 hover:bg-primary/5 sm:h-10";
 
@@ -463,6 +567,8 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
         data-placeholder={placeholder}
         className={`rich-text-editor min-h-64 w-full p-4 text-base font-normal leading-7 text-ink outline-none transition focus:ring-2 focus:ring-primary/20 ${isFocused ? "ring-2 ring-primary/20" : ""}`}
         onInput={emitChange}
+        onPaste={handlePaste}
+        onKeyDown={handleKeyDown}
         onKeyUp={saveSelection}
         onMouseUp={saveSelection}
         onFocus={() => setIsFocused(true)}
