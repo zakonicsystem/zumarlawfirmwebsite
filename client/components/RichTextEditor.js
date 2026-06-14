@@ -68,6 +68,40 @@ function normalizeElementStyle(element) {
   }
 }
 
+function clearStyleProperty(element, property) {
+  element.style[property] = "";
+  normalizeElementStyle(element);
+}
+
+function setStyleProperty(element, property, value) {
+  if (value === null || value === undefined || value === "") {
+    clearStyleProperty(element, property);
+    element.querySelectorAll("[style]").forEach((child) => clearStyleProperty(child, property));
+    return;
+  }
+
+  element.style[property] = value;
+  normalizeElementStyle(element);
+}
+
+function isStyleApplied(element, property, value) {
+  const computed = window.getComputedStyle(element);
+
+  if (property === "fontWeight") {
+    return Number(computed.fontWeight) >= 600;
+  }
+
+  if (property === "fontStyle") {
+    return computed.fontStyle === value;
+  }
+
+  if (property === "textDecoration") {
+    return computed.textDecorationLine.includes(value);
+  }
+
+  return element.style[property] === value;
+}
+
 function mergeStyle(element, styleText) {
   const cleanStyle = normalizeStyle(`${element.getAttribute("style") || ""}; ${styleText || ""}`);
 
@@ -244,6 +278,11 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
     }
   }
 
+  function keepEditorSelection(event) {
+    event.preventDefault();
+    saveSelection();
+  }
+
   function restoreSelection() {
     const selection = window.getSelection();
     if (!selection || !savedRangeRef.current) return;
@@ -252,9 +291,9 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
     selection.addRange(savedRangeRef.current);
   }
 
-  function applyInlineStyle(property, value) {
+  function withSelection(callback) {
     const editor = editorRef.current;
-    if (!editor || !value) return;
+    if (!editor) return;
 
     restoreSelection();
 
@@ -273,22 +312,39 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
       return;
     }
 
-    targets.forEach((target) => {
-      target.style[property] = value;
-      normalizeElementStyle(target);
-    });
+    callback(targets);
 
     cleanDom(editor);
     emitChange();
-    editor.focus();
+    editor.focus({ preventScroll: true });
     saveSelection();
+  }
+
+  function applyInlineStyle(property, value) {
+    if (!value) return;
+
+    withSelection((targets) => {
+      targets.forEach((target) => {
+        setStyleProperty(target, property, value);
+      });
+    });
+  }
+
+  function toggleInlineStyle(property, activeValue) {
+    withSelection((targets) => {
+      const shouldRemove = targets.some((target) => isStyleApplied(target, property, activeValue));
+
+      targets.forEach((target) => {
+        setStyleProperty(target, property, shouldRemove ? null : activeValue);
+      });
+    });
   }
 
   function applyBlock(tag) {
     restoreSelection();
     document.execCommand("formatBlock", false, tag);
     emitChange();
-    editorRef.current?.focus();
+    editorRef.current?.focus({ preventScroll: true });
     saveSelection();
   }
 
@@ -296,7 +352,7 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
     restoreSelection();
     document.execCommand(command, false);
     emitChange();
-    editorRef.current?.focus();
+    editorRef.current?.focus({ preventScroll: true });
     saveSelection();
   }
 
@@ -304,7 +360,7 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
     restoreSelection();
     document.execCommand("removeFormat", false);
     emitChange();
-    editorRef.current?.focus();
+    editorRef.current?.focus({ preventScroll: true });
     saveSelection();
   }
 
@@ -316,7 +372,7 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
 
     document.execCommand("createLink", false, url.trim());
     emitChange();
-    editorRef.current?.focus();
+    editorRef.current?.focus({ preventScroll: true });
     saveSelection();
   }
 
@@ -327,33 +383,33 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
     <div className="overflow-hidden rounded-lg border border-primary/10 bg-white shadow-sm">
       <div className="border-b border-primary/10 bg-paper p-3 sm:p-4">
         <div className="flex flex-wrap gap-2 sm:gap-3">
-          <button type="button" className={buttonClass} title="Bold" onMouseDown={saveSelection} onClick={() => applyInlineStyle("fontWeight", "700")}>
+          <button type="button" className={buttonClass} title="Bold" onMouseDown={keepEditorSelection} onClick={() => toggleInlineStyle("fontWeight", "700")}>
             <FaIcon name="bold" className="size-4" />
           </button>
-          <button type="button" className={buttonClass} title="Italic" onMouseDown={saveSelection} onClick={() => applyInlineStyle("fontStyle", "italic")}>
+          <button type="button" className={buttonClass} title="Italic" onMouseDown={keepEditorSelection} onClick={() => toggleInlineStyle("fontStyle", "italic")}>
             <FaIcon name="italic" className="size-4" />
           </button>
-          <button type="button" className={buttonClass} title="Underline" onMouseDown={saveSelection} onClick={() => applyInlineStyle("textDecoration", "underline")}>
+          <button type="button" className={buttonClass} title="Underline" onMouseDown={keepEditorSelection} onClick={() => toggleInlineStyle("textDecoration", "underline")}>
             <FaIcon name="underline" className="size-4" />
           </button>
 
           <div className="w-px bg-primary/10" />
 
           {["p", "h1", "h2", "h3", "h4", "h5", "h6"].map((tag) => (
-            <button key={tag} type="button" className="rounded-lg border border-primary/10 bg-white px-3 py-2 text-xs font-black uppercase text-primary transition hover:border-primary/30 hover:bg-primary/5" title={tag.toUpperCase()} onMouseDown={saveSelection} onClick={() => applyBlock(tag)}>
+            <button key={tag} type="button" className="rounded-lg border border-primary/10 bg-white px-3 py-2 text-xs font-black uppercase text-primary transition hover:border-primary/30 hover:bg-primary/5" title={tag.toUpperCase()} onMouseDown={keepEditorSelection} onClick={() => applyBlock(tag)}>
               {tag}
             </button>
           ))}
 
           <div className="w-px bg-primary/10" />
 
-          <button type="button" className={buttonClass} title="Bullet List" onMouseDown={saveSelection} onClick={() => applyList("insertUnorderedList")}>
+          <button type="button" className={buttonClass} title="Bullet List" onMouseDown={keepEditorSelection} onClick={() => applyList("insertUnorderedList")}>
             <FaIcon name="list" className="size-4" />
           </button>
-          <button type="button" className={buttonClass} title="Numbered List" onMouseDown={saveSelection} onClick={() => applyList("insertOrderedList")}>
+          <button type="button" className={buttonClass} title="Numbered List" onMouseDown={keepEditorSelection} onClick={() => applyList("insertOrderedList")}>
             <FaIcon name="listNumber" className="size-4" />
           </button>
-          <button type="button" className={buttonClass} title="Insert Link" onMouseDown={saveSelection} onClick={insertLink}>
+          <button type="button" className={buttonClass} title="Insert Link" onMouseDown={keepEditorSelection} onClick={insertLink}>
             <FaIcon name="link" className="size-4" />
           </button>
 
@@ -382,7 +438,7 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
             onChange={(event) => applyInlineStyle("color", event.target.value)}
           />
 
-          <button type="button" className={`${buttonClass} ml-auto`} title="Clear Formatting" onMouseDown={saveSelection} onClick={clearFormatting}>
+          <button type="button" className={`${buttonClass} ml-auto`} title="Clear Formatting" onMouseDown={keepEditorSelection} onClick={clearFormatting}>
             <FaIcon name="eraser" className="size-4" />
           </button>
         </div>
@@ -392,7 +448,7 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
         ref={editorRef}
         contentEditable
         data-placeholder={placeholder}
-        className={`rich-text-editor min-h-64 w-full p-4 text-base leading-7 text-ink outline-none transition focus:ring-2 focus:ring-primary/20 ${isFocused ? "ring-2 ring-primary/20" : ""}`}
+        className={`rich-text-editor min-h-64 w-full p-4 text-base font-normal leading-7 text-ink outline-none transition focus:ring-2 focus:ring-primary/20 ${isFocused ? "ring-2 ring-primary/20" : ""}`}
         onInput={emitChange}
         onKeyUp={saveSelection}
         onMouseUp={saveSelection}

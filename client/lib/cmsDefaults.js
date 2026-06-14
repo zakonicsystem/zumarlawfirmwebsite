@@ -1,6 +1,7 @@
 import { blogPosts, categories, internationalServices, services, slugify } from "./services";
 import { branches, serviceAreas } from "./services";
 import { defaultSeoPages } from "./seoDefaults";
+import { plainText } from "./text";
 
 export const defaultHomeSections = [
   {
@@ -1064,5 +1065,5 @@ export function makeCmsDefaults() {
 }
 
 export function makeSlug(value) {
-  return slugify(value || `item-${Date.now()}`);
+  return slugify(plainText(value, `item-${Date.now()}`));
 }

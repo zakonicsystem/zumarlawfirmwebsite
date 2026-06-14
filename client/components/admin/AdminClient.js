@@ -8,6 +8,7 @@ import RichTextEditor from "@/components/RichTextEditor";
 import { makeSlug } from "@/lib/cmsDefaults";
 import { defaultPageContent } from "@/lib/cmsDefaults";
 import { defaultSeoPages } from "@/lib/seoDefaults";
+import { plainText } from "@/lib/text";
 
 const iconOptions = [
   "appointment",
@@ -880,9 +881,9 @@ function ServiceList({ data, save }) {
           <div className="grid gap-3 rounded-2xl border border-primary/10 p-4 md:grid-cols-[1fr_auto]" key={service.id}>
             <div>
               <p className="text-xs font-black uppercase text-primary/60">{service.category}</p>
-              <h2 className="text-xl font-black text-primary">{service.title}</h2>
+              <h2 className="text-xl font-black text-primary">{plainText(service.title, "Untitled service")}</h2>
               <p className="mt-1 break-all text-xs font-bold text-primary/50">/services/{service.slug}</p>
-              <p className="text-sm text-muted">{service.summary}</p>
+              <p className="line-clamp-3 text-sm leading-6 text-muted">{plainText(service.summary)}</p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <Link className="rounded-full border border-primary/15 px-4 py-2 text-sm font-black text-primary" href={`/services/${service.slug}`} target="_blank">View</Link>
@@ -1618,7 +1619,7 @@ function ServiceSelectionEditor({ title, description, services, selectedSlugs, o
           <label className="flex cursor-pointer items-start gap-3 rounded-xl bg-white p-3 text-sm font-bold text-ink shadow-sm shadow-primary/5" key={service.slug}>
             <input className="mt-1" type="checkbox" checked={selected.has(service.slug)} onChange={() => toggle(service.slug)} />
             <span>
-              <span className="block font-black text-primary">{service.title}</span>
+              <span className="block font-black text-primary">{plainText(service.title, "Untitled service")}</span>
               <span className="mt-1 block text-xs font-bold uppercase text-primary/50">{service.category} | {service.slug}</span>
             </span>
           </label>
@@ -2274,12 +2275,12 @@ function Textarea({ label, value, onChange, placeholder = "" }) {
 
 function RichEditor({ label, value, onChange, placeholder = "" }) {
   return (
-    <label className="grid gap-2 text-sm font-black text-primary">
-      {label}
+    <div className="grid gap-2">
+      <span className="text-sm font-black text-primary">{label}</span>
       <div className="rounded-2xl border border-primary/10 overflow-hidden">
         <RichTextEditor value={value || ""} onChange={onChange} placeholder={placeholder} />
       </div>
-    </label>
+    </div>
   );
 }
 

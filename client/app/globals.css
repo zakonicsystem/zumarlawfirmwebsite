@@ -65,8 +65,12 @@ body {
 
 .rich-content-compact,
 .rich-content-compact :where(*) {
+  color: inherit !important;
   font-size: inherit !important;
+  font-style: inherit !important;
+  font-weight: inherit !important;
   line-height: inherit !important;
+  text-decoration: inherit !important;
 }
 
 .rich-content-clamp-2,
