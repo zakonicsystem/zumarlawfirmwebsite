@@ -4,6 +4,7 @@ import RichContent from "@/components/RichContent";
 import FaqAccordion from "@/components/FaqAccordion";
 import JsonLd from "@/components/JsonLd";
 import ServiceCarousel from "@/components/ServiceCarousel";
+import ServiceDetailColumns from "@/components/ServiceDetailColumns";
 import { findBySlug, readCmsData } from "@/lib/cmsStore";
 import { getRecordMetadata } from "@/lib/seo";
 import { generateServiceSchema, generateFAQSchema } from "@/lib/schema";
@@ -94,8 +95,9 @@ export default async function ServiceDetailPage({ params }) {
       </section>
 
       <section className="py-16 sm:py-20">
-        <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[1fr_380px] lg:items-start">
-          <div className="order-2 rounded-[2rem] border border-primary/10 bg-white shadow-xl shadow-primary/5 lg:sticky lg:top-28 lg:order-1 lg:h-[calc(100vh-7rem)] lg:overflow-y-auto lg:overscroll-contain">
+        <ServiceDetailColumns
+          left={(
+          <div className="order-2 h-full rounded-[2rem] border border-primary/10 bg-white shadow-xl shadow-primary/5 lg:sticky lg:top-28 lg:order-1 lg:overflow-y-auto lg:overscroll-contain">
             <section className="border-b border-primary/10 p-7 sm:p-9">
               {detailContent.requirementsTitle ? <RichContent as="h2" className="text-3xl font-black text-primary" content={detailContent.requirementsTitle} /> : null}
               {service.requirements.length > 0 ? (
@@ -133,8 +135,9 @@ export default async function ServiceDetailPage({ params }) {
               </div>
             </section>
           </div>
-
-          <aside className="order-1 rounded-[2rem] border border-primary/10 bg-primary p-7 text-white shadow-2xl shadow-primary/20 lg:sticky lg:top-28 lg:order-2 lg:h-[calc(100vh-7rem)] lg:overflow-hidden">
+          )}
+          right={(
+          <aside className="order-1 rounded-[2rem] border border-primary/10 bg-primary p-7 text-white shadow-2xl shadow-primary/20 lg:sticky lg:top-28 lg:order-2">
             <div className="leading-7 text-white/70">{detailContent.feeNote && <RichContent content={detailContent.feeNote} />}</div>
             <div className="mt-7 grid gap-3">
               <a className="inline-flex min-h-12 items-center justify-center rounded-full bg-secondary px-5 text-sm font-black text-primary transition hover:-translate-y-1" href={detailContent.startOnlineHref} target="_blank" rel="noreferrer">
@@ -181,7 +184,8 @@ export default async function ServiceDetailPage({ params }) {
               </div>
             ) : null}
           </aside>
-        </div>
+          )}
+        />
       </section>
 
       {(service.benefits || []).length > 0 ? (
