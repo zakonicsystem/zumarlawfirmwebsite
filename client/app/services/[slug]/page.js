@@ -95,7 +95,7 @@ export default async function ServiceDetailPage({ params }) {
 
       <section className="py-16 sm:py-20">
         <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[1fr_380px] lg:items-start">
-          <div className="order-2 rounded-[2rem] border border-primary/10 bg-white p-7 shadow-xl shadow-primary/5 sm:p-9 lg:order-1">
+          <div className="order-2 rounded-[2rem] border border-primary/10 bg-white p-7 shadow-xl shadow-primary/5 sm:p-9 lg:sticky lg:top-28 lg:order-1 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:overscroll-contain">
             {overviewTitle ? <RichContent as="h2" className="text-3xl font-black text-primary" content={overviewTitle} /> : null}
             <div className="mt-5 text-lg leading-8 text-muted">
               {overviewCopy && <RichContent content={overviewCopy} />}
