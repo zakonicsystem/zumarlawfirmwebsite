@@ -5,6 +5,7 @@ import Link from "next/link";
 import { services } from "@/lib/services";
 import FaIcon from "@/components/FaIcon";
 import RichContent from "@/components/RichContent";
+import { plainText } from "@/lib/text";
 
 export default function ServiceCarousel({ items }) {
   const [index, setIndex] = useState(0);
@@ -165,7 +166,7 @@ export default function ServiceCarousel({ items }) {
         <div ref={thumbnailScroll} className="flex gap-2 overflow-x-auto pb-1 snap-x scroll-smooth hide-scrollbar">
           {featured.map((service, itemIndex) => (
             <button
-              aria-label={`Show ${service.title}`}
+              aria-label={`Show ${plainText(service.title, "service")}`}
               className={`min-w-[136px] rounded-lg p-3 text-left transition snap-start sm:min-w-[180px] sm:rounded-2xl ${itemIndex === index ? "bg-primary text-white shadow-lg shadow-primary/15" : "bg-white text-primary hover:bg-secondary/45"}`}
               key={service.slug}
               onClick={() => setIndex(itemIndex)}
