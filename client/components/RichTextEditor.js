@@ -380,8 +380,8 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
   const selectClass = "h-9 rounded-lg border border-primary/10 bg-white px-3 text-xs font-black text-primary outline-none transition hover:border-primary/30 hover:bg-primary/5 sm:h-10";
 
   return (
-    <div className="overflow-hidden rounded-lg border border-primary/10 bg-white shadow-sm">
-      <div className="border-b border-primary/10 bg-paper p-3 sm:p-4">
+    <div className="rounded-lg border border-primary/10 bg-white shadow-sm">
+      <div className="sticky top-20 z-10 rounded-t-lg border-b border-primary/10 bg-paper p-3 shadow-sm sm:p-4">
         <div className="flex flex-wrap gap-2 sm:gap-3">
           <button type="button" className={buttonClass} title="Bold" onMouseDown={keepEditorSelection} onClick={() => toggleInlineStyle("fontWeight", "700")}>
             <FaIcon name="bold" className="size-4" />

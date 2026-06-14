@@ -2277,7 +2277,7 @@ function RichEditor({ label, value, onChange, placeholder = "" }) {
   return (
     <div className="grid gap-2">
       <span className="text-sm font-black text-primary">{label}</span>
-      <div className="rounded-2xl border border-primary/10 overflow-hidden">
+      <div className="rounded-2xl border border-primary/10">
         <RichTextEditor value={value || ""} onChange={onChange} placeholder={placeholder} />
       </div>
     </div>
