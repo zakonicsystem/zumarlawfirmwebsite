@@ -96,22 +96,7 @@ export default async function ServiceDetailPage({ params }) {
       <section className="py-16 sm:py-20">
         <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[1fr_380px] lg:items-start">
           <div className="order-2 rounded-[2rem] border border-primary/10 bg-white p-7 shadow-xl shadow-primary/5 sm:p-9 lg:sticky lg:top-28 lg:order-1 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:overscroll-contain">
-            {overviewTitle ? <RichContent as="h2" className="text-3xl font-black text-primary" content={overviewTitle} /> : null}
-            <div className="mt-5 text-lg leading-8 text-muted">
-              {overviewCopy && <RichContent content={overviewCopy} />}
-            </div>
-
-            {processTitle ? <RichContent as="h3" className="mt-10 text-2xl font-black text-primary" content={processTitle} /> : null}
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              {processSteps.map((item, index) => (
-                <div className="rounded-2xl border border-primary/10 bg-paper p-4" key={`${item}-${index}`}>
-                  <span className="text-xs font-black uppercase text-primary/50">{String(index + 1).padStart(2, "0")}</span>
-                  <div className="mt-2 font-bold leading-7 text-ink/80">{item && <RichContent content={item} />}</div>
-                </div>
-              ))}
-            </div>
-
-            {detailContent.requirementsTitle ? <RichContent as="h3" className="mt-10 text-2xl font-black text-primary" content={detailContent.requirementsTitle} /> : null}
+            {detailContent.requirementsTitle ? <RichContent as="h2" className="text-3xl font-black text-primary" content={detailContent.requirementsTitle} /> : null}
             {service.requirements.length > 0 ? (
               <ul className="mt-5 grid gap-3">
                 {service.requirements.map((item) => (
@@ -127,10 +112,24 @@ export default async function ServiceDetailPage({ params }) {
               </p>
             )}
 
+            {overviewTitle ? <RichContent as="h2" className="mt-10 text-3xl font-black text-primary" content={overviewTitle} /> : null}
+            <div className="mt-5 text-lg leading-8 text-muted">
+              {overviewCopy && <RichContent content={overviewCopy} />}
+            </div>
+
+            {processTitle ? <RichContent as="h3" className="mt-10 text-2xl font-black text-primary" content={processTitle} /> : null}
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {processSteps.map((item, index) => (
+                <div className="rounded-2xl border border-primary/10 bg-paper p-4" key={`${item}-${index}`}>
+                  <span className="text-xs font-black uppercase text-primary/50">{String(index + 1).padStart(2, "0")}</span>
+                  <div className="mt-2 font-bold leading-7 text-ink/80">{item && <RichContent content={item} />}</div>
+                </div>
+              ))}
+            </div>
 
           </div>
 
-          <aside className="order-1 max-h-[calc(100vh-7rem)] overflow-y-auto overscroll-contain rounded-[2rem] border border-primary/10 bg-primary p-7 text-white shadow-2xl shadow-primary/20 lg:sticky lg:top-28 lg:order-2">
+          <aside className="order-1 rounded-[2rem] border border-primary/10 bg-primary p-7 text-white shadow-2xl shadow-primary/20 lg:sticky lg:top-28 lg:order-2">
             <div className="leading-7 text-white/70">{detailContent.feeNote && <RichContent content={detailContent.feeNote} />}</div>
             <div className="mt-7 grid gap-3">
               <a className="inline-flex min-h-12 items-center justify-center rounded-full bg-secondary px-5 text-sm font-black text-primary transition hover:-translate-y-1" href={detailContent.startOnlineHref} target="_blank" rel="noreferrer">
@@ -167,7 +166,7 @@ export default async function ServiceDetailPage({ params }) {
                           <FaIcon className="size-4" name={item.icon} />
                         </span>
                         <span className="min-w-0">
-                          <span className="block font-black leading-5 text-white">{item.title && <RichContent content={item.title} />}</span>
+                          <span className="block font-black leading-5 text-white">{item.title && <RichContent className="rich-content-compact" content={item.title} inline />}</span>
                           <span className="mt-1 block text-xs font-bold text-white/60">{item.formattedPrice}</span>
                         </span>
                       </span>
