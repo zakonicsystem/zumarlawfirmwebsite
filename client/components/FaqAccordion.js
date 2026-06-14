@@ -28,7 +28,7 @@ export default function FaqAccordion({ items = [] }) {
               <span className={`grid size-14 place-items-center rounded-2xl transition ${active ? "bg-primary text-white" : "bg-secondary text-primary"}`}>
                 <FaIcon className="size-6" name={item.icon || "faq"} />
               </span>
-              <span className="text-xl font-black leading-tight text-primary sm:text-2xl">{item.question && <RichContent content={item.question} />}</span>
+              <span className="text-xl font-black leading-tight text-primary sm:text-2xl">{item.question && <RichContent content={item.question} inline />}</span>
               <span className={`grid size-10 place-items-center rounded-full border border-primary/10 text-primary transition ${active ? "rotate-45 bg-secondary" : "bg-white"}`}>
                 +
               </span>

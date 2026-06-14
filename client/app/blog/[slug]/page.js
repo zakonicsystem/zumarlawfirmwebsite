@@ -39,7 +39,7 @@ export default async function BlogDetailPage({ params }) {
               <FaIcon className="size-4" name="certificate" />
               Blog | {post.date}
             </p>
-            <h1 className="text-5xl font-black leading-tight text-primary sm:text-5xl">{post.title}</h1>
+            <h1 className="text-5xl font-black leading-tight text-primary sm:text-5xl">{post.title && <RichContent content={post.title} inline />}</h1>
             <div className="mt-5 text-lg leading-8 text-muted">
               {post.summary && <RichContent content={post.summary} />}
             </div>

@@ -70,7 +70,7 @@ export function HomeWhyChooseSection({ content }) {
               {strengths.map((item, index) => (
                 <div key={`${item.label || "strength"}-${index}`}>
                   <div className="mb-3 flex items-center justify-between gap-4 text-sm font-black sm:text-base">
-                    <span>{item.label}</span>
+                    <span>{item.label && <RichContent content={item.label} inline />}</span>
                     <span className="text-secondary">{item.value}</span>
                   </div>
                   <div className="h-3 overflow-hidden rounded-full bg-white/25">
@@ -99,7 +99,7 @@ export function HomeWhyChooseSection({ content }) {
                 <span className="grid size-5 shrink-0 place-items-center rounded border border-primary/20 bg-secondary/60 text-primary">
                   <FaIcon className="size-3" name={item.icon || "check"} />
                 </span>
-                {item.text}
+                {item.text && <RichContent content={item.text} inline />}
               </div>
             ))}
           </div>
@@ -156,7 +156,7 @@ export function HomeServiceAreasSection({ content, serviceAreas = [] }) {
             <h2 className="text-4xl font-black leading-tight text-primary sm:text-6xl">{content?.title && <RichContent content={content.title} inline />}</h2>
           </div>
           <SmartLink className="inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-black text-white" href={content?.buttonHref || "/service-areas"}>
-            {content?.buttonText}
+            {content?.buttonText && <RichContent content={content.buttonText} inline />}
           </SmartLink>
         </div>
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
@@ -168,8 +168,8 @@ export function HomeServiceAreasSection({ content, serviceAreas = [] }) {
                   <FaIcon className="size-7 text-primary" name={area.icon || "landmark"} />
                   {area.province ? <span className="rounded-full bg-secondary px-3 py-1 text-xs font-black text-primary">{area.province}</span> : null}
                 </div>
-                <h3 className="text-xl font-black text-primary">{area.title}</h3>
-                <p className="mt-3 text-sm leading-6 text-muted">{area.summary}</p>
+                <h3 className="text-xl font-black text-primary">{area.title && <RichContent content={area.title} inline />}</h3>
+                <div className="mt-3 text-sm leading-6 text-muted">{area.summary && <RichContent content={area.summary} />}</div>
               </div>
             </Link>
           ))}
@@ -240,7 +240,7 @@ export function HomeBranchesSection({ content, branches = [] }) {
             <h2 className="text-4xl font-black leading-tight sm:text-6xl">{content?.title && <RichContent content={content.title} inline />}</h2>
           </div>
           <SmartLink className="inline-flex min-h-12 items-center justify-center rounded-full bg-secondary px-6 text-sm font-black text-primary" href={content?.buttonHref || "/branches"}>
-            {content?.buttonText}
+            {content?.buttonText && <RichContent content={content.buttonText} inline />}
           </SmartLink>
         </div>
         <div className="grid gap-6 md:grid-cols-2">
@@ -252,13 +252,13 @@ export function HomeBranchesSection({ content, branches = [] }) {
               <div className="p-6">
                 <Link className="inline-flex items-center gap-3 text-xl font-black transition hover:text-secondary" href={`/branches/${branch.slug}`} prefetch={false}>
                   <FaIcon className="size-5 text-secondary" name="landmark" />
-                  {branch.name}
+                  {branch.name && <RichContent content={branch.name} inline />}
                 </Link>
                 <p className="mt-4 text-white/75">{branch.phone}</p>
                 <p className="text-white/75">{branch.email}</p>
                 <a className="mt-3 inline-flex items-start gap-2 leading-7 text-white/75 transition hover:text-secondary" href={branch.googleMapUrl} target="_blank" rel="noreferrer">
                   <FaIcon className="mt-1 size-4 shrink-0 text-secondary" name="globe" />
-                  <span>{branch.address}</span>
+                  <span>{branch.address && <RichContent content={branch.address} inline />}</span>
                 </a>
               </div>
             </article>
@@ -292,7 +292,7 @@ export function HomeYoutubeSection({ content }) {
             </div>
           </div>
           <SmartLink className="inline-flex min-h-12 items-center justify-center rounded-full bg-secondary px-6 text-sm font-black text-primary transition hover:-translate-y-1 hover:bg-white" href={content?.channelHref || "https://www.youtube.com/@zumarlawfirm"}>
-            {content?.channelLabel || "Visit Channel"}
+            {content?.channelLabel ? <RichContent content={content.channelLabel} inline /> : "Visit Channel"}
           </SmartLink>
         </div>
         <YoutubeVideoCarousel videos={videos} />
@@ -338,7 +338,7 @@ function ArticlePreviewColumn({ eyebrow, title, linkText, linkHref, items, baseP
           <p className="mb-3 text-sm font-black uppercase text-primary">{eyebrow && <RichContent content={eyebrow} inline />}</p>
           <h2 className="text-4xl font-black text-primary">{title && <RichContent content={title} inline />}</h2>
         </div>
-        <SmartLink className="font-black text-primary" href={linkHref}>{linkText}</SmartLink>
+        <SmartLink className="font-black text-primary" href={linkHref}>{linkText && <RichContent content={linkText} inline />}</SmartLink>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {items.slice(0, 3).map((item) => (
@@ -346,8 +346,8 @@ function ArticlePreviewColumn({ eyebrow, title, linkText, linkHref, items, baseP
             <img className="h-56 w-full object-cover" src={item.image} alt={plainText(item.title, "Zumar Law Firm update")} loading="lazy" decoding="async" />
             <div className="p-4">
               <p className="text-xs font-black uppercase text-primary/60">{item.date}</p>
-              <h3 className="mt-2 text-xl font-black text-primary">{item.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-muted">{item.summary}</p>
+              <h3 className="mt-2 text-xl font-black text-primary">{item.title && <RichContent content={item.title} inline />}</h3>
+              <div className="mt-2 text-sm leading-6 text-muted">{item.summary && <RichContent content={item.summary} />}</div>
             </div>
           </Link>
         ))}

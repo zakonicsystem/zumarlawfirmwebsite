@@ -40,9 +40,9 @@ export default async function AboutPage() {
             </div>
 
             <div data-reveal="right">
-              <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-primary">{about.introEyebrow}</p>
+              <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-primary">{about.introEyebrow && <RichContent content={about.introEyebrow} inline />}</p>
               <h2 className="text-3xl font-black leading-tight text-primary sm:text-4xl">
-                {about.introTitle}
+                {about.introTitle && <RichContent content={about.introTitle} inline />}
               </h2>
               <div className="mt-6 text-lg leading-8 text-muted">
                 {about.introCopy && <RichContent content={about.introCopy} />}
@@ -66,8 +66,8 @@ export default async function AboutPage() {
 
           <section className="grid gap-6 rounded-[2rem] border border-primary/10 bg-white p-6 shadow-xl shadow-primary/5 sm:p-8" data-reveal="up">
             <div className="max-w-4xl">
-              <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-primary">{about.overviewEyebrow || "Company Overview"}</p>
-              <h2 className="text-3xl font-black leading-tight text-primary sm:text-4xl">{about.overviewTitle}</h2>
+              <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-primary">{about.overviewEyebrow ? <RichContent content={about.overviewEyebrow} inline /> : "Company Overview"}</p>
+              <h2 className="text-3xl font-black leading-tight text-primary sm:text-4xl">{about.overviewTitle && <RichContent content={about.overviewTitle} inline />}</h2>
               <div className="mt-5 text-lg leading-8 text-muted">
                 {about.overviewCopy && <RichContent content={about.overviewCopy} />}
               </div>
@@ -76,8 +76,8 @@ export default async function AboutPage() {
 
           <section className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr]" data-reveal="up">
             <div className="rounded-[2rem] bg-primary p-7 text-white shadow-2xl shadow-primary/15 sm:p-9">
-              <p className="text-sm font-black uppercase tracking-[0.18em] text-secondary">{about.historyEyebrow || "Company History"}</p>
-              <h2 className="mt-3 text-3xl font-black leading-tight sm:text-4xl">{about.historyTitle}</h2>
+              <p className="text-sm font-black uppercase tracking-[0.18em] text-secondary">{about.historyEyebrow ? <RichContent content={about.historyEyebrow} inline /> : "Company History"}</p>
+              <h2 className="mt-3 text-3xl font-black leading-tight sm:text-4xl">{about.historyTitle && <RichContent content={about.historyTitle} inline />}</h2>
               <div className="mt-6 rounded-3xl border border-white/10 bg-white/8 p-5">
                 <span className="text-xs font-black uppercase tracking-[0.18em] text-secondary">Established</span>
                 <strong className="mt-2 block text-5xl font-black">{about.establishmentYear}</strong>
@@ -93,7 +93,7 @@ export default async function AboutPage() {
                   <article className="grid gap-4 rounded-[1.5rem] border border-primary/10 bg-white p-5 shadow-lg shadow-primary/5 sm:grid-cols-[110px_1fr] sm:p-6" key={`${item.year}-${item.title}-${index}`}>
                     <div className="text-3xl font-black text-primary">{item.year}</div>
                     <div>
-                      <h3 className="text-2xl font-black text-primary">{item.title}</h3>
+                      <h3 className="text-2xl font-black text-primary">{item.title && <RichContent content={item.title} inline />}</h3>
                       <div className="mt-2 leading-7 text-muted">{item.copy && <RichContent content={item.copy} />}</div>
                     </div>
                   </article>
@@ -105,12 +105,12 @@ export default async function AboutPage() {
           <section className="grid gap-5 lg:grid-cols-2" data-reveal="up">
             <article className="rounded-[2rem] border border-primary/10 bg-white p-7 shadow-xl shadow-primary/5 sm:p-8">
               <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-primary">Mission</p>
-              <h2 className="text-3xl font-black text-primary">{about.missionTitle || "Mission Statement"}</h2>
+              <h2 className="text-3xl font-black text-primary">{about.missionTitle ? <RichContent content={about.missionTitle} inline /> : "Mission Statement"}</h2>
               <div className="mt-4 text-lg leading-8 text-muted">{about.missionCopy && <RichContent content={about.missionCopy} />}</div>
             </article>
             <article className="rounded-[2rem] border border-primary/10 bg-primary p-7 text-white shadow-xl shadow-primary/15 sm:p-8">
               <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-secondary">Vision</p>
-              <h2 className="text-3xl font-black">{about.visionTitle || "Vision Statement"}</h2>
+              <h2 className="text-3xl font-black">{about.visionTitle ? <RichContent content={about.visionTitle} inline /> : "Vision Statement"}</h2>
               <div className="mt-4 text-lg leading-8 text-white/75">{about.visionCopy && <RichContent content={about.visionCopy} />}</div>
             </article>
           </section>
@@ -127,7 +127,7 @@ export default async function AboutPage() {
                     <span className="grid size-12 place-items-center rounded-2xl bg-secondary text-primary">
                       <FaIcon className="size-5" name={item.icon || "check"} />
                     </span>
-                    <h3 className="mt-4 text-xl font-black text-primary">{item.title}</h3>
+                    <h3 className="mt-4 text-xl font-black text-primary">{item.title && <RichContent content={item.title} inline />}</h3>
                     <div className="mt-2 text-sm leading-6 text-muted">{item.copy && <RichContent content={item.copy} />}</div>
                   </article>
                 ))}
@@ -141,7 +141,7 @@ export default async function AboutPage() {
                 <span className="grid size-16 place-items-center rounded-2xl bg-secondary text-primary shadow-lg shadow-primary/10 transition group-hover:rotate-3">
                   <FaIcon className="size-7" name={item.icon} />
                 </span>
-                <h2 className="mt-6 text-3xl font-black text-primary">{item.title}</h2>
+                <h2 className="mt-6 text-3xl font-black text-primary">{item.title && <RichContent content={item.title} inline />}</h2>
                 <div className="mt-3 text-lg leading-8 text-ink/75">
                   {item.copy && <RichContent content={item.copy} />}
                 </div>
@@ -152,8 +152,8 @@ export default async function AboutPage() {
           {about.certifications?.enabled !== false && certificates.length ? (
             <section className="grid gap-8 rounded-[2rem] bg-paper p-6 sm:p-8" data-reveal="up">
               <div className="max-w-3xl">
-                <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-primary">{about.certifications?.eyebrow || "Registrations & Certifications"}</p>
-                <h2 className="text-3xl font-black leading-tight text-primary sm:text-4xl">{about.certifications?.title}</h2>
+                <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-primary">{about.certifications?.eyebrow ? <RichContent content={about.certifications.eyebrow} inline /> : "Registrations & Certifications"}</p>
+                <h2 className="text-3xl font-black leading-tight text-primary sm:text-4xl">{about.certifications?.title && <RichContent content={about.certifications.title} inline />}</h2>
                 <div className="mt-4 text-lg leading-8 text-muted">
                   {about.certifications?.copy && <RichContent content={about.certifications.copy} />}
                 </div>
@@ -171,7 +171,7 @@ export default async function AboutPage() {
                       </div>
                     )}
                     <div className="p-5">
-                      <h3 className="text-xl font-black text-primary">{item.title}</h3>
+                      <h3 className="text-xl font-black text-primary">{item.title && <RichContent content={item.title} inline />}</h3>
                       <p className="mt-2 text-sm font-bold text-muted">{item.issuer}</p>
                       <p className="mt-3 rounded-2xl bg-paper px-4 py-3 text-sm font-black text-primary">{item.number}</p>
                     </div>
@@ -187,9 +187,9 @@ export default async function AboutPage() {
             <section className="grid gap-8" data-reveal="up">
               <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
                 <div>
-                  <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-primary">{about.teamPreview?.eyebrow || "Team"}</p>
+                  <p className="mb-3 text-sm font-black uppercase tracking-[0.18em] text-primary">{about.teamPreview?.eyebrow ? <RichContent content={about.teamPreview.eyebrow} inline /> : "Team"}</p>
                   <h2 className="max-w-3xl text-3xl font-black leading-tight text-primary sm:text-4xl">
-                    {about.teamPreview?.title || "Meet our professional team."}
+                    {about.teamPreview?.title ? <RichContent content={about.teamPreview.title} inline /> : "Meet our professional team."}
                   </h2>
                   <div className="mt-4 max-w-3xl text-lg leading-8 text-muted">
                     {about.teamPreview?.copy && <RichContent content={about.teamPreview?.copy} />}

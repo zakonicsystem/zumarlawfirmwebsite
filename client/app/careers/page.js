@@ -1,6 +1,7 @@
 import Link from "next/link";
 import PageHeader from "@/components/PageHeader";
 import FaIcon from "@/components/FaIcon";
+import RichContent from "@/components/RichContent";
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
 import JsonLd from "@/components/JsonLd";
@@ -28,19 +29,19 @@ export default async function CareersPage() {
             <img className="h-[420px] w-full rounded-[1.5rem] object-cover" src={page.image} alt={`${plainText(page.introTitle || page.title, "Zumar Law Firm careers")} image`} />
           </div>
           <div className="rounded-[2rem] border border-primary/10 bg-white p-7 shadow-2xl shadow-primary/10 sm:p-9">
-            <p className="text-sm font-black uppercase tracking-wide text-primary">{page.introEyebrow}</p>
-            <h2 className="mt-3 text-4xl font-black leading-tight text-primary sm:text-4xl">{page.introTitle}</h2>
-            <p className="mt-5 leading-8 text-muted">
-              {page.introCopy}
-            </p>
+            <p className="text-sm font-black uppercase tracking-wide text-primary">{page.introEyebrow && <RichContent content={page.introEyebrow} inline />}</p>
+            <h2 className="mt-3 text-4xl font-black leading-tight text-primary sm:text-4xl">{page.introTitle && <RichContent content={page.introTitle} inline />}</h2>
+            <div className="mt-5 leading-8 text-muted">
+              {page.introCopy && <RichContent content={page.introCopy} />}
+            </div>
             <div className="mt-8 grid gap-4 sm:grid-cols-3">
               {(page.values || []).filter((item) => item.enabled !== false).map((item, index) => (
                 <div className="rounded-3xl bg-paper p-5" key={`${item.title || "value"}-${index}`}>
                   <span className="grid size-12 place-items-center rounded-2xl bg-primary text-white">
                     <FaIcon className="size-5" name={item.icon} />
                   </span>
-                  <h3 className="mt-4 font-black text-primary">{item.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-muted">{item.copy}</p>
+                  <h3 className="mt-4 font-black text-primary">{item.title && <RichContent content={item.title} inline />}</h3>
+                  <div className="mt-2 text-sm leading-6 text-muted">{item.copy && <RichContent content={item.copy} />}</div>
                 </div>
               ))}
             </div>
@@ -52,11 +53,11 @@ export default async function CareersPage() {
         <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
           <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="mb-3 text-sm font-black uppercase text-primary">{page.openingsEyebrow}</p>
-              <h2 className="text-4xl font-black leading-tight text-primary sm:text-5xl">{page.openingsTitle}</h2>
+              <p className="mb-3 text-sm font-black uppercase text-primary">{page.openingsEyebrow && <RichContent content={page.openingsEyebrow} inline />}</p>
+              <h2 className="text-4xl font-black leading-tight text-primary sm:text-5xl">{page.openingsTitle && <RichContent content={page.openingsTitle} inline />}</h2>
             </div>
             <Link className="inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-6 text-sm font-black text-white transition hover:-translate-y-1" href={page.openingsButtonHref || "/contact"}>
-              {page.openingsButtonText}
+              {page.openingsButtonText && <RichContent content={page.openingsButtonText} inline />}
             </Link>
           </div>
 
@@ -66,12 +67,12 @@ export default async function CareersPage() {
                 <span className="grid size-14 place-items-center rounded-2xl bg-secondary text-primary">
                   <FaIcon className="size-6" name={job.icon} />
                 </span>
-                <h3 className="mt-6 text-2xl font-black leading-tight text-primary">{job.title}</h3>
+                <h3 className="mt-6 text-2xl font-black leading-tight text-primary">{job.title && <RichContent content={job.title} inline />}</h3>
                 <div className="mt-4 flex flex-wrap gap-2 text-xs font-black uppercase tracking-wide text-primary/70">
                   <span className="rounded-full bg-paper px-3 py-2">{job.type}</span>
                   <span className="rounded-full bg-paper px-3 py-2">{job.location}</span>
                 </div>
-                <p className="mt-5 leading-7 text-muted">{job.summary}</p>
+                <div className="mt-5 leading-7 text-muted">{job.summary && <RichContent content={job.summary} />}</div>
               </article>
             ))}
           </div>
@@ -81,17 +82,17 @@ export default async function CareersPage() {
       <section className="bg-primary py-16 text-white sm:py-20">
         <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <div>
-            <p className="mb-3 text-sm font-black uppercase text-secondary">{page.processEyebrow}</p>
-            <h2 className="text-4xl font-black leading-tight sm:text-5xl">{page.processTitle}</h2>
-            <p className="mt-5 leading-8 text-white/75">
-              {page.processCopy}
-            </p>
+            <p className="mb-3 text-sm font-black uppercase text-secondary">{page.processEyebrow && <RichContent content={page.processEyebrow} inline />}</p>
+            <h2 className="text-4xl font-black leading-tight sm:text-5xl">{page.processTitle && <RichContent content={page.processTitle} inline />}</h2>
+            <div className="mt-5 leading-8 text-white/75">
+              {page.processCopy && <RichContent content={page.processCopy} />}
+            </div>
           </div>
           <div className="grid gap-4">
             {(page.steps || []).map((step, index) => (
               <div className="flex gap-4 rounded-[2rem] border border-white/10 bg-white/10 p-5" key={step}>
                 <span className="grid size-11 shrink-0 place-items-center rounded-full bg-secondary font-black text-primary">{index + 1}</span>
-                <p className="self-center font-bold leading-7 text-white/85">{step}</p>
+                <div className="self-center font-bold leading-7 text-white/85">{step && <RichContent content={step} />}</div>
               </div>
             ))}
           </div>

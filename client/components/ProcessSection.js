@@ -10,8 +10,8 @@ export default function ProcessSection({ section, steps = [], className = "my-5"
     <section className={`${className} bg-primary py-5 text-white sm:py-10`} data-reveal="up">
       <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-12 lg:grid-cols-[0.85fr_1.15fr]">
         <div data-reveal="left">
-          <p className="mb-3 text-sm font-black uppercase text-secondary">{section?.eyebrow}</p>
-          <h2 className="text-3xl font-black leading-tight sm:text-4xl">{section?.title}</h2>
+          <p className="mb-3 text-sm font-black uppercase text-secondary">{section?.eyebrow && <RichContent content={section.eyebrow} inline />}</p>
+          <h2 className="text-3xl font-black leading-tight sm:text-4xl">{section?.title && <RichContent content={section.title} inline />}</h2>
           <div className="mt-6 text-lg leading-8 text-white/70">
             {section?.copy && <RichContent content={section?.copy} />}
           </div>
@@ -28,7 +28,7 @@ export default function ProcessSection({ section, steps = [], className = "my-5"
                 {step.number}
               </span>
               <div>
-                <h3 className="text-2xl font-black">{step.title}</h3>
+                <h3 className="text-2xl font-black">{step.title && <RichContent content={step.title} inline />}</h3>
                 <div className="mt-2 leading-7 text-white/70">
                   {step.copy && <RichContent content={step.copy} />}
                 </div>

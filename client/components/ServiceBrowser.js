@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { categories as defaultCategories, services as defaultServices } from "@/lib/services";
 import FaIcon from "@/components/FaIcon";
+import RichContent from "@/components/RichContent";
 
 export default function ServiceBrowser({ initialCategory = "All", initialType = "national", limit, showAllButton = false, services = defaultServices, categories = defaultCategories }) {
   const [query, setQuery] = useState("");
@@ -114,8 +115,8 @@ export default function ServiceBrowser({ initialCategory = "All", initialType = 
                   {service.category}
                 </span>
               </div>
-              <h3 className="mt-5 text-xl font-black leading-tight text-primary sm:mt-7 sm:text-2xl">{service.title}</h3>
-              <p className="mt-3 text-sm leading-6 text-muted sm:leading-7">{service.summary}</p>
+              <h3 className="mt-5 text-xl font-black leading-tight text-primary sm:mt-7 sm:text-2xl">{service.title && <RichContent content={service.title} inline />}</h3>
+              <div className="mt-3 text-sm leading-6 text-muted sm:leading-7">{service.summary && <RichContent content={service.summary} />}</div>
             </div>
             <div className="mt-6 flex flex-col gap-3 sm:mt-8">
               <strong className="text-primary">{service.formattedPrice}</strong>

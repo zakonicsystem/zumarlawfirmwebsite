@@ -53,7 +53,7 @@ export default function YoutubeVideoCarousel({ videos = [] }) {
                 allowFullScreen
               />
             </div>
-            {video.title ? <h3 className="p-4 text-base font-black text-primary">{video.title && <RichContent content={video.title} />}</h3> : null}
+            {video.title ? <h3 className="p-4 text-base font-black text-primary">{video.title && <RichContent content={video.title} inline />}</h3> : null}
           </article>
         ))}
       </div>

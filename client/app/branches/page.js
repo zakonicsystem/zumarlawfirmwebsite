@@ -1,6 +1,7 @@
 import Link from "next/link";
 import FaIcon from "@/components/FaIcon";
 import PageHeader from "@/components/PageHeader";
+import RichContent from "@/components/RichContent";
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
 import JsonLd from "@/components/JsonLd";
@@ -27,10 +28,10 @@ export default async function BranchesPage() {
                 <img className="h-56 w-full object-cover transition duration-500 group-hover:scale-105" src={branch.image} alt={`${plainText(branch.name, "Zumar Law Firm")} branch office`} />
               </Link>
               <div className="p-6">
-                <h2 className="text-2xl font-black leading-tight text-primary">{branch.name}</h2>
+                <h2 className="text-2xl font-black leading-tight text-primary">{branch.name && <RichContent content={branch.name} inline />}</h2>
                 <a className="mt-4 inline-flex min-w-0 items-start gap-3 rounded-2xl bg-paper/70 p-4 leading-7 text-muted transition hover:bg-secondary/60 hover:text-primary" href={branch.googleMapUrl} target="_blank" rel="noreferrer">
                   <FaIcon className="mt-1 size-4 shrink-0 text-primary" name="landmark" />
-                  <span className="break-words">{branch.address}</span>
+                  <span className="break-words">{branch.address && <RichContent content={branch.address} inline />}</span>
                 </a>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <Link className="inline-flex min-h-11 items-center gap-2 rounded-full bg-secondary px-5 text-sm font-black text-primary" href={`/branches/${branch.slug}`}>

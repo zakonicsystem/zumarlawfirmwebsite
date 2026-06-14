@@ -133,7 +133,7 @@ export default function ServiceCarousel({ items }) {
                         </span>
                       ) : null}
                     </div>
-                    <h3 className="max-w-3xl text-2xl font-black leading-tight text-primary sm:text-5xl">{service.title && <RichContent content={service.title} />}</h3>
+                    <h3 className="max-w-3xl text-2xl font-black leading-tight text-primary sm:text-5xl">{service.title && <RichContent content={service.title} inline />}</h3>
                     <div className="mt-3 max-w-3xl text-sm leading-6 text-muted sm:mt-4 sm:text-base sm:leading-7">{service.summary && <RichContent content={service.summary} />}</div>
                   </div>
 
@@ -175,7 +175,7 @@ export default function ServiceCarousel({ items }) {
                 <FaIcon className={itemIndex === index ? "size-4 text-secondary" : "size-4 text-primary"} name={service.icon} />
                 <span className="line-clamp-1 text-xs font-black uppercase tracking-wide">{service.category}</span>
               </span>
-              <span className={`mt-2 line-clamp-1 block text-sm font-black ${itemIndex === index ? "text-white" : "text-ink"}`}>{service.title}</span>
+              <span className={`mt-2 line-clamp-1 block text-sm font-black ${itemIndex === index ? "text-white" : "text-ink"}`}>{service.title && <RichContent content={service.title} inline />}</span>
             </button>
           ))}
         </div>

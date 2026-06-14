@@ -47,7 +47,7 @@ export default async function ContactPage() {
           <form className="rounded-[2rem] border border-primary/10 bg-white p-7 shadow-2xl shadow-primary/10 sm:p-9">
             <h2 className="inline-flex items-center gap-3 text-3xl font-black text-primary">
               <FaIcon className="size-6" name="headset" />
-              {page.formTitle}
+              {page.formTitle && <RichContent content={page.formTitle} inline />}
             </h2>
             <div className="mt-4 leading-8 text-muted">
               {page.formCopy && <RichContent content={page.formCopy} />}

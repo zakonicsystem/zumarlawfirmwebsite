@@ -1,5 +1,6 @@
 import PageHeader from "@/components/PageHeader";
 import FaIcon from "@/components/FaIcon";
+import RichContent from "@/components/RichContent";
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
 import Link from "next/link";
@@ -56,9 +57,9 @@ export default async function ServiceAreasPage() {
                     <span className="inline-flex size-11 shrink-0 items-center justify-center rounded-2xl bg-secondary text-primary">
                       <FaIcon className="size-5" name={area.icon || "landmark"} />
                     </span>
-                    <h2 className="text-2xl font-black leading-tight text-primary">{area.title}</h2>
+                    <h2 className="text-2xl font-black leading-tight text-primary">{area.title && <RichContent content={area.title} inline />}</h2>
                   </div>
-                  <p className="leading-7 text-muted">{area.summary}</p>
+                  <div className="leading-7 text-muted">{area.summary && <RichContent content={area.summary} />}</div>
                   <span className="mt-6 inline-flex items-center gap-2 text-sm font-black text-primary">
                     View city services
                     <FaIcon className="size-3.5 transition group-hover:translate-x-1" name="arrowRight" />
