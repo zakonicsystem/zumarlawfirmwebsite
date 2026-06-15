@@ -16,7 +16,7 @@ const colorOptions = [
 ];
 
 const allowedTags = new Set(["A", "B", "BLOCKQUOTE", "BR", "CAPTION", "COL", "COLGROUP", "DIV", "EM", "H1", "H2", "H3", "H4", "H5", "H6", "I", "LI", "OL", "P", "SPAN", "STRONG", "TABLE", "TBODY", "TD", "TFOOT", "TH", "THEAD", "TR", "U", "UL"]);
-const allowedStyles = new Set(["color", "font-size", "font-style", "font-weight", "text-align", "text-decoration"]);
+const allowedStyles = new Set(["background-color", "color", "font-size", "font-style", "font-weight", "text-align", "text-decoration"]);
 
 function normalizeStyle(styleText = "") {
   const styles = new Map();
@@ -305,6 +305,106 @@ function cleanHtml(html) {
     .trim();
 }
 
+function textFromHtml(html) {
+  if (!html || typeof document === "undefined") return "";
+
+  const container = document.createElement("div");
+  container.innerHTML = html;
+  return (container.innerText || container.textContent || "").replace(/\s+/g, " ").trim();
+}
+
+function extractClipboardFragment(html) {
+  let fragment = decodeHtmlEntities(html || "");
+  const startMarker = "<!--StartFragment-->";
+  const endMarker = "<!--EndFragment-->";
+  const startIndex = fragment.indexOf(startMarker);
+  const endIndex = fragment.indexOf(endMarker);
+
+  if (startIndex !== -1 && endIndex !== -1 && endIndex > startIndex) {
+    fragment = fragment.slice(startIndex + startMarker.length, endIndex);
+  }
+
+  fragment = fragment
+    .replace(/<!--[\s\S]*?-->/g, "")
+    .replace(/<(script|style|iframe|object|embed|form|input|button|textarea|select|meta|link)\b[^>]*>[\s\S]*?<\/\1>/gi, "")
+    .replace(/<\/?(script|style|iframe|object|embed|form|input|button|textarea|select|meta|link)\b[^>]*>/gi, "")
+    .replace(/\sclass\s*=\s*(["']).*?\1/gi, "")
+    .replace(/\sid\s*=\s*(["']).*?\1/gi, "");
+
+  if (typeof DOMParser !== "undefined" && /<\/?(html|body|head)\b/i.test(fragment)) {
+    const parsed = new DOMParser().parseFromString(fragment, "text/html");
+    fragment = parsed.body?.innerHTML || fragment;
+  }
+
+  return fragment.trim();
+}
+
+function wrapLooseInlineContent(root) {
+  const blockTags = new Set(["BLOCKQUOTE", "H1", "H2", "H3", "H4", "H5", "H6", "OL", "P", "TABLE", "UL"]);
+  const fragment = document.createDocumentFragment();
+  let paragraph = null;
+
+  function appendParagraph() {
+    if (!paragraph) return;
+
+    if (paragraph.textContent.trim() || paragraph.querySelector("br,a,strong,em,u,span")) {
+      fragment.appendChild(paragraph);
+    }
+
+    paragraph = null;
+  }
+
+  while (root.firstChild) {
+    const node = root.firstChild;
+    root.removeChild(node);
+
+    if (node.nodeType === Node.ELEMENT_NODE && blockTags.has(node.tagName)) {
+      appendParagraph();
+      fragment.appendChild(node);
+      continue;
+    }
+
+    if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "BR") {
+      appendParagraph();
+      continue;
+    }
+
+    if (node.nodeType === Node.TEXT_NODE && !node.textContent.trim()) {
+      if (paragraph && paragraph.textContent.trim()) {
+        paragraph.appendChild(document.createTextNode(" "));
+      }
+      continue;
+    }
+
+    if (!paragraph) {
+      paragraph = document.createElement("p");
+    }
+
+    paragraph.appendChild(node);
+  }
+
+  appendParagraph();
+
+  root.appendChild(fragment);
+}
+
+function clipboardHtmlToCleanHtml(html, fallbackText = "") {
+  if (!html || typeof document === "undefined") {
+    return "";
+  }
+
+  const container = document.createElement("div");
+  container.innerHTML = extractClipboardFragment(html);
+  wrapLooseInlineContent(container);
+  cleanDom(container);
+
+  const cleaned = container.innerHTML
+    .replace(/(<br\s*\/?>\s*){3,}/gi, "<br><br>")
+    .trim();
+
+  return textFromHtml(cleaned) ? cleaned : plainTextToCleanHtml(fallbackText);
+}
+
 function escapeHtml(text) {
   return String(text || "")
     .replace(/&/g, "&amp;")
@@ -312,6 +412,49 @@ function escapeHtml(text) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+function isPlainTextHeading(line, previousLine = "", nextLine = "") {
+  const text = String(line || "").trim();
+  const words = text.split(/\s+/).filter(Boolean);
+  const previousBlank = !String(previousLine || "").trim();
+  const nextBlank = !String(nextLine || "").trim();
+
+  if (!text || words.length > 12 || text.length > 90) {
+    return false;
+  }
+
+  if (/[.,;]$/.test(text)) {
+    return false;
+  }
+
+  if (/^\d+(\.\d+)*[.)]?\s+/.test(text) || /[:?]$/.test(text)) {
+    return true;
+  }
+
+  if (previousBlank && /^[A-Z0-9\s/&-]{6,}$/.test(text) && /[A-Z]/.test(text)) {
+    return true;
+  }
+
+  if (previousBlank && !nextBlank && /^(about|benefits|documents|eligibility|faq|how|overview|required|requirements|service|steps|what|when|where|who|why)\b/i.test(text)) {
+    return true;
+  }
+
+  return false;
+}
+
+function listMatch(line) {
+  const unordered = String(line || "").match(/^[\s]*[\u2022\u00b7\u25aa\u25ab\u25e6*-]\s+(.+)$/);
+  if (unordered) {
+    return { type: "ul", text: unordered[1] };
+  }
+
+  const ordered = String(line || "").match(/^[\s]*(?:\d+|[a-zA-Z])[.)]\s+(.+)$/);
+  if (ordered) {
+    return { type: "ol", text: ordered[1] };
+  }
+
+  return null;
 }
 
 function tableHtmlFromRows(rows) {
@@ -334,30 +477,42 @@ function plainTextToCleanHtml(text) {
   const lines = String(text || "")
     .replace(/\r\n/g, "\n")
     .split("\n")
-    .map((line) => line.replace(/\s+/g, " ").trim());
+    .map((line) => line.replace(/\u00a0/g, " ").replace(/[ \t]+$/g, ""));
   const blocks = [];
   let paragraph = [];
+  let list = null;
 
   function flushParagraph() {
     if (!paragraph.length) return;
-    blocks.push(`<p>${escapeHtml(paragraph.join(" "))}</p>`);
+    blocks.push(`<p>${escapeHtml(paragraph.join(" ").replace(/\s+/g, " ").trim())}</p>`);
     paragraph = [];
   }
 
+  function flushList() {
+    if (!list) return;
+    blocks.push(`<${list.type}>${list.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</${list.type}>`);
+    list = null;
+  }
+
   for (let index = 0; index < lines.length; index += 1) {
-    const line = lines[index];
+    const rawLine = lines[index];
+    const line = rawLine.replace(/\s+/g, " ").trim();
+    const previousLine = index > 0 ? lines[index - 1] : "";
+    const nextLine = index < lines.length - 1 ? lines[index + 1] : "";
 
     if (!line) {
       flushParagraph();
+      flushList();
       continue;
     }
 
-    if (line.includes("\t")) {
+    if (rawLine.includes("\t")) {
       const rows = [];
       flushParagraph();
+      flushList();
 
       while (index < lines.length && lines[index]?.includes("\t")) {
-        rows.push(lines[index].split("\t").map((cell) => cell.trim()));
+        rows.push(lines[index].split("\t").map((cell) => cell.replace(/\s+/g, " ").trim()));
         index += 1;
       }
 
@@ -366,10 +521,31 @@ function plainTextToCleanHtml(text) {
       continue;
     }
 
+    const currentListItem = listMatch(line);
+
+    if (currentListItem) {
+      flushParagraph();
+      if (!list || list.type !== currentListItem.type) {
+        flushList();
+        list = { type: currentListItem.type, items: [] };
+      }
+      list.items.push(currentListItem.text);
+      continue;
+    }
+
+    flushList();
+
+    if (isPlainTextHeading(line, previousLine, nextLine)) {
+      flushParagraph();
+      blocks.push(`<h3>${escapeHtml(line)}</h3>`);
+      continue;
+    }
+
     paragraph.push(line);
   }
 
   flushParagraph();
+  flushList();
   return blocks.join("");
 }
 
@@ -745,14 +921,15 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
   }
 
   function handlePaste(event) {
+    const html = event.clipboardData?.getData("text/html");
     const text = event.clipboardData?.getData("text/plain");
 
-    if (!text) {
+    if (!html && !text) {
       return;
     }
 
     event.preventDefault();
-    insertHtmlAtSelection(plainTextToCleanHtml(text));
+    insertHtmlAtSelection(html ? clipboardHtmlToCleanHtml(html, text) : plainTextToCleanHtml(text));
   }
 
   function getCurrentBlock() {

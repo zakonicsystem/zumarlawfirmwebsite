@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 
-const allowedStyles = new Set(["color", "font-size", "font-style", "font-weight", "text-align", "text-decoration"]);
+const allowedStyles = new Set(["background-color", "color", "font-size", "font-style", "font-weight", "text-align", "text-decoration"]);
 const blockTagPattern = /<(p|div|h[1-6]|ul|ol|li|blockquote)\b/i;
 const inlineHeadingStyles = {
   h1: "font-size: 2.5rem; font-weight: 900; line-height: 1.12",
