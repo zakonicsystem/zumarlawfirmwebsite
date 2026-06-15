@@ -374,7 +374,6 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
     const editor = editorRef.current;
     if (!editor) return;
 
-    cleanDom(editor);
     setCharacterCount(editor.innerText.length);
     const cleaned = cleanHtml(editor.innerHTML);
     lastEmittedRef.current = cleaned;
@@ -409,6 +408,46 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
     selection.addRange(savedRangeRef.current);
   }
 
+  function currentRange() {
+    const selection = window.getSelection();
+    const editor = editorRef.current;
+    if (!selection?.rangeCount || !editor) return null;
+
+    const range = selection.getRangeAt(0);
+    const container = range.commonAncestorContainer.nodeType === Node.ELEMENT_NODE
+      ? range.commonAncestorContainer
+      : range.commonAncestorContainer.parentNode;
+
+    return container && editor.contains(container) ? range.cloneRange() : null;
+  }
+
+  function restoreRange(range) {
+    const selection = window.getSelection();
+    const editor = editorRef.current;
+    if (!selection || !range || !editor) return;
+
+    try {
+      editor.focus({ preventScroll: true });
+      selection.removeAllRanges();
+      selection.addRange(range);
+      savedRangeRef.current = range.cloneRange();
+    } catch {
+      editor.focus({ preventScroll: true });
+      saveSelection();
+    }
+  }
+
+  function finishEditorAction(range) {
+    emitChange();
+    if (range) {
+      restoreRange(range);
+      return;
+    }
+
+    editorRef.current?.focus({ preventScroll: true });
+    saveSelection();
+  }
+
   function withSelection(callback) {
     const editor = editorRef.current;
     if (!editor) return;
@@ -430,12 +469,9 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
       return;
     }
 
+    const selectedRange = range.cloneRange();
     callback(targets);
-
-    cleanDom(editor);
-    emitChange();
-    editor.focus({ preventScroll: true });
-    saveSelection();
+    finishEditorAction(selectedRange);
   }
 
   function applyInlineStyle(property, value) {
@@ -460,46 +496,59 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
 
   function runCommand(command, value = null) {
     restoreSelection();
+    const selectedRange = currentRange();
     document.execCommand(command, false, value);
-    emitChange();
-    editorRef.current?.focus({ preventScroll: true });
-    saveSelection();
+    finishEditorAction(selectedRange);
   }
 
   function applyBlock(tag) {
     restoreSelection();
+    const selectedRange = currentRange();
     document.execCommand("formatBlock", false, tag);
-    emitChange();
-    editorRef.current?.focus({ preventScroll: true });
-    saveSelection();
+    finishEditorAction(selectedRange);
   }
 
   function applyList(command) {
     restoreSelection();
+    const selectedRange = currentRange();
     document.execCommand(command, false);
-    emitChange();
-    editorRef.current?.focus({ preventScroll: true });
-    saveSelection();
+    finishEditorAction(selectedRange);
   }
 
   function clearFormatting() {
     restoreSelection();
+    const selectedRange = currentRange();
+    const editor = editorRef.current;
+    const shouldResetBlock = selectedRange && editor
+      ? getStyleTargets(selectedRange, editor).some((target) => /^H[1-6]$/.test(target.tagName) || target.tagName === "BLOCKQUOTE")
+      : false;
+
     document.execCommand("removeFormat", false);
-    emitChange();
-    editorRef.current?.focus({ preventScroll: true });
-    saveSelection();
+    if (shouldResetBlock) {
+      document.execCommand("formatBlock", false, "p");
+    }
+
+    const range = currentRange() || selectedRange;
+
+    if (range && editor) {
+      getStyleTargets(range, editor).forEach((target) => {
+        target.removeAttribute("style");
+        target.querySelectorAll("[style]").forEach((child) => child.removeAttribute("style"));
+      });
+    }
+
+    finishEditorAction(range);
   }
 
   function insertLink() {
     restoreSelection();
+    const selectedRange = currentRange();
 
     const url = prompt("Enter URL (https://, mailto:, tel:, /page, or #section):");
     if (!url || !/^(https?:|mailto:|tel:|\/|#)/i.test(url.trim())) return;
 
     document.execCommand("createLink", false, url.trim());
-    emitChange();
-    editorRef.current?.focus({ preventScroll: true });
-    saveSelection();
+    finishEditorAction(selectedRange);
   }
 
   function getTableCell() {
@@ -561,7 +610,6 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
       activeSelection.addRange(range);
     }
 
-    cleanDom(editor);
     emitChange();
     editor.focus({ preventScroll: true });
     saveSelection();
@@ -710,8 +758,8 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
   const selectClass = "h-9 rounded-lg border border-primary/10 bg-white px-3 text-xs font-black text-primary outline-none transition hover:border-primary/30 hover:bg-primary/5 sm:h-10";
 
   return (
-    <div className="rounded-lg border border-primary/10 bg-white shadow-sm">
-      <div className="sticky top-20 z-10 rounded-t-lg border-b border-primary/10 bg-paper p-3 shadow-sm sm:p-4">
+    <div className="relative overflow-visible rounded-lg border border-primary/10 bg-white shadow-sm">
+      <div className="sticky top-20 z-20 rounded-t-lg border-b border-primary/10 bg-paper p-3 shadow-sm sm:p-4">
         <div className="flex flex-wrap gap-2 sm:gap-3">
           <button type="button" className={buttonClass} title="Bold" onMouseDown={keepEditorSelection} onClick={() => runCommand("bold")}>
             <FaIcon name="bold" className="size-4" />
