@@ -110,6 +110,34 @@ body {
   padding-left: 1.35rem;
 }
 
+.rich-content :where(table),
+.rich-text-editor :where(table) {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  overflow-wrap: anywhere;
+}
+
+.rich-content :where(th, td),
+.rich-text-editor :where(th, td) {
+  border: 1px solid rgba(81, 33, 61, 0.18);
+  min-width: 7rem;
+  padding: 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.rich-content :where(th),
+.rich-text-editor :where(th) {
+  background: #fffaf6;
+  color: #51213d;
+  font-weight: 900;
+}
+
+.rich-text-editor :where(td:empty, th:empty)::after {
+  content: "\00a0";
+}
+
 .rich-content :where(p + p, p + ul, p + ol, ul + p, ol + p),
 .rich-text-editor :where(p + p, p + ul, p + ol, ul + p, ol + p) {
   margin-top: 0.75rem;

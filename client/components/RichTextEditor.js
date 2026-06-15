@@ -15,7 +15,7 @@ const colorOptions = [
   ["#15803d", "Green"]
 ];
 
-const allowedTags = new Set(["A", "B", "BLOCKQUOTE", "BR", "DIV", "EM", "H1", "H2", "H3", "H4", "H5", "H6", "I", "LI", "OL", "P", "SPAN", "STRONG", "U", "UL"]);
+const allowedTags = new Set(["A", "B", "BLOCKQUOTE", "BR", "CAPTION", "COL", "COLGROUP", "DIV", "EM", "H1", "H2", "H3", "H4", "H5", "H6", "I", "LI", "OL", "P", "SPAN", "STRONG", "TABLE", "TBODY", "TD", "TFOOT", "TH", "THEAD", "TR", "U", "UL"]);
 const allowedStyles = new Set(["color", "font-size", "font-style", "font-weight", "text-align", "text-decoration"]);
 
 function normalizeStyle(styleText = "") {
@@ -150,6 +150,14 @@ function cleanDom(root) {
       element = replaceTag(element, "p");
     }
 
+    if (element.tagName === "B") {
+      element = replaceTag(element, "strong");
+    }
+
+    if (element.tagName === "I") {
+      element = replaceTag(element, "em");
+    }
+
     if (!allowedTags.has(element.tagName)) {
       unwrapNode(element);
       return;
@@ -172,6 +180,17 @@ function cleanDom(root) {
       }
 
       if (name === "target" || name === "rel") {
+        return;
+      }
+
+      if ((name === "colspan" || name === "rowspan") && (element.tagName === "TD" || element.tagName === "TH")) {
+        const value = Math.max(1, Math.min(12, Number.parseInt(attribute.value, 10) || 1));
+        element.setAttribute(name, String(value));
+        return;
+      }
+
+      if (name === "scope" && element.tagName === "TH" && /^(col|row)$/i.test(attribute.value)) {
+        element.setAttribute("scope", attribute.value.toLowerCase());
         return;
       }
 
@@ -259,6 +278,22 @@ function looksLikeHeading(line) {
   return /\?$/.test(text) || /^(about|benefits|documents|eligibility|faq|how|overview|required|requirements|service|what|when|where|who|why)\b/i.test(text);
 }
 
+function tableHtmlFromRows(rows) {
+  const body = rows
+    .map((row, rowIndex) => {
+      const cells = row.map((cell) => {
+        const tag = rowIndex === 0 ? "th" : "td";
+        const scope = tag === "th" ? " scope=\"col\"" : "";
+        return `<${tag}${scope}>${escapeHtml(cell) || "<br>"}</${tag}>`;
+      }).join("");
+
+      return `<tr>${cells}</tr>`;
+    })
+    .join("");
+
+  return `<table><tbody>${body}</tbody></table>`;
+}
+
 function plainTextToCleanHtml(text) {
   const lines = String(text || "")
     .replace(/\r\n/g, "\n")
@@ -273,20 +308,36 @@ function plainTextToCleanHtml(text) {
     paragraph = [];
   }
 
-  lines.forEach((line) => {
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+
     if (!line) {
       flushParagraph();
-      return;
+      continue;
+    }
+
+    if (line.includes("\t")) {
+      const rows = [];
+      flushParagraph();
+
+      while (index < lines.length && lines[index]?.includes("\t")) {
+        rows.push(lines[index].split("\t").map((cell) => cell.trim()));
+        index += 1;
+      }
+
+      index -= 1;
+      blocks.push(tableHtmlFromRows(rows));
+      continue;
     }
 
     if (looksLikeHeading(line)) {
       flushParagraph();
       blocks.push(`<h3>${escapeHtml(line)}</h3>`);
-      return;
+      continue;
     }
 
     paragraph.push(line);
-  });
+  }
 
   flushParagraph();
   return blocks.join("");
@@ -399,6 +450,14 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
     });
   }
 
+  function runCommand(command, value = null) {
+    restoreSelection();
+    document.execCommand(command, false, value);
+    emitChange();
+    editorRef.current?.focus({ preventScroll: true });
+    saveSelection();
+  }
+
   function applyBlock(tag) {
     restoreSelection();
     document.execCommand("formatBlock", false, tag);
@@ -435,6 +494,170 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
     saveSelection();
   }
 
+  function getTableCell() {
+    const selection = window.getSelection();
+    const editor = editorRef.current;
+    if (!selection?.rangeCount || !editor) return null;
+
+    const node = selection.getRangeAt(0).startContainer;
+    const element = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+    const cell = element?.closest("td,th");
+
+    return cell && editor.contains(cell) ? cell : null;
+  }
+
+  function selectNodeStart(node) {
+    const selection = window.getSelection();
+    if (!selection || !node) return;
+
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    savedRangeRef.current = range.cloneRange();
+  }
+
+  function insertHtmlAtSelection(html) {
+    const editor = editorRef.current;
+    if (!editor) return;
+
+    restoreSelection();
+
+    const selection = window.getSelection();
+    if (!selection?.rangeCount || !editor.contains(selection.anchorNode)) {
+      const range = document.createRange();
+      range.selectNodeContents(editor);
+      range.collapse(false);
+      selection?.removeAllRanges();
+      selection?.addRange(range);
+    }
+
+    const activeSelection = window.getSelection();
+    if (!activeSelection?.rangeCount) return;
+
+    const range = activeSelection.getRangeAt(0);
+    const template = document.createElement("template");
+    template.innerHTML = html;
+    const fragment = template.content;
+    const firstNode = fragment.firstElementChild;
+    const lastNode = fragment.lastChild;
+
+    range.deleteContents();
+    range.insertNode(fragment);
+
+    if (lastNode?.parentNode) {
+      range.setStartAfter(lastNode);
+      range.collapse(true);
+      activeSelection.removeAllRanges();
+      activeSelection.addRange(range);
+    }
+
+    cleanDom(editor);
+    emitChange();
+    editor.focus({ preventScroll: true });
+    saveSelection();
+
+    if (firstNode) {
+      const firstCell = firstNode.querySelector?.("td,th");
+      if (firstCell) {
+        selectNodeStart(firstCell);
+      }
+    }
+  }
+
+  function insertTable() {
+    insertHtmlAtSelection(tableHtmlFromRows([
+      ["Header 1", "Header 2", "Header 3"],
+      ["", "", ""],
+      ["", "", ""]
+    ]));
+  }
+
+  function updateTable(callback) {
+    const cell = getTableCell();
+    if (!cell) return;
+
+    callback(cell);
+    emitChange();
+    editorRef.current?.focus({ preventScroll: true });
+    saveSelection();
+  }
+
+  function addTableRow() {
+    updateTable((cell) => {
+      const row = cell.closest("tr");
+      const columns = row?.children.length || 1;
+      const nextRow = document.createElement("tr");
+
+      for (let index = 0; index < columns; index += 1) {
+        const td = document.createElement("td");
+        td.innerHTML = "<br>";
+        nextRow.appendChild(td);
+      }
+
+      row?.after(nextRow);
+      selectNodeStart(nextRow.firstElementChild);
+    });
+  }
+
+  function addTableColumn() {
+    updateTable((cell) => {
+      const row = cell.closest("tr");
+      const table = cell.closest("table");
+      const index = [...row.children].indexOf(cell);
+
+      table?.querySelectorAll("tr").forEach((tableRow) => {
+        const sourceCell = tableRow.children[index];
+        const tagName = sourceCell?.tagName === "TH" ? "th" : "td";
+        const newCell = document.createElement(tagName);
+        if (tagName === "th") {
+          newCell.setAttribute("scope", "col");
+        }
+        newCell.innerHTML = "<br>";
+        sourceCell?.after(newCell);
+      });
+    });
+  }
+
+  function deleteTableRow() {
+    updateTable((cell) => {
+      const row = cell.closest("tr");
+      const table = cell.closest("table");
+
+      if ((table?.querySelectorAll("tr").length || 0) <= 1) {
+        table?.remove();
+        return;
+      }
+
+      row?.remove();
+    });
+  }
+
+  function deleteTableColumn() {
+    updateTable((cell) => {
+      const row = cell.closest("tr");
+      const table = cell.closest("table");
+      const index = [...row.children].indexOf(cell);
+      const firstRow = table?.querySelector("tr");
+
+      if ((firstRow?.children.length || 0) <= 1) {
+        table?.remove();
+        return;
+      }
+
+      table?.querySelectorAll("tr").forEach((tableRow) => {
+        tableRow.children[index]?.remove();
+      });
+    });
+  }
+
+  function deleteTable() {
+    updateTable((cell) => {
+      cell.closest("table")?.remove();
+    });
+  }
+
   function handlePaste(event) {
     const text = event.clipboardData?.getData("text/plain");
 
@@ -443,12 +666,7 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
     }
 
     event.preventDefault();
-    restoreSelection();
-    document.execCommand("insertHTML", false, plainTextToCleanHtml(text));
-    document.execCommand("formatBlock", false, "p");
-    emitChange();
-    editorRef.current?.focus({ preventScroll: true });
-    saveSelection();
+    insertHtmlAtSelection(plainTextToCleanHtml(text));
   }
 
   function getCurrentBlock() {
@@ -487,13 +705,13 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
     <div className="rounded-lg border border-primary/10 bg-white shadow-sm">
       <div className="sticky top-20 z-10 rounded-t-lg border-b border-primary/10 bg-paper p-3 shadow-sm sm:p-4">
         <div className="flex flex-wrap gap-2 sm:gap-3">
-          <button type="button" className={buttonClass} title="Bold" onMouseDown={keepEditorSelection} onClick={() => toggleInlineStyle("fontWeight", "700")}>
+          <button type="button" className={buttonClass} title="Bold" onMouseDown={keepEditorSelection} onClick={() => runCommand("bold")}>
             <FaIcon name="bold" className="size-4" />
           </button>
-          <button type="button" className={buttonClass} title="Italic" onMouseDown={keepEditorSelection} onClick={() => toggleInlineStyle("fontStyle", "italic")}>
+          <button type="button" className={buttonClass} title="Italic" onMouseDown={keepEditorSelection} onClick={() => runCommand("italic")}>
             <FaIcon name="italic" className="size-4" />
           </button>
-          <button type="button" className={buttonClass} title="Underline" onMouseDown={keepEditorSelection} onClick={() => toggleInlineStyle("textDecoration", "underline")}>
+          <button type="button" className={buttonClass} title="Underline" onMouseDown={keepEditorSelection} onClick={() => runCommand("underline")}>
             <FaIcon name="underline" className="size-4" />
           </button>
 
@@ -528,6 +746,25 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
           </button>
           <button type="button" className={buttonClass} title="Insert Link" onMouseDown={keepEditorSelection} onClick={insertLink}>
             <FaIcon name="link" className="size-4" />
+          </button>
+
+          <button type="button" className={buttonClass} title="Insert Table" onMouseDown={keepEditorSelection} onClick={insertTable}>
+            <FaIcon name="table" className="size-4" />
+          </button>
+          <button type="button" className="rounded-lg border border-primary/10 bg-white px-3 py-2 text-xs font-black text-primary transition hover:border-primary/30 hover:bg-primary/5" title="Add Table Row" onMouseDown={keepEditorSelection} onClick={addTableRow}>
+            + Row
+          </button>
+          <button type="button" className="rounded-lg border border-primary/10 bg-white px-3 py-2 text-xs font-black text-primary transition hover:border-primary/30 hover:bg-primary/5" title="Add Table Column" onMouseDown={keepEditorSelection} onClick={addTableColumn}>
+            + Col
+          </button>
+          <button type="button" className="rounded-lg border border-primary/10 bg-white px-3 py-2 text-xs font-black text-primary transition hover:border-primary/30 hover:bg-primary/5" title="Delete Table Row" onMouseDown={keepEditorSelection} onClick={deleteTableRow}>
+            - Row
+          </button>
+          <button type="button" className="rounded-lg border border-primary/10 bg-white px-3 py-2 text-xs font-black text-primary transition hover:border-primary/30 hover:bg-primary/5" title="Delete Table Column" onMouseDown={keepEditorSelection} onClick={deleteTableColumn}>
+            - Col
+          </button>
+          <button type="button" className={buttonClass} title="Delete Table" onMouseDown={keepEditorSelection} onClick={deleteTable}>
+            <FaIcon name="trash" className="size-4" />
           </button>
 
           <select className={selectClass} defaultValue="" title="Font Size" onMouseDown={saveSelection} onChange={(event) => {
