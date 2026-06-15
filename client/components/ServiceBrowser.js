@@ -5,6 +5,7 @@ import Link from "next/link";
 import { categories as defaultCategories, services as defaultServices } from "@/lib/services";
 import FaIcon from "@/components/FaIcon";
 import RichContent from "@/components/RichContent";
+import { plainText } from "@/lib/text";
 
 export default function ServiceBrowser({ initialCategory = "All", initialType = "national", limit, showAllButton = false, services = defaultServices, categories = defaultCategories }) {
   const [query, setQuery] = useState("");
@@ -43,8 +44,9 @@ export default function ServiceBrowser({ initialCategory = "All", initialType = 
       const matchesCategory = category === "All" || service.category === category;
       const matchesQuery =
         !normalized ||
-        service.title.toLowerCase().includes(normalized) ||
-        service.category.toLowerCase().includes(normalized);
+        plainText(service.title).toLowerCase().includes(normalized) ||
+        plainText(service.summary).toLowerCase().includes(normalized) ||
+        plainText(service.category).toLowerCase().includes(normalized);
 
       return matchesType && matchesCategory && matchesQuery;
     });

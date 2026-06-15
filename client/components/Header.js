@@ -42,7 +42,8 @@ const navGroups = [
         href: "/ceo",
         icon: "user",
         copy: "Leadership profile, firm history, and professional journey."
-      }
+      },
+    
     ]
   },
   {
@@ -327,8 +328,8 @@ export default function Header() {
       ) : null}
 
       {searchOpen ? (
-        <div className="fixed inset-0 z-[120] grid place-items-center overflow-y-auto bg-ink/55 px-4 py-6 backdrop-blur-sm sm:py-8" role="dialog" aria-modal="true" aria-label="Search services">
-          <div className="flex max-h-[calc(100vh-48px)] w-full max-w-2xl flex-col rounded-2xl bg-white p-4 shadow-2xl shadow-primary/25 sm:max-h-[calc(100vh-64px)] sm:p-7">
+        <div className="fixed inset-0 z-[120] flex min-h-dvh items-start justify-center overflow-y-auto bg-ink/55 px-3 py-4 backdrop-blur-sm sm:items-center sm:px-4 sm:py-8" role="dialog" aria-modal="true" aria-label="Search services">
+          <div className="flex max-h-[calc(100dvh-32px)] w-full max-w-2xl flex-col rounded-2xl bg-white p-4 shadow-2xl shadow-primary/25 sm:max-h-[calc(100dvh-64px)] sm:p-7">
             <div className="mb-5 flex shrink-0 items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.2em] text-primary/60">Search</p>
@@ -358,7 +359,7 @@ export default function Header() {
                 Search
               </button>
             </form>
-            <div className="mt-5 grid max-h-[52vh] gap-2 overflow-y-auto overscroll-contain pr-1 sm:max-h-[48vh] sm:pr-2">
+            <div className="mt-5 grid flex-1 gap-2 overflow-y-auto overscroll-contain pr-1 sm:pr-2">
               {searchStatus ? <p className="rounded-2xl bg-paper px-4 py-3 text-sm font-black text-primary">{searchStatus}</p> : null}
               {visibleResults.map((item) => (
                 <Link

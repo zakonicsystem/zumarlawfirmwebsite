@@ -1,20 +1,23 @@
 import { NextResponse } from "next/server";
 import { readCmsData } from "@/lib/cmsStore";
+import { plainText } from "@/lib/text";
 
 const staticPages = [
   { title: "Home", href: "/", type: "Page", summary: "Zumar Law Firm homepage." },
+  { title: "How We Work", href: "/#how-we-work", type: "Section", summary: "Step-by-step workflow used for Zumar Law Firm service requests." },
   { title: "Services", href: "/services", type: "Page", summary: "Browse legal, tax, corporate, and registration services." },
   { title: "Tax Calculators", href: "/calculators", type: "Page", summary: "Salary tax and business tax estimators." },
-  { title: "Salary Tax Calculator", href: "/calculators/salary-tax", type: "Calculator", summary: "Estimate salaried income tax." },
-  { title: "Business Tax Calculator", href: "/calculators/business-tax", type: "Calculator", summary: "Estimate individual or AOP business income tax." },
   { title: "Service Areas", href: "/service-areas", type: "Page", summary: "Focused tax, corporate, licensing, and compliance areas." },
   { title: "Branches", href: "/branches", type: "Page", summary: "Office locations and branch contact details." },
   { title: "Appointment", href: "/appointment", type: "Page", summary: "Book a consultation appointment." },
   { title: "Contact", href: "/contact", type: "Page", summary: "Contact Zumar Law Firm." },
+  { title: "About Zumar Law Firm", href: "/about", type: "Page", summary: "Company overview, mission, values, and registrations." },
   { title: "CEO & History", href: "/ceo", type: "Page", summary: "Leadership and history of Zumar Law Firm." },
   { title: "Careers", href: "/careers", type: "Page", summary: "Careers and professional opportunities at Zumar Law Firm." },
   { title: "Blog", href: "/blog", type: "Page", summary: "Case notes and service guides from Zumar Law Firm." },
-  { title: "Contact", href: "/contact", type: "Page", summary: "Send your inquiry to the team." }
+  { title: "Privacy Policy", href: "/privacy-policy", type: "Page", summary: "Privacy policy for Zumar Law Firm website users." },
+  { title: "Refund Policy", href: "/refund-policy", type: "Page", summary: "Refund and service fee policy." },
+  { title: "Terms and Conditions", href: "/terms-and-conditions", type: "Page", summary: "Website and service terms." }
 ];
 
 export async function GET(request) {
@@ -25,39 +28,32 @@ export async function GET(request) {
   const items = [
     ...staticPages,
     ...cms.services.filter((item) => item.enabled !== false).map((item) => ({
-      title: item.title,
+      title: plainText(item.title, "Service"),
       href: `/services/${item.slug}`,
-      type: item.category || "Service",
-      summary: item.summary || "",
-      keywords: [item.category, item.serviceType, item.formattedPrice].filter(Boolean).join(" ")
+      type: plainText(item.category, "Service"),
+      summary: plainText(item.summary),
+      keywords: [plainText(item.category), plainText(item.serviceType), plainText(item.formattedPrice)].filter(Boolean).join(" ")
     })),
     ...cms.serviceAreas.filter((item) => item.enabled !== false).map((item) => ({
-      title: item.title,
+      title: plainText(item.title, "Service Area"),
       href: `/service-areas/${item.slug}`,
       type: "Service Area",
-      summary: item.summary || "",
-      keywords: item.icon || ""
+      summary: plainText(item.summary),
+      keywords: plainText(item.icon)
     })),
     ...cms.branches.filter((item) => item.enabled !== false).map((item) => ({
-      title: item.name,
+      title: plainText(item.name, "Office"),
       href: `/branches/${item.slug}`,
       type: "Office",
-      summary: item.address || "",
-      keywords: [item.phone, item.email].filter(Boolean).join(" ")
-    })),
-    ...cms.news.filter((item) => item.enabled !== false).map((item) => ({
-      title: item.title,
-      href: `/news/${item.slug}`,
-      type: "News",
-      summary: item.summary || "",
-      keywords: [item.authority, item.date].filter(Boolean).join(" ")
+      summary: plainText(item.address),
+      keywords: [plainText(item.phone), plainText(item.email)].filter(Boolean).join(" ")
     })),
     ...cms.blogs.filter((item) => item.enabled !== false).map((item) => ({
-      title: item.title,
+      title: plainText(item.title, "Blog"),
       href: `/blog/${item.slug}`,
       type: "Blog",
-      summary: item.summary || "",
-      keywords: [item.service, item.date].filter(Boolean).join(" ")
+      summary: plainText(item.summary),
+      keywords: [plainText(item.service), plainText(item.date)].filter(Boolean).join(" ")
     }))
   ];
 

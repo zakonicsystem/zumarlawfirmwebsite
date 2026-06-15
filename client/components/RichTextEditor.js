@@ -346,6 +346,8 @@ function plainTextToCleanHtml(text) {
 export default function RichTextEditor({ value = "", onChange, placeholder = "Enter text..." }) {
   const editorRef = useRef(null);
   const savedRangeRef = useRef(null);
+  const focusedRef = useRef(false);
+  const lastEmittedRef = useRef("");
   const [isFocused, setIsFocused] = useState(false);
   const [characterCount, setCharacterCount] = useState(0);
 
@@ -356,6 +358,10 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
     document.execCommand("defaultParagraphSeparator", false, "p");
 
     const nextHtml = decodeHtmlEntities(value || "");
+
+    if (focusedRef.current && (nextHtml === lastEmittedRef.current || cleanHtml(editor.innerHTML) === nextHtml)) {
+      return;
+    }
 
     if (editor.innerHTML !== nextHtml) {
       editor.innerHTML = nextHtml;
@@ -370,7 +376,9 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
 
     cleanDom(editor);
     setCharacterCount(editor.innerText.length);
-    onChange(cleanHtml(editor.innerHTML));
+    const cleaned = cleanHtml(editor.innerHTML);
+    lastEmittedRef.current = cleaned;
+    onChange(cleaned);
   }
 
   function saveSelection() {
@@ -808,10 +816,14 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
         onKeyDown={handleKeyDown}
         onKeyUp={saveSelection}
         onMouseUp={saveSelection}
-        onFocus={() => setIsFocused(true)}
+        onFocus={() => {
+          focusedRef.current = true;
+          setIsFocused(true);
+        }}
         onBlur={() => {
           saveSelection();
           emitChange();
+          focusedRef.current = false;
           setIsFocused(false);
         }}
         suppressContentEditableWarning
