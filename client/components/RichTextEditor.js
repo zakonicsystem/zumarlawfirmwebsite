@@ -235,10 +235,61 @@ function cleanDom(root) {
     }
   });
 
+  repairNestedBlocks(root);
+
   root.querySelectorAll("p,div,h1,h2,h3,h4,h5,h6,li,blockquote").forEach((element) => {
     if (!element.textContent.trim() && !element.querySelector("br,img")) {
       element.remove();
     }
+  });
+}
+
+function isEditableBlockNode(node) {
+  return node?.nodeType === Node.ELEMENT_NODE && /^(BLOCKQUOTE|DIV|H[1-6]|OL|P|TABLE|UL)$/.test(node.tagName);
+}
+
+function repairNestedBlocks(root) {
+  const invalidParents = [...root.querySelectorAll("p,h1,h2,h3,h4,h5,h6,blockquote")]
+    .filter((parent) => [...parent.children].some((child) => isEditableBlockNode(child)));
+
+  invalidParents.forEach((parent) => {
+    const replacement = document.createDocumentFragment();
+    let inlineNodes = [];
+
+    function flushInlineNodes() {
+      if (!inlineNodes.length) return;
+
+      const hasText = inlineNodes.some((node) => node.textContent.trim());
+
+      if (hasText) {
+        const wrapper = document.createElement(parent.tagName.toLowerCase());
+        inlineNodes.forEach((node) => wrapper.appendChild(node));
+        replacement.appendChild(wrapper);
+      } else {
+        inlineNodes.forEach((node) => {
+          if (node.nodeType !== Node.TEXT_NODE || node.textContent.trim()) {
+            replacement.appendChild(node);
+          }
+        });
+      }
+
+      inlineNodes = [];
+    }
+
+    while (parent.firstChild) {
+      const node = parent.firstChild;
+      parent.removeChild(node);
+
+      if (isEditableBlockNode(node)) {
+        flushInlineNodes();
+        replacement.appendChild(node);
+      } else {
+        inlineNodes.push(node);
+      }
+    }
+
+    flushInlineNodes();
+    parent.replaceWith(replacement);
   });
 }
 
@@ -261,21 +312,6 @@ function escapeHtml(text) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
-}
-
-function looksLikeHeading(line) {
-  const text = String(line || "").trim();
-  const words = text.split(/\s+/).filter(Boolean);
-
-  if (!text || words.length > 12 || text.length > 95) {
-    return false;
-  }
-
-  if (/[.;,]$/.test(text)) {
-    return false;
-  }
-
-  return /\?$/.test(text) || /^(about|benefits|documents|eligibility|faq|how|overview|required|requirements|service|what|when|where|who|why)\b/i.test(text);
 }
 
 function tableHtmlFromRows(rows) {
@@ -330,12 +366,6 @@ function plainTextToCleanHtml(text) {
       continue;
     }
 
-    if (looksLikeHeading(line)) {
-      flushParagraph();
-      blocks.push(`<h3>${escapeHtml(line)}</h3>`);
-      continue;
-    }
-
     paragraph.push(line);
   }
 
@@ -359,7 +389,7 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
 
     const nextHtml = decodeHtmlEntities(value || "");
 
-    if (focusedRef.current && (nextHtml === lastEmittedRef.current || cleanHtml(editor.innerHTML) === nextHtml)) {
+    if (focusedRef.current) {
       return;
     }
 
@@ -593,33 +623,33 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
     const activeSelection = window.getSelection();
     if (!activeSelection?.rangeCount) return;
 
-    const range = activeSelection.getRangeAt(0);
-    const template = document.createElement("template");
-    template.innerHTML = html;
-    const fragment = template.content;
-    const firstNode = fragment.firstElementChild;
-    const lastNode = fragment.lastChild;
+    const markerId = `rte-caret-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    document.execCommand("insertHTML", false, `${html}<span data-rte-caret="${markerId}"></span>`);
 
-    range.deleteContents();
-    range.insertNode(fragment);
+    repairNestedBlocks(editor);
 
-    if (lastNode?.parentNode) {
-      range.setStartAfter(lastNode);
+    const marker = editor.querySelector(`[data-rte-caret="${markerId}"]`);
+    const insertedTable = marker?.previousElementSibling?.tagName === "TABLE"
+      ? marker.previousElementSibling
+      : marker?.previousElementSibling?.querySelector?.("table");
+    const firstCell = insertedTable?.querySelector("td,th");
+
+    if (firstCell) {
+      marker?.remove();
+      selectNodeStart(firstCell);
+    } else if (marker) {
+      const range = document.createRange();
+      range.setStartBefore(marker);
       range.collapse(true);
       activeSelection.removeAllRanges();
       activeSelection.addRange(range);
+      savedRangeRef.current = range.cloneRange();
+      marker.remove();
     }
 
     emitChange();
     editor.focus({ preventScroll: true });
     saveSelection();
-
-    if (firstNode) {
-      const firstCell = firstNode.querySelector?.("td,th");
-      if (firstCell) {
-        selectNodeStart(firstCell);
-      }
-    }
   }
 
   function insertTable() {
@@ -759,7 +789,7 @@ export default function RichTextEditor({ value = "", onChange, placeholder = "En
 
   return (
     <div className="relative overflow-visible rounded-lg border border-primary/10 bg-white shadow-sm">
-      <div className="sticky top-20 z-20 rounded-t-lg border-b border-primary/10 bg-paper p-3 shadow-sm sm:p-4">
+      <div className="sticky top-0 z-30 rounded-t-lg border-b border-primary/10 bg-paper p-3 shadow-sm sm:p-4">
         <div className="flex flex-wrap gap-2 sm:gap-3">
           <button type="button" className={buttonClass} title="Bold" onMouseDown={keepEditorSelection} onClick={() => runCommand("bold")}>
             <FaIcon name="bold" className="size-4" />

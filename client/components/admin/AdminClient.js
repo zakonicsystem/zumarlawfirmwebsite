@@ -2275,9 +2275,9 @@ function Textarea({ label, value, onChange, placeholder = "" }) {
 
 function RichEditor({ label, value, onChange, placeholder = "" }) {
   return (
-    <div className="grid gap-2">
+    <div className="grid scroll-mt-28 gap-2 overflow-visible">
       <span className="text-sm font-black text-primary">{label}</span>
-      <div className="rounded-2xl border border-primary/10">
+      <div className="overflow-visible rounded-2xl border border-primary/10">
         <RichTextEditor value={value || ""} onChange={onChange} placeholder={placeholder} />
       </div>
     </div>
