@@ -1,94 +1,4 @@
-"use client";
-
-import { useEffect, useMemo, useRef, useState } from "react";
 import FaIcon from "@/components/FaIcon";
-
-function parseStatValue(value) {
-  const text = String(value || "");
-  const match = text.match(/[\d,.]+/);
-
-  if (!match) {
-    return { target: 0, prefix: "", suffix: text, decimals: 0 };
-  }
-
-  const numericText = match[0];
-  const decimals = numericText.includes(".") ? numericText.split(".")[1].length : 0;
-  const target = Number(numericText.replace(/,/g, ""));
-
-  return {
-    target: Number.isFinite(target) ? target : 0,
-    prefix: text.slice(0, match.index),
-    suffix: text.slice((match.index || 0) + numericText.length),
-    decimals
-  };
-}
-
-function formatStatValue(value, decimals) {
-  return value.toLocaleString("en-US", {
-    maximumFractionDigits: decimals,
-    minimumFractionDigits: decimals
-  });
-}
-
-function CountingNumber({ value }) {
-  const ref = useRef(null);
-  const [{ current, started }, setCount] = useState({ current: 0, started: false });
-  const parsed = useMemo(() => parseStatValue(value), [value]);
-
-  useEffect(() => {
-    const node = ref.current;
-
-    if (!node) {
-      return undefined;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setCount((state) => ({ ...state, started: true }));
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.35 }
-    );
-
-    observer.observe(node);
-
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!started) {
-      return undefined;
-    }
-
-    let frame = 0;
-    const duration = 1400;
-    const start = performance.now();
-
-    function tick(now) {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount({ current: parsed.target * eased, started: true });
-
-      if (progress < 1) {
-        frame = requestAnimationFrame(tick);
-      }
-    }
-
-    frame = requestAnimationFrame(tick);
-
-    return () => cancelAnimationFrame(frame);
-  }, [parsed.target, started]);
-
-  return (
-    <span ref={ref}>
-      {parsed.prefix}
-      {formatStatValue(current, parsed.decimals)}
-      {parsed.suffix}
-    </span>
-  );
-}
 
 export default function HomeStatsSection({ stats = [] }) {
   const visibleStats = stats.filter((item) => item.enabled !== false);
@@ -116,7 +26,7 @@ export default function HomeStatsSection({ stats = [] }) {
                 <FaIcon className="!h-15 !w-24 text-[5rem]" name={item.icon || "scale"} />
               </span>
               <strong className="mt-4 block text-3xl font-black leading-none text-ink sm:text-3xl">
-                <CountingNumber value={item.value} />
+                {item.value}
               </strong>
               <p className="mt-3 text-sm font-bold text-muted">{item.label}</p>
             </div>

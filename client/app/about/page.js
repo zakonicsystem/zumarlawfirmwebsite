@@ -7,7 +7,7 @@ import TeamMemberCard from "@/components/TeamMemberCard";
 import JsonLd from "@/components/JsonLd";
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
-import { generateAboutPageSchema, generateOrganizationSchema } from "@/lib/schema";
+import { generateAboutPageSchema } from "@/lib/schema";
 import { plainText } from "@/lib/text";
 
 export async function generateMetadata() {
@@ -25,7 +25,6 @@ export default async function AboutPage() {
   return (
     <>
       <JsonLd schema={generateAboutPageSchema()} />
-      <JsonLd schema={generateOrganizationSchema()} />
       <Reveal />
       <PageHeader eyebrow={about.eyebrow} title={about.title} copy={about.copy} />
 

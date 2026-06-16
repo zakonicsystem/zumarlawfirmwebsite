@@ -1,7 +1,3 @@
-"use client";
-
-import { useMemo } from "react";
-
 const allowedStyles = new Set(["background-color", "color", "font-size", "font-style", "font-weight", "text-align", "text-decoration"]);
 const blockTagPattern = /<(p|div|h[1-6]|ul|ol|li|blockquote)\b/i;
 const inlineHeadingStyles = {
@@ -200,14 +196,8 @@ function inlineAttributes(tag, attributes = "") {
 }
 
 export default function RichContent({ content, className = "", as, inline = false, componentStyle = false }) {
-  const result = useMemo(() => {
-    const sanitized = componentStyle ? componentHtml(sanitizeHtml(content)) : sanitizeHtml(content);
-    if (as) {
-      return unwrapSingleRoot(sanitized);
-    }
-
-    return { html: inline ? inlineHtml(sanitized) : sanitized, style: {} };
-  }, [as, componentStyle, content, inline]);
+  const sanitized = componentStyle ? componentHtml(sanitizeHtml(content)) : sanitizeHtml(content);
+  const result = as ? unwrapSingleRoot(sanitized) : { html: inline ? inlineHtml(sanitized) : sanitized, style: {} };
 
   const { html, style } = result;
 

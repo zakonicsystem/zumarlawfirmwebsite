@@ -1,5 +1,4 @@
 import "./globals.css";
-import "@fortawesome/fontawesome-svg-core/styles.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import StickyWhatsappButton from "@/components/StickyWhatsappButton";
@@ -84,7 +83,6 @@ function extractGoogleSiteVerification(value) {
 }
 
 export default async function RootLayout({ children }) {
-  await readCmsData();
   return (
     <html lang="en" className={jakarta.variable} suppressHydrationWarning>
       <body className="font-sans text-ink antialiased" suppressHydrationWarning>

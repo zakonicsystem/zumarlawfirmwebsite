@@ -4,7 +4,7 @@ import FaqAccordion from "@/components/FaqAccordion";
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
 import JsonLd from "@/components/JsonLd";
-import { generateOrganizationSchema, generateFAQSchema } from "@/lib/schema";
+import { generateFAQSchema } from "@/lib/schema";
 
 export async function generateMetadata() {
   return getPageMetadata("calculators");
@@ -17,7 +17,6 @@ export default async function CalculatorsPage() {
 
   return (
     <>
-      <JsonLd schema={generateOrganizationSchema()} />
       {faqItems.length ? <JsonLd schema={generateFAQSchema(faqItems, "https://zumarlawfirm.com/calculators")} /> : null}
       <PageHeader eyebrow={page.eyebrow} title={page.title} copy={page.copy} />
       <TaxCalculators page={page} />

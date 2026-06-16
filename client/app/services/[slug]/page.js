@@ -7,6 +7,7 @@ import ServiceCarousel from "@/components/ServiceCarousel";
 import ServiceDetailColumns from "@/components/ServiceDetailColumns";
 import { findBySlug, readCmsData } from "@/lib/cmsStore";
 import { getRecordMetadata } from "@/lib/seo";
+import { toServiceCards } from "@/lib/serviceCards";
 import { generateServiceSchema, generateFAQSchema } from "@/lib/schema";
 import { notFound } from "next/navigation";
 
@@ -54,7 +55,7 @@ export default async function ServiceDetailPage({ params }) {
     .filter((item) => item.enabled !== false && item.slug !== service.slug && !relatedServiceSlugs.has(item.slug));
   const manualCarouselServices = mapServiceSlugs(services, getServiceSelectionValues(service, ["carouselServiceSlugs", "carouselServices", "manualCarouselServices", "otherServiceSlugs", "otherServices"]), service.slug)
     .filter((item) => !relatedServiceSlugs.has(item.slug));
-  const carouselServices = manualCarouselServices.length ? manualCarouselServices : automaticCarouselServices;
+  const carouselServices = toServiceCards(manualCarouselServices.length ? manualCarouselServices : automaticCarouselServices);
   const serviceFaqItems = (service.faqItems || []).filter((item) => item.enabled !== false);
   const fallbackFaqItems = (detailContent.faqItems || []).filter((item) => item.enabled !== false);
   const faqItems = serviceFaqItems.length ? serviceFaqItems : fallbackFaqItems;

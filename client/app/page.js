@@ -16,8 +16,9 @@ import {
 } from "@/components/HomeSections";
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
+import { toServiceCards } from "@/lib/serviceCards";
 import JsonLd from "@/components/JsonLd";
-import { generateFAQSchema, generateWebsiteSchema, generateLocalBusinessSchema, generateOrganizationSchema } from "@/lib/schema";
+import { generateFAQSchema, generateLocalBusinessSchema } from "@/lib/schema";
 
 export async function generateMetadata() {
   return getPageMetadata("home");
@@ -28,17 +29,15 @@ export default async function HomePage() {
   const home = Object.fromEntries(cms.homeSections.map((section) => [section.id, section]));
   const services = cms.services.filter((service) => service.enabled !== false);
   const serviceSelections = cms.homeContent?.serviceSelections || {};
-  const featuredServices = selectServices(services, serviceSelections.featuredSlugs, 14);
-  const homeGridServices = selectServices(services, serviceSelections.homeGridSlugs, 6);
+  const featuredServices = toServiceCards(selectServices(services, serviceSelections.featuredSlugs, 14));
+  const homeGridServices = toServiceCards(selectServices(services, serviceSelections.homeGridSlugs, 6));
   const newsItems = cms.news.filter((item) => item.enabled !== false);
   const blogPosts = cms.blogs.filter((post) => post.enabled !== false);
   const homeFaqItems = (cms.homeContent?.faq?.items || []).filter((item) => item.enabled !== false);
 
   return (
     <>
-      <JsonLd schema={generateWebsiteSchema()} />
       <JsonLd schema={generateLocalBusinessSchema()} />
-      <JsonLd schema={generateOrganizationSchema()} />
       {homeFaqItems.length ? <JsonLd schema={generateFAQSchema(homeFaqItems, "https://zumarlawfirm.com")} /> : null}
       <Reveal />
       <HomeHeroSlider slides={cms.heroSlides} />

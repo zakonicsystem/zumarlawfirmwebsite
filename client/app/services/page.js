@@ -3,8 +3,7 @@ import FaIcon from "@/components/FaIcon";
 import RichContent from "@/components/RichContent";
 import { readCmsData } from "@/lib/cmsStore";
 import { getPageMetadata } from "@/lib/seo";
-import JsonLd from "@/components/JsonLd";
-import { generateOrganizationSchema } from "@/lib/schema";
+import { toServiceCards } from "@/lib/serviceCards";
 
 export async function generateMetadata() {
   return getPageMetadata("services");
@@ -13,11 +12,10 @@ export async function generateMetadata() {
 export default async function ServicesPage() {
   const { services, categories, pageContent } = await readCmsData();
   const page = pageContent.services;
-  const visibleServices = services.filter((service) => service.enabled !== false);
+  const visibleServices = toServiceCards(services.filter((service) => service.enabled !== false));
 
   return (
     <>
-      <JsonLd schema={generateOrganizationSchema()} />
       <section className="border-b border-primary/10 bg-gradient-to-br from-paper via-white to-secondary/60 py-10 sm:py-20">
         <div className="mx-auto w-[min(1180px,calc(100%-24px))] sm:w-[min(1180px,calc(100%-32px))]">
           <div>
