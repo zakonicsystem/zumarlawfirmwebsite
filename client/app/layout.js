@@ -21,16 +21,10 @@ export async function generateMetadata() {
   const googleSiteVerifications = normalizeGoogleSiteVerifications(data.settings?.googleSiteVerifications);
 
   return {
-    title: {
-      default: "Zumar Law Firm | Tax, Corporate & Regulatory Services",
-      template: "%s | Zumar Law Firm"
-    },
+    title: "Zumar Law Firm | Tax, Corporate & Regulatory Services",
     description:
       "Professional tax, company registration, intellectual property, licensing, and regulatory services in Pakistan.",
     metadataBase: new URL("https://zumarlawfirm.com"),
-    alternates: {
-      canonical: "https://zumarlawfirm.com"
-    },
     robots: {
       index: true,
       follow: true,

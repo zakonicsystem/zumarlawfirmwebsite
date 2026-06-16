@@ -24,7 +24,10 @@ export async function generateMetadata({ params }) {
     return {};
   }
 
-  return getRecordMetadata(service);
+  return getRecordMetadata(service, {
+    path: `/services/${service.slug}`,
+    image: service.image
+  });
 }
 
 export default async function ServiceDetailPage({ params }) {
@@ -76,18 +79,18 @@ export default async function ServiceDetailPage({ params }) {
               </span>
               {service.title ? <RichContent as="h1" className="text-5xl font-black leading-tight text-primary sm:text-5xl" content={service.title} /> : null}
             </div>
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-muted">
+            <div className="mt-5 max-w-3xl text-lg leading-8 text-muted">
               {service.summary && <RichContent content={service.summary} />}
-            </p>
+            </div>
           </div>
           <div className="grid min-w-64 gap-4 rounded-[2rem] bg-white p-6 shadow-2xl shadow-primary/10 ring-1 ring-primary/10">
             <div>
-              <p className="text-xs font-black uppercase tracking-wide text-primary/50">{detailContent.feeLabel && <RichContent content={detailContent.feeLabel} />}</p>
+              <p className="text-xs font-black uppercase tracking-wide text-primary/50">{detailContent.feeLabel && <RichContent content={detailContent.feeLabel} inline />}</p>
               <strong className="mt-2 block text-2xl font-black text-primary">{service.formattedPrice}</strong>
             </div>
             <div className="h-px bg-primary/10" />
             <div>
-              <p className="text-xs font-black uppercase tracking-wide text-primary/50">{detailContent.timelineLabel ? <RichContent content={detailContent.timelineLabel} /> : "Timeline"}</p>
+              <p className="text-xs font-black uppercase tracking-wide text-primary/50">{detailContent.timelineLabel ? <RichContent content={detailContent.timelineLabel} inline /> : "Timeline"}</p>
               <strong className="mt-2 block text-xl font-black text-ink">{service.timeline}</strong>
             </div>
           </div>
@@ -105,14 +108,14 @@ export default async function ServiceDetailPage({ params }) {
                   {service.requirements.map((item) => (
                     <li className="flex gap-3 rounded-2xl bg-paper px-4 py-3 text-ink/80" key={item}>
                       <FaIcon className="mt-1 size-4 shrink-0 text-primary" name="filing" />
-                      <span>{item && <RichContent content={item} />}</span>
+                      <div className="min-w-0">{item && <RichContent content={item} />}</div>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="mt-5 text-lg leading-8 text-muted">
+                <div className="mt-5 text-lg leading-8 text-muted">
                   {detailContent.emptyRequirementsText && <RichContent content={detailContent.emptyRequirementsText} />}
-                </p>
+                </div>
               )}
             </section>
 
@@ -142,15 +145,15 @@ export default async function ServiceDetailPage({ params }) {
             <div className="mt-7 grid gap-3">
               <a className="inline-flex min-h-12 items-center justify-center rounded-full bg-secondary px-5 text-sm font-black text-primary transition hover:-translate-y-1" href={detailContent.startOnlineHref} target="_blank" rel="noreferrer">
                 <FaIcon className="mr-2 size-4" name="registration" />
-                {detailContent.startOnlineLabel && <RichContent content={detailContent.startOnlineLabel} />}
+                {detailContent.startOnlineLabel && <RichContent content={detailContent.startOnlineLabel} inline />}
               </a>
               <Link className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 px-5 text-sm font-black text-white transition hover:-translate-y-1 hover:bg-white/10" href={detailContent.appointmentHref || detailContent.contactHref || "/contact"}>
                 <FaIcon className="mr-2 size-4" name="phone" />
-                {(detailContent.appointmentLabel || detailContent.contactLabel) ? <RichContent content={detailContent.appointmentLabel || detailContent.contactLabel} /> : "Send Inquiry"}
+                {(detailContent.appointmentLabel || detailContent.contactLabel) ? <RichContent content={detailContent.appointmentLabel || detailContent.contactLabel} inline /> : "Send Inquiry"}
               </Link>
               <a className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 px-5 text-sm font-black text-white transition hover:-translate-y-1 hover:bg-white/10" href={detailContent.callHref}>
                 <FaIcon className="mr-2 size-4" name="phone" />
-                {detailContent.callLabel && <RichContent content={detailContent.callLabel} />}
+                {detailContent.callLabel && <RichContent content={detailContent.callLabel} inline />}
               </a>
               <a
                 className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#25D366] px-5 text-sm font-black text-white transition hover:-translate-y-1 hover:bg-[#1ebe5d]"
@@ -159,13 +162,13 @@ export default async function ServiceDetailPage({ params }) {
                 rel="noreferrer"
               >
                 <FaIcon className="mr-2 size-4" name="phone" />
-                {detailContent.whatsappLabel && <RichContent content={detailContent.whatsappLabel} />}
+                {detailContent.whatsappLabel && <RichContent content={detailContent.whatsappLabel} inline />}
               </a>
             </div>
 
             {relatedServices.length ? (
               <div className="mt-8 border-t border-white/15 pt-6">
-                <p className="text-xs font-black uppercase tracking-[0.18em] text-secondary">{detailContent.relatedEyebrow && <RichContent content={detailContent.relatedEyebrow} />}</p>
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-secondary">{detailContent.relatedEyebrow && <RichContent content={detailContent.relatedEyebrow} inline />}</p>
                 <div className="mt-4 grid gap-3">
                   {relatedServices.map((item) => (
                     <Link className="group rounded-2xl border border-white/10 bg-white/8 p-4 transition hover:-translate-y-0.5 hover:bg-white/12" href={`/services/${item.slug}`} key={item.slug} prefetch={false}>
@@ -194,9 +197,9 @@ export default async function ServiceDetailPage({ params }) {
             <div className="mb-7">
               <p className="mb-2 text-sm font-black uppercase text-primary">{detailContent.benefitsEyebrow ? <RichContent content={detailContent.benefitsEyebrow} inline /> : "Benefits"}</p>
               {detailContent.benefitsTitle ? <RichContent as="h2" className="text-3xl font-black leading-tight text-primary sm:text-4xl" content={detailContent.benefitsTitle} /> : <h2 className="text-3xl font-black leading-tight text-primary sm:text-4xl">Key Benefits</h2>}
-              <p className="mt-3 max-w-3xl text-base leading-7 text-muted">
+              <div className="mt-3 max-w-3xl text-base leading-7 text-muted">
                 {detailContent.benefitsCopy && <RichContent content={detailContent.benefitsCopy} />}
-              </p>
+              </div>
             </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {(service.benefits || []).map((item, index) => (
@@ -218,9 +221,9 @@ export default async function ServiceDetailPage({ params }) {
             <div className="mb-7">
               <p className="mb-2 text-sm font-black uppercase text-primary">{detailContent.eligibilityEyebrow ? <RichContent content={detailContent.eligibilityEyebrow} inline /> : "Requirements"}</p>
               {detailContent.eligibilityTitle ? <RichContent as="h2" className="text-3xl font-black leading-tight text-primary sm:text-4xl" content={detailContent.eligibilityTitle} /> : <h2 className="text-3xl font-black leading-tight text-primary sm:text-4xl">Service Eligibility</h2>}
-              <p className="mt-3 max-w-3xl text-base leading-7 text-muted">
+              <div className="mt-3 max-w-3xl text-base leading-7 text-muted">
                 {detailContent.eligibilityCopy && <RichContent content={detailContent.eligibilityCopy} />}
-              </p>
+              </div>
             </div>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {(service.eligibility || []).map((item, index) => (
@@ -244,9 +247,9 @@ export default async function ServiceDetailPage({ params }) {
             <div className="mb-10">
               <p className="mb-3 text-sm font-black uppercase text-primary">{detailContent.faqEyebrow ? <RichContent content={detailContent.faqEyebrow} inline /> : "FAQ"}</p>
               {detailContent.faqTitle ? <RichContent as="h2" className="text-4xl font-black leading-tight text-primary sm:text-5xl" content={detailContent.faqTitle} /> : <h2 className="text-4xl font-black leading-tight text-primary sm:text-5xl">Frequently Asked Questions</h2>}
-              <p className="mt-4 max-w-3xl text-lg leading-8 text-muted">
+              <div className="mt-4 max-w-3xl text-lg leading-8 text-muted">
                 {detailContent.faqCopy && <RichContent content={detailContent.faqCopy} />}
-              </p>
+              </div>
             </div>
             <FaqAccordion items={faqItems} />
           </div>

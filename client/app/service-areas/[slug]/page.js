@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import JsonLd from "@/components/JsonLd";
 import { generateServiceAreaSchema } from "@/lib/schema";
 import { plainText } from "@/lib/text";
+import { buildMetadata } from "@/lib/seo";
 
 export async function generateStaticParams() {
   const { serviceAreas } = await readCmsData();
@@ -16,7 +17,12 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const { serviceAreas } = await readCmsData();
   const area = findBySlug(serviceAreas, slug);
-  return area ? { title: area.title, description: area.summary } : {};
+  return area ? buildMetadata(area, {
+    metaTitle: area.title,
+    metaDescription: area.summary,
+    path: `/service-areas/${area.slug}`,
+    image: area.image
+  }) : {};
 }
 
 function matchingServices(area, services) {

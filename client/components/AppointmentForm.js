@@ -88,7 +88,7 @@ export default function AppointmentForm({ branches = [], services = [], content 
               {requirements.map((item) => (
                 <li className="flex min-w-0 gap-3 rounded-xl bg-white px-4 py-3 text-sm font-bold text-ink/80" key={item}>
                   <span className="mt-1 size-2 shrink-0 rounded-full bg-primary" />
-                  <span className="min-w-0 break-words">{item && <RichContent content={item} />}</span>
+                  <div className="min-w-0 break-words">{item && <RichContent content={item} />}</div>
                 </li>
               ))}
             </ul>

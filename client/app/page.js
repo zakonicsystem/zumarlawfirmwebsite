@@ -20,14 +20,7 @@ import JsonLd from "@/components/JsonLd";
 import { generateFAQSchema, generateWebsiteSchema, generateLocalBusinessSchema, generateOrganizationSchema } from "@/lib/schema";
 
 export async function generateMetadata() {
-  const metadata = await getPageMetadata("home");
-  return {
-    ...metadata,
-    canonical: "https://zumarlawfirm.com",
-    alternates: {
-      canonical: "https://zumarlawfirm.com"
-    }
-  };
+  return getPageMetadata("home");
 }
 
 export default async function HomePage() {

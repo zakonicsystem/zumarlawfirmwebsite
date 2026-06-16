@@ -4,6 +4,7 @@ import RichContent from "@/components/RichContent";
 import { findBySlug, readCmsData } from "@/lib/cmsStore";
 import { notFound } from "next/navigation";
 import { plainText } from "@/lib/text";
+import { buildMetadata } from "@/lib/seo";
 
 export async function generateStaticParams() {
   const { branches } = await readCmsData();
@@ -14,7 +15,12 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const { branches } = await readCmsData();
   const branch = findBySlug(branches, slug);
-  return branch ? { title: `${branch.name} Branch`, description: branch.address } : {};
+  return branch ? buildMetadata(branch, {
+    metaTitle: `${plainText(branch.name, "Branch")} Branch`,
+    metaDescription: branch.address,
+    path: `/branches/${branch.slug}`,
+    image: branch.image
+  }) : {};
 }
 
 export default async function BranchDetailPage({ params }) {

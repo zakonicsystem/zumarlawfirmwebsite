@@ -44,7 +44,7 @@ export default async function AppointmentPage() {
                   {page.checklist.map((item, index) => (
                     <li className="flex items-start gap-3 rounded-2xl bg-paper px-4 py-3 text-sm font-bold leading-6 text-ink/80" key={`${item}-${index}`}>
                       <FaIcon className="mt-1 size-4 shrink-0 text-primary" name="check" />
-                      <span>{item && <RichContent content={item} />}</span>
+                      <div className="min-w-0">{item && <RichContent content={item} />}</div>
                     </li>
                   ))}
                 </ul>

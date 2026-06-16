@@ -36,9 +36,9 @@ export function HomeFeaturedSection({ section, services }) {
             <p className="mb-3 text-sm font-black uppercase text-primary">{section?.eyebrow && <RichContent content={section.eyebrow} inline />}</p>
             <h2 className="text-3xl font-black leading-tight text-primary sm:text-6xl">{section?.title && <RichContent content={section.title} inline />}</h2>
           </div>
-          <p className="text-sm leading-7 text-muted sm:text-base sm:leading-8 lg:text-lg" data-reveal="right">
+          <div className="text-sm leading-7 text-muted sm:text-base sm:leading-8 lg:text-lg" data-reveal="right">
             {section?.copy && <RichContent content={section?.copy} />}
-          </p>
+          </div>
         </div>
         <div data-reveal="zoom">
           <ServiceCarousel items={services} />

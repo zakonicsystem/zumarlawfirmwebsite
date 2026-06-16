@@ -17,7 +17,11 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const { blogs } = await readCmsData();
   const post = findBySlug(blogs, slug);
-  return post ? getRecordMetadata(post) : {};
+  return post ? getRecordMetadata(post, {
+    path: `/blog/${post.slug}`,
+    image: post.image,
+    openGraphType: "article"
+  }) : {};
 }
 
 export default async function BlogDetailPage({ params }) {
