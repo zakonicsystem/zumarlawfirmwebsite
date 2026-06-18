@@ -142,7 +142,7 @@ export default async function ServiceDetailPage({ params }) {
           )}
           right={(
           <aside className="order-1 text-white lg:sticky lg:top-28 lg:order-2 lg:rounded-[2rem] lg:border lg:border-primary/10 lg:bg-primary lg:p-7 lg:shadow-2xl lg:shadow-primary/20">
-            <div className="rounded-[2rem] bg-primary p-6 shadow-xl shadow-primary/15 lg:contents lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none">
+            <div className="rounded-[2rem] bg-primary p-6 lg:contents lg:rounded-none lg:bg-transparent lg:p-0">
               <div className="leading-7 text-white/70">{detailContent.feeNote && <RichContent content={detailContent.feeNote} />}</div>
               <div className="mt-7 grid gap-3">
                 <a className="inline-flex min-h-12 items-center justify-center rounded-full bg-secondary px-5 text-sm font-black text-primary transition hover:-translate-y-1" href={detailContent.startOnlineHref} target="_blank" rel="noreferrer">
@@ -174,7 +174,7 @@ export default async function ServiceDetailPage({ params }) {
                 <p className="px-2 text-xs font-black uppercase tracking-[0.18em] text-primary lg:px-0 lg:text-secondary">{detailContent.relatedEyebrow && <RichContent content={detailContent.relatedEyebrow} inline />}</p>
                 <div className="mt-4 grid gap-3">
                   {relatedServices.map((item) => (
-                    <Link className="group rounded-2xl border border-primary/10 bg-primary p-4 shadow-sm shadow-primary/10 transition hover:-translate-y-0.5 lg:border-white/10 lg:bg-white/8 lg:shadow-none lg:hover:bg-white/12" href={`/services/${item.slug}`} key={item.slug} prefetch={false}>
+                    <Link className="group rounded-2xl border border-primary/10 bg-primary p-4 lg:border-white/10 lg:bg-white/8 lg:transition lg:hover:-translate-y-0.5 lg:hover:bg-white/12" href={`/services/${item.slug}`} key={item.slug} prefetch={false}>
                       <span className="flex items-start gap-3">
                         <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-secondary text-primary">
                           <FaIcon className="size-4" name={item.icon} />

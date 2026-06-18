@@ -189,7 +189,7 @@ export default function Header() {
         <div className="mx-auto w-[min(1180px,calc(100%-24px))] rounded-lg bg-primary text-white shadow-xl shadow-primary/15 sm:w-[min(1180px,calc(100%-32px))]">
           <div className="flex items-center justify-between gap-2 px-2.5 py-2.5 sm:gap-3 sm:px-4 sm:py-4 lg:px-6">
             <button
-              className="inline-flex min-h-11 items-center gap-2 rounded-md border border-white/15 px-3 text-xs font-black uppercase tracking-wide transition active:scale-[0.98] hover:bg-white/10 sm:min-h-12 sm:gap-3 sm:px-4 sm:text-sm lg:hidden"
+              className="inline-flex min-h-11 items-center gap-2 rounded-md border border-white/15 px-3 text-xs font-black uppercase tracking-wide sm:min-h-12 sm:gap-3 sm:px-4 sm:text-sm lg:hidden"
               type="button"
               onClick={() => setMobileOpen(true)}
               aria-label="Open menu"
@@ -245,21 +245,20 @@ export default function Header() {
       </div>
 
       {mobileOpen ? (
-        <div className="fixed inset-0 z-[110] bg-ink/60 backdrop-blur-sm lg:hidden" role="dialog" aria-modal="true" aria-label="Mobile menu">
-          <button className="absolute inset-0 h-full w-full cursor-default" type="button" aria-label="Close menu backdrop" onClick={closeMobileMenu} />
-          <div className="relative ml-auto flex h-full w-[min(440px,calc(100%-16px))] flex-col overflow-hidden bg-white shadow-2xl shadow-primary/30">
+        <div className="fixed inset-0 z-[110] overflow-y-auto bg-white lg:hidden" role="dialog" aria-modal="true" aria-label="Mobile menu">
+          <div className="flex min-h-dvh w-full flex-col bg-white">
             <div className="border-b border-primary/10 bg-gradient-to-br from-paper to-secondary/45 p-4 sm:p-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <p className="text-xs font-black uppercase tracking-[0.2em] text-primary/60">Menu</p>
                   <h2 className="mt-1 text-2xl font-black leading-tight text-primary sm:text-3xl">Zumar Law Firm</h2>
                 </div>
-                <button className="grid size-11 shrink-0 place-items-center rounded-full bg-white text-xl font-black text-primary shadow-lg shadow-primary/10 transition active:scale-95" type="button" onClick={closeMobileMenu} aria-label="Close menu">
+                <button className="grid size-11 shrink-0 place-items-center rounded-full border border-primary/10 bg-white text-xl font-black text-primary" type="button" onClick={closeMobileMenu} aria-label="Close menu">
                   x
                 </button>
               </div>
               <button
-                className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-5 text-sm font-black uppercase text-white transition active:scale-[0.98]"
+                className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-5 text-sm font-black uppercase text-white"
                 type="button"
                 onClick={() => {
                   closeMobileMenu();
@@ -271,15 +270,15 @@ export default function Header() {
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto bg-paper p-3 sm:p-4">
+            <div className="flex-1 bg-paper p-3 sm:p-4">
               <div className="grid gap-3">
                 {navGroups.map((group) => {
                   const isActive = activeMobileGroup === group.label;
 
                   return (
-                    <div className="overflow-hidden rounded-2xl border border-primary/10 bg-white shadow-sm shadow-primary/5" key={group.label}>
+                    <div className="rounded-2xl border border-primary/10 bg-white" key={group.label}>
                       <button
-                        className={`flex min-h-14 w-full items-center justify-between gap-3 px-4 py-3 text-left transition active:scale-[0.99] ${isActive ? "bg-primary text-white" : "text-primary"}`}
+                        className={`flex min-h-14 w-full items-center justify-between gap-3 rounded-2xl px-4 py-3 text-left ${isActive ? "bg-primary text-white" : "text-primary"}`}
                         type="button"
                         onClick={() => setActiveMobileGroup(isActive ? "" : group.label)}
                         aria-expanded={isActive}
@@ -290,17 +289,17 @@ export default function Header() {
                           </span>
                           <span className="text-base font-black">{group.label}</span>
                         </span>
-                        <span className={`text-lg font-black transition ${isActive ? "rotate-45 text-secondary" : "text-primary/40"}`}>+</span>
+                        <span className={`text-lg font-black ${isActive ? "text-secondary" : "text-primary/40"}`}>{isActive ? "-" : "+"}</span>
                       </button>
 
                       {isActive ? (
                         <div className="grid gap-2 p-3">
-                          <Link className="rounded-2xl bg-paper p-4 text-primary transition active:scale-[0.99]" href={group.href} onClick={closeMobileMenu} prefetch={false}>
+                          <Link className="rounded-2xl bg-paper p-4 text-primary" href={group.href} onClick={closeMobileMenu} prefetch={false}>
                             <span className="block text-base font-black">Open {group.label}</span>
                             <span className="mt-1 block text-sm font-semibold leading-5 text-muted">Main page</span>
                           </Link>
                           {(group.items || []).map((item) => (
-                            <Link className="grid grid-cols-[42px_1fr] gap-3 rounded-2xl border border-primary/10 bg-white p-4 transition active:scale-[0.99] hover:bg-secondary/40" href={item.href} key={item.href} onClick={closeMobileMenu} prefetch={false}>
+                            <Link className="grid grid-cols-[42px_1fr] gap-3 rounded-2xl border border-primary/10 bg-white p-4" href={item.href} key={item.href} onClick={closeMobileMenu} prefetch={false}>
                               <span className="grid size-10 place-items-center rounded-xl bg-secondary text-primary">
                                 <FaIcon className="size-4" name={item.icon} />
                               </span>
@@ -319,7 +318,7 @@ export default function Header() {
             </div>
 
             <div className="border-t border-primary/10 bg-white p-3 sm:p-4">
-              <Link className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-primary px-5 text-sm font-black uppercase tracking-wide text-white transition active:scale-[0.98]" href="/appointment" onClick={closeMobileMenu} prefetch={false}>
+              <Link className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-primary px-5 text-sm font-black uppercase tracking-wide text-white" href="/appointment" onClick={closeMobileMenu} prefetch={false}>
                 Appointment
               </Link>
             </div>
