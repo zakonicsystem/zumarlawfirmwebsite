@@ -141,38 +141,40 @@ export default async function ServiceDetailPage({ params }) {
           </div>
           )}
           right={(
-          <aside className="order-1 rounded-[2rem] border border-primary/10 bg-primary p-7 text-white shadow-2xl shadow-primary/20 lg:sticky lg:top-28 lg:order-2">
-            <div className="leading-7 text-white/70">{detailContent.feeNote && <RichContent content={detailContent.feeNote} />}</div>
-            <div className="mt-7 grid gap-3">
-              <a className="inline-flex min-h-12 items-center justify-center rounded-full bg-secondary px-5 text-sm font-black text-primary transition hover:-translate-y-1" href={detailContent.startOnlineHref} target="_blank" rel="noreferrer">
-                <FaIcon className="mr-2 size-4" name="registration" />
-                {detailContent.startOnlineLabel && <RichContent content={detailContent.startOnlineLabel} inline />}
-              </a>
-              <Link className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 px-5 text-sm font-black text-white transition hover:-translate-y-1 hover:bg-white/10" href={detailContent.appointmentHref || detailContent.contactHref || "/contact"}>
-                <FaIcon className="mr-2 size-4" name="phone" />
-                {(detailContent.appointmentLabel || detailContent.contactLabel) ? <RichContent content={detailContent.appointmentLabel || detailContent.contactLabel} inline /> : "Send Inquiry"}
-              </Link>
-              <a className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 px-5 text-sm font-black text-white transition hover:-translate-y-1 hover:bg-white/10" href={detailContent.callHref}>
-                <FaIcon className="mr-2 size-4" name="phone" />
-                {detailContent.callLabel && <RichContent content={detailContent.callLabel} inline />}
-              </a>
-              <a
-                className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#25D366] px-5 text-sm font-black text-white transition hover:-translate-y-1 hover:bg-[#1ebe5d]"
-                href={`https://wa.me/${detailContent.whatsappPhone || "923035988574"}?text=${encodeURIComponent(`Hello Zumar Law Firm, I need help with ${service.title}.`)}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <FaIcon className="mr-2 size-4" name="phone" />
-                {detailContent.whatsappLabel && <RichContent content={detailContent.whatsappLabel} inline />}
-              </a>
+          <aside className="order-1 text-white lg:sticky lg:top-28 lg:order-2 lg:rounded-[2rem] lg:border lg:border-primary/10 lg:bg-primary lg:p-7 lg:shadow-2xl lg:shadow-primary/20">
+            <div className="rounded-[2rem] bg-primary p-6 shadow-xl shadow-primary/15 lg:contents lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none">
+              <div className="leading-7 text-white/70">{detailContent.feeNote && <RichContent content={detailContent.feeNote} />}</div>
+              <div className="mt-7 grid gap-3">
+                <a className="inline-flex min-h-12 items-center justify-center rounded-full bg-secondary px-5 text-sm font-black text-primary transition hover:-translate-y-1" href={detailContent.startOnlineHref} target="_blank" rel="noreferrer">
+                  <FaIcon className="mr-2 size-4" name="registration" />
+                  {detailContent.startOnlineLabel && <RichContent content={detailContent.startOnlineLabel} inline />}
+                </a>
+                <Link className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 px-5 text-sm font-black text-white transition hover:-translate-y-1 hover:bg-white/10" href={detailContent.appointmentHref || detailContent.contactHref || "/contact"}>
+                  <FaIcon className="mr-2 size-4" name="phone" />
+                  {(detailContent.appointmentLabel || detailContent.contactLabel) ? <RichContent content={detailContent.appointmentLabel || detailContent.contactLabel} inline /> : "Send Inquiry"}
+                </Link>
+                <a className="inline-flex min-h-12 items-center justify-center rounded-full border border-white/20 px-5 text-sm font-black text-white transition hover:-translate-y-1 hover:bg-white/10" href={detailContent.callHref}>
+                  <FaIcon className="mr-2 size-4" name="phone" />
+                  {detailContent.callLabel && <RichContent content={detailContent.callLabel} inline />}
+                </a>
+                <a
+                  className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#25D366] px-5 text-sm font-black text-white transition hover:-translate-y-1 hover:bg-[#1ebe5d]"
+                  href={`https://wa.me/${detailContent.whatsappPhone || "923035988574"}?text=${encodeURIComponent(`Hello Zumar Law Firm, I need help with ${service.title}.`)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <FaIcon className="mr-2 size-4" name="phone" />
+                  {detailContent.whatsappLabel && <RichContent content={detailContent.whatsappLabel} inline />}
+                </a>
+              </div>
             </div>
 
             {relatedServices.length ? (
-              <div className="mt-8 border-t border-white/15 pt-6">
-                <p className="text-xs font-black uppercase tracking-[0.18em] text-secondary">{detailContent.relatedEyebrow && <RichContent content={detailContent.relatedEyebrow} inline />}</p>
+              <div className="mt-7 lg:mt-8 lg:border-t lg:border-white/15 lg:pt-6">
+                <p className="px-2 text-xs font-black uppercase tracking-[0.18em] text-primary lg:px-0 lg:text-secondary">{detailContent.relatedEyebrow && <RichContent content={detailContent.relatedEyebrow} inline />}</p>
                 <div className="mt-4 grid gap-3">
                   {relatedServices.map((item) => (
-                    <Link className="group rounded-2xl border border-white/10 bg-white/8 p-4 transition hover:-translate-y-0.5 hover:bg-white/12" href={`/services/${item.slug}`} key={item.slug} prefetch={false}>
+                    <Link className="group rounded-2xl border border-primary/10 bg-primary p-4 shadow-sm shadow-primary/10 transition hover:-translate-y-0.5 lg:border-white/10 lg:bg-white/8 lg:shadow-none lg:hover:bg-white/12" href={`/services/${item.slug}`} key={item.slug} prefetch={false}>
                       <span className="flex items-start gap-3">
                         <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-secondary text-primary">
                           <FaIcon className="size-4" name={item.icon} />
