@@ -171,10 +171,12 @@ html.js [data-reveal].is-visible {
   transform: translate3d(0, 0, 0) scale(1);
 }
 
-main > section:not(:first-child),
-main > div:not(:first-child) {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 720px;
+@media (min-width: 1024px) {
+  main > section:not(:first-child),
+  main > div:not(:first-child) {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 720px;
+  }
 }
 
 .animate-route-progress {
