@@ -43,7 +43,7 @@ const navGroups = [
         icon: "user",
         copy: "Leadership profile, firm history, and professional journey."
       },
-    
+
     ]
   },
   {
@@ -245,9 +245,9 @@ export default function Header() {
       </div>
 
       {mobileOpen ? (
-        <div className="fixed inset-0 z-[110] overflow-y-auto bg-white lg:hidden" role="dialog" aria-modal="true" aria-label="Mobile menu">
-          <div className="flex min-h-dvh w-full flex-col bg-white">
-            <div className="border-b border-primary/10 bg-gradient-to-br from-paper to-secondary/45 p-4 sm:p-5">
+        <div className="fixed inset-0 z-[110] overflow-y-auto bg-paper lg:hidden" role="dialog" aria-modal="true" aria-label="Mobile menu">
+          <div className="flex min-h-dvh w-full flex-col bg-paper">
+            <div className="border-b border-primary/10 bg-white p-4 sm:p-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <p className="text-xs font-black uppercase tracking-[0.2em] text-primary/60">Menu</p>
@@ -276,20 +276,20 @@ export default function Header() {
                   const isActive = activeMobileGroup === group.label;
 
                   return (
-                    <div className="rounded-2xl border border-primary/10 bg-white" key={group.label}>
+                    <div className="overflow-hidden rounded-2xl border border-primary/10 bg-white" key={group.label}>
                       <button
-                        className={`flex min-h-14 w-full items-center justify-between gap-3 rounded-2xl px-4 py-3 text-left ${isActive ? "bg-primary text-white" : "text-primary"}`}
+                        className={`flex min-h-14 w-full items-center justify-between gap-3 px-4 py-3 text-left text-primary ${isActive ? "bg-secondary/55" : "bg-white"}`}
                         type="button"
                         onClick={() => setActiveMobileGroup(isActive ? "" : group.label)}
                         aria-expanded={isActive}
                       >
                         <span className="inline-flex min-w-0 items-center gap-3">
-                          <span className={`grid size-10 shrink-0 place-items-center rounded-xl ${isActive ? "bg-white/15 text-secondary" : "bg-secondary text-primary"}`}>
+                          <span className={`grid size-10 shrink-0 place-items-center rounded-xl ${isActive ? "bg-primary text-white" : "bg-secondary text-primary"}`}>
                             <FaIcon className="size-4" name={group.icon} />
                           </span>
                           <span className="text-base font-black">{group.label}</span>
                         </span>
-                        <span className={`text-lg font-black ${isActive ? "text-secondary" : "text-primary/40"}`}>{isActive ? "-" : "+"}</span>
+                        <span className="text-lg font-black text-primary/50">{isActive ? "-" : "+"}</span>
                       </button>
 
                       {isActive ? (
