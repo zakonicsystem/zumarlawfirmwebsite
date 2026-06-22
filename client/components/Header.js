@@ -69,12 +69,12 @@ export default function Header() {
   const visibleResults = useMemo(() => results.slice(0, 6), [results]);
 
   useEffect(() => {
-    document.body.style.overflow = mobileOpen || searchOpen ? "hidden" : "";
+    document.body.style.overflow = searchOpen ? "hidden" : "";
 
     return () => {
       document.body.style.overflow = "";
     };
-  }, [mobileOpen, searchOpen]);
+  }, [searchOpen]);
 
   useEffect(() => {
     if (!searchOpen) {
@@ -114,6 +114,11 @@ export default function Header() {
 
   function closeMobileMenu() {
     setMobileOpen(false);
+  }
+
+  function openMobileMenu() {
+    window.scrollTo(0, 0);
+    setMobileOpen(true);
   }
 
   function submitSearch(event) {
@@ -191,7 +196,7 @@ export default function Header() {
             <button
               className="inline-flex min-h-11 items-center gap-2 rounded-md border border-white/15 px-3 text-xs font-black uppercase tracking-wide sm:min-h-12 sm:gap-3 sm:px-4 sm:text-sm lg:hidden"
               type="button"
-              onClick={() => setMobileOpen(true)}
+              onClick={openMobileMenu}
               aria-label="Open menu"
             >
               <span className="grid gap-1">
@@ -245,8 +250,8 @@ export default function Header() {
       </div>
 
       {mobileOpen ? (
-        <div className="fixed inset-0 z-[110] overflow-y-auto bg-paper lg:hidden" role="dialog" aria-modal="true" aria-label="Mobile menu">
-          <div className="flex min-h-dvh w-full flex-col bg-paper">
+        <div className="absolute inset-x-0 top-0 z-[110] min-h-screen bg-paper lg:hidden" role="dialog" aria-modal="true" aria-label="Mobile menu">
+          <div className="flex min-h-screen w-full flex-col bg-paper">
             <div className="border-b border-primary/10 bg-white p-4 sm:p-5">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
@@ -276,9 +281,9 @@ export default function Header() {
                   const isActive = activeMobileGroup === group.label;
 
                   return (
-                    <div className="overflow-hidden rounded-2xl border border-primary/10 bg-white" key={group.label}>
+                    <div className="rounded-2xl border border-primary/10 bg-white" key={group.label}>
                       <button
-                        className={`flex min-h-14 w-full items-center justify-between gap-3 px-4 py-3 text-left text-primary ${isActive ? "bg-secondary/55" : "bg-white"}`}
+                        className={`flex min-h-14 w-full items-center justify-between gap-3 px-4 py-3 text-left text-primary ${isActive ? "rounded-t-2xl bg-secondary/55" : "rounded-2xl bg-white"}`}
                         type="button"
                         onClick={() => setActiveMobileGroup(isActive ? "" : group.label)}
                         aria-expanded={isActive}
