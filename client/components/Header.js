@@ -65,7 +65,6 @@ export default function Header() {
   const [results, setResults] = useState([]);
   const [searchStatus, setSearchStatus] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [activeMobileGroup, setActiveMobileGroup] = useState("Services");
   const visibleResults = useMemo(() => results.slice(0, 6), [results]);
 
   useEffect(() => {
@@ -275,51 +274,22 @@ export default function Header() {
               </button>
             </div>
 
-            <div className="flex-1 bg-paper p-3 sm:p-4">
-              <div className="grid gap-3">
-                {navGroups.map((group) => {
-                  const isActive = activeMobileGroup === group.label;
-
-                  return (
-                    <div className="rounded-2xl border border-primary/10 bg-white" key={group.label}>
-                      <button
-                        className={`flex min-h-14 w-full items-center justify-between gap-3 px-4 py-3 text-left text-primary ${isActive ? "rounded-t-2xl bg-secondary/55" : "rounded-2xl bg-white"}`}
-                        type="button"
-                        onClick={() => setActiveMobileGroup(isActive ? "" : group.label)}
-                        aria-expanded={isActive}
-                      >
-                        <span className="inline-flex min-w-0 items-center gap-3">
-                          <span className={`grid size-10 shrink-0 place-items-center rounded-xl ${isActive ? "bg-primary text-white" : "bg-secondary text-primary"}`}>
-                            <FaIcon className="size-4" name={group.icon} />
-                          </span>
-                          <span className="text-base font-black">{group.label}</span>
-                        </span>
-                        <span className="text-lg font-black text-primary/50">{isActive ? "-" : "+"}</span>
-                      </button>
-
-                      {isActive ? (
-                        <div className="grid gap-2 p-3">
-                          <Link className="rounded-2xl bg-paper p-4 text-primary" href={group.href} onClick={closeMobileMenu} prefetch={false}>
-                            <span className="block text-base font-black">Open {group.label}</span>
-                            <span className="mt-1 block text-sm font-semibold leading-5 text-muted">Main page</span>
-                          </Link>
-                          {(group.items || []).map((item) => (
-                            <Link className="grid grid-cols-[42px_1fr] gap-3 rounded-2xl border border-primary/10 bg-white p-4" href={item.href} key={item.href} onClick={closeMobileMenu} prefetch={false}>
-                              <span className="grid size-10 place-items-center rounded-xl bg-secondary text-primary">
-                                <FaIcon className="size-4" name={item.icon} />
-                              </span>
-                              <span className="min-w-0">
-                                <span className="block text-base font-black text-primary">{item.label}</span>
-                                <span className="mt-1 block text-sm leading-5 text-muted">{item.copy}</span>
-                              </span>
-                            </Link>
-                          ))}
-                        </div>
-                      ) : null}
-                    </div>
-                  );
-                })}
-              </div>
+            <div className="flex-1 bg-white">
+              <nav aria-label="Mobile navigation">
+                {navGroups.map((group) => (
+                  <div className="border-b border-primary/10" key={group.label}>
+                    <Link className="flex min-h-16 items-center gap-4 px-5 py-4 text-primary" href={group.href} onClick={closeMobileMenu} prefetch={false}>
+                      <FaIcon className="size-5 shrink-0" name={group.icon} />
+                      <span className="text-base font-black">{group.label}</span>
+                    </Link>
+                    {(group.items || []).map((item) => (
+                      <Link className="block border-t border-primary/10 py-3 pl-14 pr-5 text-sm font-bold text-primary/75" href={item.href} key={item.href} onClick={closeMobileMenu} prefetch={false}>
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                ))}
+              </nav>
             </div>
 
             <div className="border-t border-primary/10 bg-white p-3 sm:p-4">

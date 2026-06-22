@@ -170,24 +170,37 @@ export default async function ServiceDetailPage({ params }) {
             </div>
 
             {relatedServices.length ? (
-              <div className="mt-7 rounded-[2rem] border border-primary/10 bg-paper p-4 lg:mt-8 lg:rounded-none lg:border-x-0 lg:border-b-0 lg:border-t-white/15 lg:bg-transparent lg:p-0 lg:pt-6">
-                <p className="px-1 text-xs font-black uppercase tracking-[0.18em] text-primary lg:px-0 lg:text-secondary">{detailContent.relatedEyebrow && <RichContent content={detailContent.relatedEyebrow} inline />}</p>
-                <div className="mt-4 grid gap-3">
+              <>
+                <section className="mt-7 border-y border-primary/15 bg-white lg:hidden">
+                  <p className="border-b border-primary/15 px-4 py-4 text-xs font-black uppercase tracking-[0.18em] text-primary">{detailContent.relatedEyebrow && <RichContent content={detailContent.relatedEyebrow} inline />}</p>
+                  <div>
+                    {relatedServices.map((item) => (
+                      <Link className="block border-b border-primary/10 px-4 py-4 last:border-b-0" href={`/services/${item.slug}`} key={item.slug} prefetch={false}>
+                        <span className="block font-black leading-5 text-primary">{item.title && <RichContent className="rich-content-compact" content={item.title} inline componentStyle />}</span>
+                        <span className="mt-1 block text-xs font-bold text-muted">{item.formattedPrice}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+                <div className="mt-8 hidden border-t border-white/15 pt-6 lg:block">
+                  <p className="text-xs font-black uppercase tracking-[0.18em] text-secondary">{detailContent.relatedEyebrow && <RichContent content={detailContent.relatedEyebrow} inline />}</p>
+                  <div className="mt-4 grid gap-3">
                   {relatedServices.map((item) => (
-                    <Link className="group rounded-2xl border border-primary/10 bg-white p-4 lg:border-white/10 lg:bg-white/8 lg:transition lg:hover:-translate-y-0.5 lg:hover:bg-white/12" href={`/services/${item.slug}`} key={item.slug} prefetch={false}>
+                    <Link className="group rounded-2xl border border-white/10 bg-white/8 p-4 transition hover:-translate-y-0.5 hover:bg-white/12" href={`/services/${item.slug}`} key={item.slug} prefetch={false}>
                       <span className="flex items-start gap-3">
                         <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-secondary text-primary">
                           <FaIcon className="size-4" name={item.icon} />
                         </span>
                         <span className="min-w-0">
-                          <span className="block font-black leading-5 text-primary lg:text-white">{item.title && <RichContent className="rich-content-compact" content={item.title} inline componentStyle />}</span>
-                          <span className="mt-1 block text-xs font-bold text-muted lg:text-white/60">{item.formattedPrice}</span>
+                          <span className="block font-black leading-5 text-white">{item.title && <RichContent className="rich-content-compact" content={item.title} inline componentStyle />}</span>
+                          <span className="mt-1 block text-xs font-bold text-white/60">{item.formattedPrice}</span>
                         </span>
                       </span>
                     </Link>
                   ))}
+                  </div>
                 </div>
-              </div>
+              </>
             ) : null}
           </aside>
           )}
